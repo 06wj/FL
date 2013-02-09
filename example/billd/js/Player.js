@@ -71,11 +71,6 @@
 			this.v.y = -5;
 			this.angle = 0;
 		}
-		// if(this.pos.y < height && Keyboard.getIsDown("down"))
-		// {
-		// 	this.v.y = 0;
-		// 	this.play("jump1");
-		// }
 
 		if(this.v.y == 0 && Keyboard.getIsDown("SPACE"))
 		{
@@ -102,7 +97,7 @@
 		{
 			for(var i = 0, lines = this.map.lines,l = lines.length;i < l;i ++)
 			{
-				var y = lines[i].getY(this.x);
+				var y = lines[i].getY(this.x - map.x);
 				
 				if(y && y <= this.pos.y + 2 && y >= this.pos.y - 5)
 				{
@@ -113,7 +108,6 @@
 				}
 			}
 		}
-
 
 		this.x = this.pos.x;
 		this.y = this.pos.y;

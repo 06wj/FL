@@ -14,11 +14,20 @@
 		this.img.height = h;
 		this.setImg(this.img);
 
-		this.bezier = new Bezier(0, h-40, w/4, h-150, w/4*3, h+40, w, h-40);
-		this.lines = getLinesByBezier(this.bezier);  
+		this.lines = [];
+		var bezier = new Bezier(0, h-40, w/8, h-150, w/8*3, h+40, w/2, h-40);
+		this.lines=this.lines.concat(getLinesByBezier(bezier)); 
+
+		var bezier = new Bezier(w/2, h-40, w/8+ w/2, h-150, w/8*3+ w/2, h+40, w, h-40);
+		this.lines = this.lines.concat(getLinesByBezier(bezier)); 
+
 		this.lines.push(new Line(new Vector(20, 100), new Vector(100, 80)))
 		this.lines.push(new Line(new Vector(150, 80), new Vector(240, 80)))
 		this.lines.push(new Line(new Vector(260, 40), new Vector(390, 30)))
+
+		this.lines.push(new Line(new Vector(520, 100), new Vector(600, 80)))
+		this.lines.push(new Line(new Vector(650, 80), new Vector(740, 80)))
+		this.lines.push(new Line(new Vector(760, 40), new Vector(890, 30)))
 
 		draw(this.ctx, this.lines);
 	};
@@ -43,7 +52,7 @@
 	{
 		var points = bezier.getPointsByTime();
 		var lines = []
-		for(var i = 0, l = points.length;i < l;i ++)
+		for(var i = 1, l = points.length;i < l;i ++)
 		{
 			lines.push(new Line(points[i-1], points[i]));
 		}

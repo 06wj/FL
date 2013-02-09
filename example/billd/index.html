@@ -64,17 +64,37 @@
 
 		function init(){
 			map = new Map();
-			map.init(width, height);
+			map.init(width*2, height);
 			stage.addChild(map);
 			player = Player.create();
 			player.map = map;
 			player.pos.y = 0;
 			stage.addChild(player);
+
+			stage.update = update;
 		}
 
-		stage.update = function(){
-			
-		};
+		function update(){
+			if(player.pos.x >= width * .6 && -1*map.x < width)
+			{
+				player.pos.x = width * .6;
+				map.x -= player.v.x;
+			}
+
+			if(player.pos.x <= width * .4 && map.x < 0)
+			{
+				player.pos.x = width * .4;
+				map.x -= player.v.x;
+			}
+
+			if(player.pos.x < player.width*.5){
+				player.pos.x = player.width*.5;
+			}
+
+			if(player.pos.x > width-player.width*.5){
+				player.pos.x = width-player.width*.5;
+			}
+		}
 
 	</script>
 </body>
