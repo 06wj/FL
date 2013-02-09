@@ -469,11 +469,12 @@
 		var len = this.getLength();
 		var i = 0;
 		var points = [];
-		while(i <= len)
+		while(i < len)
 		{
 			points.push(this.getPointByLen(i));
 			i+=step;
 		}
+		points.push(this.getPointByLen(len))
 		return points;
 	};
 
@@ -484,11 +485,12 @@
 		step = step||.01;
 		var t = 0;
 		var points = [];
-		while(t <= 1)
+		while(t < 1)
 		{
 			points.push(this.getPointByTime(t));
 			t += step;
 		}
+		points.push(this.getPointByTime(1));
 		return points;
 	};
 
