@@ -69,6 +69,7 @@
 		if(this.v.y == 0 && Keyboard.getIsDown("UP"))
 		{
 			this.v.y = -5;
+			this.angle = 0;
 		}
 		// if(this.pos.y < height && Keyboard.getIsDown("down"))
 		// {
