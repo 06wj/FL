@@ -28,8 +28,8 @@
 		if(!ctx) return;
 		ctx.save();
 		ctx.translate(this.x, this.y);
-		ctx.scale(this.scaleX, this.scaleY);
 		ctx.rotate(this.angle);
+		ctx.scale(this.scaleX, this.scaleY);
 		this._draw(ctx);
 		ctx.restore();
 	};
