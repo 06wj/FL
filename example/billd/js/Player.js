@@ -95,15 +95,16 @@
 		this.time += this.timeStep;
 
 		this.v.plus(this.a);
+		if(this.v.y > 5) this.v.y = 5;
 		this.pos.plus(this.v);
 
-		if(this.map)
+		if(this.map && this.v.y > 0)
 		{
 			for(var i = 0, lines = this.map.lines,l = lines.length;i < l;i ++)
 			{
 				var y = lines[i].getY(this.x);
 				
-				if(y && (y <= this.pos.y + 2))
+				if(y && y <= this.pos.y + 2 && y >= this.pos.y - 5)
 				{
 					this.pos.y = y;
 					this.v.y = 0;

@@ -16,19 +16,26 @@
 
 		this.bezier = new Bezier(0, h-40, w/4, h-150, w/4*3, h+40, w, h-40);
 		this.lines = getLinesByBezier(this.bezier);  
-		draw(this.ctx, this.bezier);
+		this.lines.push(new Line(new Vector(20, 100), new Vector(100, 80)))
+		this.lines.push(new Line(new Vector(150, 80), new Vector(240, 80)))
+		this.lines.push(new Line(new Vector(260, 40), new Vector(390, 30)))
+
+		draw(this.ctx, this.lines);
 	};
 
 	Map.prototype.update = function(){
 
 	};
 
-	function draw(ctx, bezier){
+	function draw(ctx, lines){
 		ctx.beginPath();
 		ctx.lineWidth = 1;
 		ctx.strokeStyle = "#222";
-		ctx.moveTo(bezier.p0.x, bezier.p0.y);
-		ctx.bezierCurveTo(bezier.p1.x, bezier.p1.y, bezier.p2.x, bezier.p2.y, bezier.p3.x, bezier.p3.y);
+		for(var i = 0, l = lines.length;i<l;i ++)
+		{
+			ctx.moveTo(lines[i].p0.x, lines[i].p0.y)
+			ctx.lineTo(lines[i].p1.x, lines[i].p1.y)
+		}
 		ctx.stroke();
 	}
 
