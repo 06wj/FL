@@ -88,6 +88,175 @@
 
 })(FL);
 (function(win){
+	var Vector = win.Vector = function(x, y)
+	{
+		this.x = x||0;
+		this.y = y||0;
+	}
+
+	Vector.prototype.set = function(x, y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+
+	Vector.prototype.getClone = function()
+	{
+		return new Vector(this.x,this.y);
+	}
+	
+	Vector.prototype.cut = function(max)
+	{
+		var r = Math.min(max, this.getLength());
+		this.setLength(r);	
+	}
+	
+	Vector.prototype.cutNew = function(max)
+	{
+		var r= Math.min(max, this.getLength());
+		var v = this.getClone();
+		v.setLength(r);
+		return v;	
+	}
+
+	Vector.prototype.equals = function(v)
+	{
+		return (this.x==v.x && this.y==v.y);
+	}
+	
+	Vector.prototype.plus = function(v)
+	{
+		this.x += v.x;
+		this.y += v.y;	
+	}
+	
+	Vector.prototype.plusNew = function(v)
+	{
+		return new Vector(this.x+v.x,this.y+v.y);
+	}
+
+	Vector.prototype.minus = function(v)
+	{
+		this.x -= v.x;
+		this.y -= v.y;
+	}
+	
+	Vector.prototype.minusNew = function(v)
+	{
+		return new Vector(this.x-v.x,this.y-v.y);
+	}
+	
+	Vector.prototype.negate = function()
+	{
+		this.x = - this.x;
+		this.y = - this.y;
+	}
+	
+	Vector.prototype.negateNew = function()
+	{
+		return new Vector(-this.x,-this.y);
+	}
+	
+	Vector.prototype.scale = function(s)
+	{
+		this.x *= s;
+		this.y *= s;
+	}
+	
+	Vector.prototype.scaleNew = function(s)
+	{
+		return new Vector(this.x * s, this.y * s);
+	}
+	
+	Vector.prototype.getLength = function()
+	{
+		return Math.sqrt(this.x*this.x + this.y*this.y);
+	}
+	
+	Vector.prototype.setLength = function(len)
+	{
+		var r = this.getLength();
+		if (r) this.scale (len / r);
+		else this.x = len;
+	}
+	
+	Vector.prototype.getAngle = function()
+	{
+		return Math.atan2(this.y, this.x);
+	}
+	
+	Vector.prototype.setAngle = function(ang)
+	{
+		var r = this.getLength();
+		this.x = r * Math.cos (ang);
+		this.y = r * Math.sin (ang);
+	}
+	
+	/**
+	*	angle || cos, sin
+	*/
+	Vector.prototype.rotate = function()
+	{  
+		var cos, sin;
+		var a = arguments;
+		if(a.length == 1)
+		{
+			cos = Math.cos(a[0]);
+			sin = Math.sin(a[0]);
+		} 
+		else
+		{
+			cos = a[0]
+			sin = a[1]
+		}
+		var rx = this.x * cos - this.y * sin;
+		var ry = this.x * sin + this.y * cos;
+		this.x = rx;
+		this.y = ry;
+	} 
+	
+	Vector.prototype.rotateNew = function(ang)
+	{
+		var v=new Vector(this.x,this.y);
+		v.rotate(ang);
+		return v;
+	}
+
+	Vector.prototype.cross = function(v)
+	{
+		return this.x*v.y - v.x*this.y;
+	};
+
+	Vector.prototype.dot = function(v)
+	{
+		return this.x * v.x + this.y * v.y;
+	}
+	
+	Vector.prototype.getNormal = function()
+	{
+		return new Vector(-this.y,this.x);
+	}
+
+	
+	Vector.prototype.isPerpTo = function(v)
+	{
+		return (this.dot (v) == 0);
+	}
+	
+	Vector.prototype.angleBetween = function(v)
+	{
+		var dp = this.dot (v); 
+		var cosAngle = dp / (this.getLength() * v.getLength());
+		return Math.acos (cosAngle); 
+	}
+
+	Vector.prototype.getLength2 = function()
+	{
+		return this.x*this.x + this.y*this.y;
+	}
+
+})(window);
+(function(win){
 	var Rect = win.Rect = function(x, y, width, height){
 		this.set(x, y, width, height);
 	};
@@ -112,7 +281,6 @@
 })(FL);
 (function(win){
 	var Rect = win.Rect;
-
 	var min = Math.min;
 	var max = Math.max; 
 	var abs = Math.abs;
@@ -121,6 +289,37 @@
 	{
 		this.p0 = v0||new Vector();
 		this.p1 = v1||new Vector();
+	};
+
+	/**
+	 *获取t百分比的点
+	*/
+	Line.prototype.getPoint = function(t){
+		var x = (this.p1.x - this.p0.x) * t + this.p0.x;
+		var y = (this.p1.y - this.p0.y) * t + this.p0.y;
+		return new Vector(x, y);
+	};
+
+	Line.prototype.getAngle = function(){
+		var x = this.p1.x - this.p0.x;
+		var y = this.p1.y - this.p0.y;
+		return Math.atan2(y, x);
+	};
+
+	Line.prototype.getY = function(x){
+		this.lx = this.lx||Math.min(this.p0.x, this.p1.x);
+		this.rx = this.rx||Math.max(this.p0.x, this.p1.x);
+		if(x < this.lx || x > this.rx) return null;
+		this._getY = this._getY || function(x){
+			var x1 = this.p0.x;
+			var y1 = this.p0.y;
+			var x2 = this.p1.x;
+			var y2 = this.p1.y;
+			if(x1 == x2) return Math.min(y1, y2); 
+			if(y1 == y2) return y1;
+			return (x-x1)/(x2-x1)*(y2-y1) + y1
+		}
+		return this._getY(x);
 	};
 
 	Line.prototype.hitTestPoint = function(x, y)
@@ -183,6 +382,116 @@
 		}
 		return n%2 == 1;
 	}
+})(FL);
+(function(win){
+	var TOTAL_SIMPSON_STEP = 100;
+	var Point = function(x, y){
+		this.x = x;
+		this.y = y;
+	};
+
+	var Bezier = win.Bezier = function(){
+		var args = arguments;
+		if(args.length == 4){
+			this.p0 = args[0];
+			this.p1 = args[1];
+			this.p2 = args[2];
+			this.p3 = args[3];
+		}
+		else if(args.length == 8){
+			this.p0 = new Point(args[0], args[1]);
+			this.p1 = new Point(args[2], args[3]);
+			this.p2 = new Point(args[4], args[5]);
+			this.p3 = new Point(args[6], args[7]);
+		}
+	};
+
+	Bezier.prototype.getSpeedLength = function(t){
+		var it = 1-t, it2 = it*it, t2 = t*t;
+		var x = -3*this.p0.x*it2 + 3*this.p1.x*it2 - 6*this.p1.x*it*t + 6*this.p2.x*it*t - 3*this.p2.x*t2 + 3*this.p3.x*t2;
+		var y = -3*this.p0.y*it2 + 3*this.p1.y*it2 - 6*this.p1.y*it*t + 6*this.p2.y*it*t - 3*this.p2.y*t2 + 3*this.p3.y*t2;
+		return Math.sqrt(x*x + y*y);
+	};
+
+	/*
+	 *获取线条长度
+	*/
+	Bezier.prototype.getLength = function(t){
+		var stepCounts = parseInt(TOTAL_SIMPSON_STEP*t), i;
+		
+		if(stepCounts & 1) stepCounts++;
+		if(stepCounts==0) return 0.0;
+
+		var halfCounts = stepCounts>>1;
+		var sum1=0, sum2=0;
+		var dStep = t/stepCounts;
+
+		for(i=0; i<halfCounts; i++){
+			sum1 += this.getSpeedLength((2*i+1)*dStep);
+		}
+		for(i = 1; i<halfCounts; i++){
+			sum2 += this.getSpeedLength((2*i)*dStep);
+		}
+
+		return (this.getSpeedLength(0)+this.getSpeedLength(1)+2*sum2+4*sum1)*dStep/3;
+	};
+
+	Bezier.prototype.getPointByTime = function(t){
+		var it = 1-t, it2 = it*it, it3 = it2*it;
+		var t2 = t*t, t3 = t2*t;
+		return new Vector(it3*this.p0.x + 3*it2*t*this.p1.x + 3*it*t2*this.p2.x + t3*this.p3.x,
+			it3*this.p0.y + 3*it2*t*this.p1.y + 3*it*t2*this.p2.y + t3*this.p3.y
+		);
+	};
+
+	Bezier.prototype.getPointByLen = function(len){
+		if(len > this.length){
+			return this.p3;
+		}
+
+		var t1 = len/this.length, t2;
+		do
+		{
+			t2 = t1 - (this.getLength(t1)-len)/this.getSpeedLength(t1);
+			if(Math.abs(t1-t2)<0.01) break;
+
+			t1=t2;
+
+		}while(true);
+		return this.getPointByTime(t2);
+	};
+
+	/**
+	 *获取等距点，距离为step，默认1
+	*/
+	Bezier.prototype.getPointsByLen = function(step){
+		step = step||1;
+		var len = this.getLength();
+		var i = 0;
+		var points = [];
+		while(i <= len)
+		{
+			points.push(this.getPointByLen(i));
+			i+=step;
+		}
+		return points;
+	};
+
+	/**
+	 *获取等比例点，比例为step，默认.01
+	*/
+	Bezier.prototype.getPointsByTime = function(step){
+		step = step||.01;
+		var t = 0;
+		var points = [];
+		while(t <= 1)
+		{
+			points.push(this.getPointByTime(t));
+			t += step;
+		}
+		return points;
+	};
+
 })(FL);
 (function(win){
 	var Rect = win.Rect;
@@ -660,8 +969,8 @@
 		if(!ctx) return;
 		ctx.save();
 		ctx.translate(this.x, this.y);
-		ctx.scale(this.scaleX, this.scaleY);
 		ctx.rotate(this.angle);
+		ctx.scale(this.scaleX, this.scaleY);
 		this._draw(ctx);
 		ctx.restore();
 	};
@@ -1165,172 +1474,3 @@
 	}
 
 })(FL);
-(function(win){
-	var Vector = win.Vector = function(x, y)
-	{
-		this.x = x||0;
-		this.y = y||0;
-	}
-
-	Vector.prototype.set = function(x, y)
-	{
-		this.x = x;
-		this.y = y;
-	}
-
-	Vector.prototype.getClone = function()
-	{
-		return new Vector(this.x,this.y);
-	}
-	
-	Vector.prototype.cut = function(max)
-	{
-		var r = Math.min(max, this.getLength());
-		this.setLength(r);	
-	}
-	
-	Vector.prototype.cutNew = function(max)
-	{
-		var r= Math.min(max, this.getLength());
-		var v = this.getClone();
-		v.setLength(r);
-		return v;	
-	}
-
-	Vector.prototype.equals = function(v)
-	{
-		return (this.x==v.x && this.y==v.y);
-	}
-	
-	Vector.prototype.plus = function(v)
-	{
-		this.x += v.x;
-		this.y += v.y;	
-	}
-	
-	Vector.prototype.plusNew = function(v)
-	{
-		return new Vector(this.x+v.x,this.y+v.y);
-	}
-
-	Vector.prototype.minus = function(v)
-	{
-		this.x -= v.x;
-		this.y -= v.y;
-	}
-	
-	Vector.prototype.minusNew = function(v)
-	{
-		return new Vector(this.x-v.x,this.y-v.y);
-	}
-	
-	Vector.prototype.negate = function()
-	{
-		this.x = - this.x;
-		this.y = - this.y;
-	}
-	
-	Vector.prototype.negateNew = function()
-	{
-		return new Vector(-this.x,-this.y);
-	}
-	
-	Vector.prototype.scale = function(s)
-	{
-		this.x *= s;
-		this.y *= s;
-	}
-	
-	Vector.prototype.scaleNew = function(s)
-	{
-		return new Vector(this.x * s, this.y * s);
-	}
-	
-	Vector.prototype.getLength = function()
-	{
-		return Math.sqrt(this.x*this.x + this.y*this.y);
-	}
-	
-	Vector.prototype.setLength = function(len)
-	{
-		var r = this.getLength();
-		if (r) this.scale (len / r);
-		else this.x = len;
-	}
-	
-	Vector.prototype.getAngle = function()
-	{
-		return Math.atan2(this.y, this.x);
-	}
-	
-	Vector.prototype.setAngle = function(ang)
-	{
-		var r = this.getLength();
-		this.x = r * Math.cos (ang);
-		this.y = r * Math.sin (ang);
-	}
-	
-	/**
-	*	angle || cos, sin
-	*/
-	Vector.prototype.rotate = function()
-	{  
-		var cos, sin;
-		var a = arguments;
-		if(a.length == 1)
-		{
-			cos = Math.cos(a[0]);
-			sin = Math.sin(a[0]);
-		} 
-		else
-		{
-			cos = a[0]
-			sin = a[1]
-		}
-		var rx = this.x * cos - this.y * sin;
-		var ry = this.x * sin + this.y * cos;
-		this.x = rx;
-		this.y = ry;
-	} 
-	
-	Vector.prototype.rotateNew = function(ang)
-	{
-		var v=new Vector(this.x,this.y);
-		v.rotate(ang);
-		return v;
-	}
-
-	Vector.prototype.cross = function(v)
-	{
-		return this.x*v.y - v.x*this.y;
-	};
-
-	Vector.prototype.dot = function(v)
-	{
-		return this.x * v.x + this.y * v.y;
-	}
-	
-	Vector.prototype.getNormal = function()
-	{
-		return new Vector(-this.y,this.x);
-	}
-
-	
-	Vector.prototype.isPerpTo = function(v)
-	{
-		return (this.dot (v) == 0);
-	}
-	
-	Vector.prototype.angleBetween = function(v)
-	{
-		var dp = this.dot (v); 
-		var cosAngle = dp / (this.getLength() * v.getLength());
-		return Math.acos (cosAngle); 
-	}
-
-	Vector.prototype.getLength2 = function()
-	{
-		return this.x*this.x + this.y*this.y;
-	}
-
-})(window);

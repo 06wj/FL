@@ -1,6 +1,5 @@
 (function(win){
 	var Rect = win.Rect;
-
 	var min = Math.min;
 	var max = Math.max; 
 	var abs = Math.abs;
@@ -9,6 +8,37 @@
 	{
 		this.p0 = v0||new Vector();
 		this.p1 = v1||new Vector();
+	};
+
+	/**
+	 *获取t百分比的点
+	*/
+	Line.prototype.getPoint = function(t){
+		var x = (this.p1.x - this.p0.x) * t + this.p0.x;
+		var y = (this.p1.y - this.p0.y) * t + this.p0.y;
+		return new Vector(x, y);
+	};
+
+	Line.prototype.getAngle = function(){
+		var x = this.p1.x - this.p0.x;
+		var y = this.p1.y - this.p0.y;
+		return Math.atan2(y, x);
+	};
+
+	Line.prototype.getY = function(x){
+		this.lx = this.lx||Math.min(this.p0.x, this.p1.x);
+		this.rx = this.rx||Math.max(this.p0.x, this.p1.x);
+		if(x < this.lx || x > this.rx) return null;
+		this._getY = this._getY || function(x){
+			var x1 = this.p0.x;
+			var y1 = this.p0.y;
+			var x2 = this.p1.x;
+			var y2 = this.p1.y;
+			if(x1 == x2) return Math.min(y1, y2); 
+			if(y1 == y2) return y1;
+			return (x-x1)/(x2-x1)*(y2-y1) + y1
+		}
+		return this._getY(x);
 	};
 
 	Line.prototype.hitTestPoint = function(x, y)

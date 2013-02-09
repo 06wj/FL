@@ -66,7 +66,7 @@
 			this.v.x = 0;
 		}
 
-		if(this.pos.y >= height && Keyboard.getIsDown("UP"))
+		if(this.v.y == 0 && Keyboard.getIsDown("UP"))
 		{
 			this.v.y = -5;
 		}
@@ -76,11 +76,11 @@
 		// 	this.play("jump1");
 		// }
 
-		if(this.pos.y >= height && Keyboard.getIsDown("SPACE"))
+		if(this.v.y == 0 && Keyboard.getIsDown("SPACE"))
 		{
 			this.play("attack")
 		}
-		else if(this.pos.y < height) 
+		else if(this.v.y != 0) 
 		{
 			if(this.v.y > 0) this.play("jump1");
 			else this.play("jump2");
@@ -96,11 +96,23 @@
 
 		this.v.plus(this.a);
 		this.pos.plus(this.v);
-		if(this.pos.y > height)
+
+		if(this.map)
 		{
-			this.pos.y = height;
-			this.v.y = 0;
+			for(var i = 0, lines = this.map.lines,l = lines.length;i < l;i ++)
+			{
+				var y = lines[i].getY(this.x);
+				
+				if(y && (y <= this.pos.y + 2))
+				{
+					this.pos.y = y;
+					this.v.y = 0;
+					this.angle = lines[i].getAngle();
+					break;
+				}
+			}
 		}
+
 
 		this.x = this.pos.x;
 		this.y = this.pos.y;
@@ -110,11 +122,11 @@
 
 	Player.create = function()
 	{
-		player = new Player();
+		var player = new Player();
 		player.init();
-		stage.addChild(player);
 		player.play("play1");
 		player.pos.set(width>>1, height);
+		return player;
 	}
 
 })(window);

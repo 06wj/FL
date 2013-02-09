@@ -1,72 +1,80 @@
-<!doctype>
-<html>
+<!DOCTYPE HTML>
+<html lang="en-US">
 <head>
-<meta charset="UTF-8">
-<title>billd</title>
-<style type="text/css">
-	canvas{
-		background: #ddd;
-		width: :275px;
-		height: :200px;
-		border:solid 1px black;
-	}
-	div{
-		margin:6px 6px;
-	}
-	#game{
-		margin:50px 50px;
-	}
-</style>
+	<meta charset="UTF-8">
+	<title>billd</title>
+	<style type="text/css">
+		canvas{
+			background: #ddd;
+			width: :275px;
+			height: :200px;
+			border:solid 1px black;
+		}
+		div{
+			margin:6px 6px;
+		}
+		#game{
+			margin:50px 50px;
+		}
+	</style>
 </head>
 <body>
-<div id = "game">
-	<canvas></canvas>
-	<div>左右键移动，上跳跃，连按两次方向键快跑</div>
-</div>
-<script type="text/javascript" src="../../FL.js"></script>
-<script type="text/javascript" src="R.js"></script>
-<script type="text/javascript" src="js/Player.js"></script>
-<script type="text/javascript">
-	var ns = FL.ns("billd");
-	FL.import(ns, this, "Player");
-	FL.import(FL, this, "Stage, LoadProgress, ImageLoader");
+	<div id = "game">
+		<canvas width = "550" height = "200"></canvas>
+		<p>左右键移动，上跳跃，连按两次方向键快跑</p>
+	</div>
+	<script type="text/javascript" src="../../FL.js"></script>
+	<script type="text/javascript" src="R.js"></script>
+	<script type="text/javascript" src="js/Player.js"></script>
+	<script type="text/javascript" src="js/Map.js"></script>
+	<script type="text/javascript">
+		var ns = FL.ns("billd");
+		FL.import(ns, this, "Player, Map");
+		FL.import(FL, this, "Stage, LoadProgress, ImageLoader");
 
-	var	canvas = document.querySelector("canvas");
-	var width = 550;
-	var height = 200;
-	var fps = 60;
-	var mc;
+		var	canvas = document.querySelector("canvas");
+		var width = 550;
+		var height = 200;
+		var fps = 60;
+		var mc;
 
-	var stage = new Stage(canvas, width, height, fps);
-	stage.start();
+		var stage = new Stage(canvas, width, height, fps);
+		stage.start();
 
-	var loadProgress = new LoadProgress(new ImageLoader());
-	loadProgress.x = width>>1;loadProgress.y=height>>1;
-	loadProgress.addEventListener("complete", function(){
-		stage.removeChild(this);
-		this.removeAllEventListener("complete", arguments.callee);
-		loadProgress = null;
-		R.images = this.loader.images; 
-		init();
-	});
-	loadProgress.load(R.images);
-	stage.addChild(loadProgress);
+		var loadProgress = new LoadProgress(new ImageLoader());
+		loadProgress.x = width>>1;loadProgress.y=height>>1;
+		loadProgress.addEventListener("complete", function(){
+			stage.removeChild(this);
+			this.removeAllEventListener("complete", arguments.callee);
+			loadProgress = null;
+			R.images = this.loader.images; 
+			init();
+		});
+		loadProgress.load(R.images);
+		stage.addChild(loadProgress);
 
-	stage.initMouseEvent();
-	stage.initKeyboardEvent();
+		stage.initMouseEvent();
+		stage.initKeyboardEvent();
 
-	setInterval(function(){
-		stage.render();
-	}, 1000/fps);
+		var map, player;
 
-	function init(){
-		Player.create();
-	}
+		setInterval(function(){
+			stage.render();
+		}, 1000/fps);
 
-	stage.update = function(){
-		
-	};
+		function init(){
+			map = new Map();
+			map.init(width, height);
+			stage.addChild(map);
+			player = Player.create();
+			player.map = map;
+			stage.addChild(player);
+		}
 
-</script>
+		stage.update = function(){
+			
+		};
+
+	</script>
 </body>
 </html>
