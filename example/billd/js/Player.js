@@ -83,8 +83,7 @@
 		}
 		else if(this.v.y != 0) 
 		{
-			if(this.v.y > 0) this.play("jump1");
-			else this.play("jump2");
+			this.play("jump2")
 		}
 		else if(Math.abs(this.v.x) == speed1) this.play("run1");
 		else if(Math.abs(this.v.x) == speed2) this.play("run2");
