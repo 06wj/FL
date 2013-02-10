@@ -50,7 +50,7 @@
 
 	function getLinesByBezier(bezier)
 	{
-		var points = bezier.getPointsByTime();
+		var points = bezier.getPointsByTime(.01);
 		var lines = []
 		for(var i = 1, l = points.length;i < l;i ++)
 		{

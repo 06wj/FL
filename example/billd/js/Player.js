@@ -3,7 +3,7 @@
 	FL.import(FL, this, "Utils, MovieClip, Keyboard");
 
 	var speed1 = 1;
-	var speed2 = 2.5;
+	var speed2 = 3;
 	
 	var Player = ns.Player = function()
 	{
@@ -63,7 +63,7 @@
 		}
 		else 
 		{
-			this.v.x = 0;
+			this.v.x *= .9;
 		}
 
 		if(this.v.y == 0 && Keyboard.getIsDown("UP"))
@@ -82,7 +82,7 @@
 		}
 		else if(Math.abs(this.v.x) == speed1) this.play("run1");
 		else if(Math.abs(this.v.x) == speed2) this.play("run2");
-		else if(this.v.x == 0) this.play("stand2");
+		else if(this.v.x < speed1) this.play("stand2");
 	};
 
 	Player.prototype.update = function()
@@ -92,18 +92,20 @@
 		this.v.plus(this.a);
 		if(this.v.y > 5) this.v.y = 5;
 		this.pos.plus(this.v);
-
+		this.a.x = 0;
 		if(this.map && this.v.y > 0)
 		{
 			for(var i = 0, lines = this.map.lines,l = lines.length;i < l;i ++)
 			{
-				var y = lines[i].getY(this.x - map.x);
+				var y = lines[i].getY(this.x - this.map.x);
 				
 				if(y && y <= this.pos.y + 2 && y >= this.pos.y - 5)
 				{
 					this.pos.y = y;
 					this.v.y = 0;
 					this.angle = lines[i].getAngle();
+					this.a.x = Math.sin(this.angle) * (Math.cos(this.angle)>0?1:-1) * .07;
+
 					break;
 				}
 			}
