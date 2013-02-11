@@ -4,6 +4,8 @@
 
 	var Map = ns.Map = function(x, y){
 		Bitmap.call(this, x, y);
+		this.mapData = {};
+		this.lines = [];
 	};
 	Utils.extends(Map, Bitmap);
 
@@ -30,10 +32,7 @@
 		this.lines.push(new Line(new Vector(760, 40), new Vector(890, 30)))
 
 		draw(this.ctx, this.lines);
-	};
-
-	Map.prototype.update = function(){
-
+		this.mapData = createMapData(this.lines);
 	};
 
 	function draw(ctx, lines){
@@ -58,5 +57,21 @@
 		}
 		return lines;
 	}	
+
+	function createMapData(lines)
+	{
+		var hash = {}, point;
+		for(var i = 0, l = lines.length;i < l;i ++)
+		{
+			var points = lines[i].createPoints();
+			for(var j = 0, pl = points.length;j < pl;j ++)
+			{
+				point = points[j];
+				hash[point.x] = hash[point.x] || [];
+				hash[point.x].push({y:point.y, ang:point.ang});
+			}
+		}
+		return hash;
+	}
 
 })(window);

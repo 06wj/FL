@@ -32,6 +32,28 @@
 		if(r < .01) this.v.y = -.1;
 	};
 
+	Snail.prototype.checkMap = function(map)
+	{
+		if(map && this.v.y > 0)
+		{
+			var dataArr = map.mapData[(this.x - map.x)>>0];
+			if(dataArr){
+				for(var i = 0, l = dataArr.length;i < l;i ++)
+				{
+					var data = dataArr[i];
+					if(data.y <= this.pos.y + 2 && data.y >= this.pos.y - 5)
+					{
+						this.pos.y = data.y;
+						this.v.y = 0;
+						this.angle = data.ang;
+						this.a.x = Math.sin(this.angle) * (Math.cos(this.angle)>0?1:-1) * .07;
+						break;
+					}
+				}
+			}
+		}
+	};
+
 	Snail.prototype.update = function()
 	{
 		this.time += this.timeStep;
@@ -40,36 +62,21 @@
 		if(this.v.y > 5) this.v.y = 5;
 		this.pos.plus(this.v);
 		this.a.x = 0;
-		if(Snail.map)
-		{
-			if(this.v.y > 0)
-			{
-				for(var i = 0, lines = Snail.map.lines,l = lines.length;i < l;i ++)
-				{
-					var y = lines[i].getY(this.pos.x);
-					
-					if(y && y <= this.pos.y + 2 && y >= this.pos.y - 5)
-					{
-						this.pos.y = y;
-						this.v.y = 0;
-						this.angle = lines[i].getAngle();
-						break;
-					}
-				}
-			}
-			if(this.pos.x < this.width) {
-				this.pos.x = this.width;
-				this.v.x = speed;
-			}
-			if(this.pos.x > Snail.map.width-this.width) {
-				this.pos.x = Snail.map.width-this.width;
-				this.v.x = speed * -1;
-			}
-			this.x = this.pos.x + Snail.map.x;
-			this.y = this.pos.y + Snail.map.y;
+		
+		this.checkMap(Snail.map);
 
-			this.doSth();
+		if(this.pos.x < this.width) {
+			this.pos.x = this.width;
+			this.v.x = speed;
 		}
+		if(this.pos.x > Snail.map.width-this.width) {
+			this.pos.x = Snail.map.width-this.width;
+			this.v.x = speed * -1;
+		}
+		this.x = this.pos.x + Snail.map.x;
+		this.y = this.pos.y + Snail.map.y;
+
+		this.doSth();
 	};
 
 	Snail.create = function(x, y)

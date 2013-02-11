@@ -85,6 +85,28 @@
 		else if(this.v.x < speed1) this.play("stand2");
 	};
 
+	Player.prototype.checkMap = function(map)
+	{
+		if(map && this.v.y > 0)
+		{
+			var dataArr = map.mapData[(this.x - map.x)>>0];
+			if(dataArr){
+				for(var i = 0, l = dataArr.length;i < l;i ++)
+				{
+					var data = dataArr[i];
+					if(data.y <= this.pos.y + 2 && data.y >= this.pos.y - 5)
+					{
+						this.pos.y = data.y;
+						this.v.y = 0;
+						this.angle = data.ang;
+						this.a.x = Math.sin(this.angle) * (Math.cos(this.angle)>0?1:-1) * .07;
+						break;
+					}
+				}
+			}
+		}
+	};
+
 	Player.prototype.update = function()
 	{
 		this.time += this.timeStep;
@@ -93,23 +115,8 @@
 		if(this.v.y > 5) this.v.y = 5;
 		this.pos.plus(this.v);
 		this.a.x = 0;
-		if(this.map && this.v.y > 0)
-		{
-			for(var i = 0, lines = this.map.lines,l = lines.length;i < l;i ++)
-			{
-				var y = lines[i].getY(this.x - this.map.x);
-				
-				if(y && y <= this.pos.y + 2 && y >= this.pos.y - 5)
-				{
-					this.pos.y = y;
-					this.v.y = 0;
-					this.angle = lines[i].getAngle();
-					this.a.x = Math.sin(this.angle) * (Math.cos(this.angle)>0?1:-1) * .07;
 
-					break;
-				}
-			}
-		}
+		this.checkMap(this.map);
 
 		this.x = this.pos.x;
 		this.y = this.pos.y;
