@@ -322,6 +322,19 @@
 		return this._getY(x);
 	};
 
+	Line.prototype.createPoints = function()
+	{
+		var points = [];
+		this.lx = this.lx||Math.min(this.p0.x, this.p1.x);
+		this.rx = this.rx||Math.max(this.p0.x, this.p1.x);
+		var ang = this.getAngle();
+		for(var i = this.lx>>0;i <= this.rx; i ++)
+		{
+			if(this.getY(i) != null) points.push({x:i, y:this.getY(i), ang:ang});
+		}
+		return points;
+	}
+
 	Line.prototype.hitTestPoint = function(x, y)
 	{
 		var p = new Vector(x, y);
