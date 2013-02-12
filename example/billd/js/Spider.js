@@ -1,7 +1,7 @@
 (function(win){
 	var ns = FL.ns("billd");
 	FL.import(FL, this, "Utils, MovieClip");
-	var speed = 1;
+	var speed = 1.5;
 	var Spider = ns.Spider = function(){
 		MovieClip.apply(this, arguments);
 		this.alive = true;
