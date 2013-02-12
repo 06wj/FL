@@ -1,5 +1,5 @@
 var ns = FL.ns("billd");
-FL.import(ns, this, "Player, Map, YellowBall, Snail");
+FL.import(ns, this, "Player, Map, YellowBall, Spider");
 FL.import(FL, this, "Stage, LoadProgress, ImageLoader");
 
 FL.debug = false;
@@ -9,6 +9,8 @@ var width = 550;
 var height = 200;
 var fps = 60;
 var mc;
+var life = 99;
+var score = 0;
 
 var stage = new Stage(canvas, width, height, fps);
 stage.start();
@@ -29,7 +31,7 @@ stage.initMouseEvent();
 stage.initKeyboardEvent();
 
 var map, player;
-var snails = [];
+var spiders = [];
 
 setInterval(function(){
 	stage.render();
@@ -37,74 +39,89 @@ setInterval(function(){
 
 function init(){
 	map = new Map();
-	map.init(width*2, height);
+	map.init(width*2, height*2);
 	stage.addChild(map);
-	Snail.map = YellowBall.map = map;
+	Spider.map = YellowBall.map = map;
 
 	player = Player.create();
 	player.map = map;
-	player.pos.x = 10;
-	player.pos.y = 0;
 	stage.addChild(player);
 
-	for(var i = 0; i < 13;i ++)
+	for(var i = 0; i < 15;i ++)
 	{
 		ball = YellowBall.create(100, 100);
 		stage.addChild(ball);
 	}
 
-	for(var i = 0; i < 13;i ++)
+	for(var i = 0; i < 15;i ++)
 	{
-		snail = Snail.create(Math.random()*width*2, 0);
-		stage.addChild(snail);
-		snails.push(snail);
+		spider = Spider.create(Math.random()*(width*2-50)+50, Math.random()>.5?10:200);
+		stage.addChild(spider);
+		spiders.push(spider);
 	}
 	
 	stage.update = update;
+	map.y = 0;
+	player.pos.x = 288;
+	player.pos.y = player.y = 377;
 }
 
 function update(){
-	if(player.pos.x >= width * .6 && -1*map.x < width)
+	if(player.x >= Math.floor(width * .6) && map.x > width - map.width)
 	{
-		player.pos.x = width * .6;
-		map.x -= player.v.x;
+		map.x = width * .6 - player.pos.x;
 	}
 
-	if(player.pos.x <= width * .4 && map.x < 0)
+	else if(player.x <= width * .4 && map.x < 0)
 	{
-		player.pos.x = width * .4;
-		map.x -= player.v.x;
+		map.x = width * .4 - player.pos.x;
+	}
+
+	if(player.y <= Math.ceil(height * .2))
+	{
+		map.y = height * .2 - player.pos.y;
+	}
+	
+	else if(player.y >= Math.floor(height * .8) && map.y > height - map.height)
+	{
+		map.y = height * .8 - player.pos.y;
+
 	}
 
 	if(player.pos.x < player.width*.5){
 		player.pos.x = player.width*.5;
 	}
 
-	if(player.pos.x > width-player.width*.5){
-		player.pos.x = width-player.width*.5;
+	if(player.pos.x > map.width-player.width*.5){
+		player.pos.x = map.width-player.width*.5;
 	}
 
-	for(var i = 0, l = snails.length;i < l;i ++)
+	for(var i = 0, l = spiders.length;i < l;i ++)
 	{
-		var snail = snails[i];
-		if(	snail.alive && player.hitTestObject(snail))
+		var spider = spiders[i];
+		if(	spider.alive && player.hitTestObject(spider))
 		{
 			if(player.v.y > 0){
 				player.v.y = -5;
-				snail.v.y = -4;
-				snail.v.x = 0;
-				snail.scaleX = 1;
-				snail.setCenter();
-				snails.splice(snails.indexOf(snail), 1);
-				TweenLite.to(snail, 2, {scaleX:.8, scaleY:.8, angle:10, onComplete:function(){
-					stage.removeChild(snail);
+				spider.v.y = -4;
+				spider.v.x = 0;
+				spider.scaleX = 1;
+				spider.setCenter();
+				spiders.splice(spiders.indexOf(spider), 1);
+				TweenLite.to(spider, 2, {scaleX:.8, scaleY:.8, angle:10, onComplete:function(){
+					stage.removeChild(spider);
 				}})
-				snail.alive = false;
+				spider.alive = false;
+				score += 5;
 			}	
-			else{
+			else if(player.alive){
 				player.die();
+				life --;
 			}
 			break;
 		}
 	}
+
+	document.getElementById("life").innerHTML = "life:" + life;
+	document.getElementById("score").innerHTML = "score:" + score;
 }
