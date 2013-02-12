@@ -17,20 +17,20 @@
 		this.setImg(this.img);
 
 		this.lines = [];
-		var bezier = new Bezier(0, h-40, w/8, h-150, w/8*3, h+40, w/2, h-40);
-		this.lines=this.lines.concat(getLinesByBezier(bezier)); 
 
-		var bezier = new Bezier(w/2, h-40, w/8+ w/2, h-150, w/8*3+ w/2, h+40, w, h-40);
-		this.lines = this.lines.concat(getLinesByBezier(bezier)); 
+		for(var i = 0, l = mapData.beziers.length;i < l;i ++)
+		{
+			var points = mapData.beziers[i];
+			this.lines = this.lines.concat(getLinesByBezier(new Bezier(points[0], points[1], points[2], points[3]))); 
+		}
 
-		this.lines.push(new Line(new Vector(20, 100), new Vector(100, 80)))
-		this.lines.push(new Line(new Vector(150, 80), new Vector(240, 80)))
-		this.lines.push(new Line(new Vector(260, 40), new Vector(390, 30)))
-
-		this.lines.push(new Line(new Vector(520, 100), new Vector(600, 80)))
-		this.lines.push(new Line(new Vector(650, 80), new Vector(740, 80)))
-		this.lines.push(new Line(new Vector(760, 40), new Vector(890, 30)))
-
+		for(var i = 0, l = mapData.lines.length;i < l;i ++)
+		{
+			var points = mapData.lines[i];
+			log(points)
+			this.lines.push(new Line(new Vector(points[0].x, points[0].y), new Vector(points[1].x, points[1].y)));
+		}
+		
 		draw(this.ctx, this.lines);
 		this.mapData = createMapData(this.lines);
 	};
