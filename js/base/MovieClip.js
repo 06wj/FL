@@ -6,7 +6,7 @@
 	{
 		Sprite.call(this, x, y);
 
-		this.time = 0;
+		this._time = 0;
 		this.isPlay = false;
 		this.isLoop = false;
 		this.frameNum = 0;
@@ -30,12 +30,12 @@
 			this.isLoop = data.loop;
 			this.delay = data.delay||this.delay;
 			this.frameNum = 0;
-			this.time = 0;
+			this._time = 0;
 			this._setFrame();
 		}
 		if(!this.isPlay)
 		{
-			this.time = 0;
+			this._time = 0;
 			this.isPlay = true;
 		}
 	};
@@ -74,10 +74,10 @@
 
 	MovieClip.prototype._update = function()
 	{
-		this.time += this.timeStep;
-		if(this.time >= this.delay)
+		this._time += this.timeStep;
+		if(this._time >= this.delay)
 		{
-			this.time = this.time - this.delay;
+			this._time = this._time - this.delay;
 			this.frameNum ++;
 			if(this.frameNum >= this.totalFrame)
 			{
