@@ -4,7 +4,8 @@
 
 	var speed1 = 2;
 	var speed2 = 3.5;
-	
+	var jumpSpeed = -6;
+
 	var Player = ns.Player = function()
 	{
 		MovieClip.apply(this, arguments);
@@ -69,7 +70,7 @@
 
 		if(this.v.y == 0 && Keyboard.getIsDown("UP"))
 		{
-			this.v.y = -5;
+			this.v.y = jumpSpeed;
 			this.angle = 0;
 		}
 
@@ -90,7 +91,7 @@
 	{
 		if(map && this.v.y > 0)
 		{
-			var dataArr = map.mapData[(this.x - map.x)>>0];
+			var dataArr = map.mapData[this.pos.x>>0];
 			if(dataArr){
 				for(var i = 0, l = dataArr.length;i < l;i ++)
 				{
@@ -127,8 +128,8 @@
 
 		this.checkMap(this.map);
 
-		this.x = this.pos.x;
-		this.y = this.pos.y;
+		this.x = this.pos.x + this.map.x;
+		this.y = this.pos.y + this.map.y;
 
 		this.keyAction();
 	

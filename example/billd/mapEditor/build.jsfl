@@ -27,7 +27,7 @@ for(var index in indexHash)
 	var arr = shape.getCubicSegmentPoints(parseInt(index));
 	if(isLine)
 	{
-		lines.push([createPoint(arr[0]), createPoint(arr[1])]);
+		lines.push([createPoint(arr[0]), createPoint(arr[2])]);
 	}
 	else
 	{

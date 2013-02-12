@@ -5,30 +5,56 @@
 	<title>billd</title>
 	<style type="text/css">
 		canvas{
-			background: #ddd;
+			background: #eee;
 			width: :275px;
 			height: :200px;
 			border:solid 1px black;
+			position:absolute;
 		}
-		div{
-			margin:6px 6px;
+		
+		.board{
+			margin:4px;
+			font: 16px;
+			width:550px;
+			line-height: 1.5;
+			font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+			color: #F563C0;
+			position:absolute;
 		}
+
 		#game{
+			width:550px;
 			margin:50px 50px;
+		}
+
+		#life{
+			float:left;
+			margin:2px 4px;
+		}
+
+		#score{
+			float:right;
+			margin:2px 10px;		
 		}
 	</style>
 </head>
 <body>
 	<div id = "game">
 		<canvas width = "550" height = "200"></canvas>
+		<div class = "board">
+			<span id = "life">life:99</span>
+			<span id = "score">score:0</span>
+		</div>
 		<p>左右键移动，上跳跃，连按两次方向键快跑</p>
 	</div>
 	<script type="text/javascript" src="../../FL.js"></script>
 	<script type="text/javascript" src="../../lib/TweenLite.min.js"></script>
 	<script type="text/javascript" src="R.js"></script>
+	<script type="text/javascript" src="mapData.js"></script>
 	<script type="text/javascript" src="js/Player.js"></script>
 	<script type="text/javascript" src="js/YellowBall.js"></script>
 	<script type="text/javascript" src="js/Snail.js"></script>
+	<script type="text/javascript" src="js/Spider.js"></script>
 	<script type="text/javascript" src="js/Map.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>
