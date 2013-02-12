@@ -971,6 +971,7 @@
 		this.width = 0;
 		this.height = 0;
 		this.angle = 0;
+		this.alpha = 1;
 		this.timeStep = 0;
 		this.mouseEnable = false;
 		this.rect = new Rect();
@@ -983,11 +984,36 @@
 	{
 		if(!ctx) return;
 		ctx.save();
+		ctx.globalAlpha = this.alpha;
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle);
 		ctx.scale(this.scaleX, this.scaleY);
 		this._draw(ctx);
+
 		ctx.restore();
+		
+		if(FL.debug)
+		{
+			ctx.save();
+			var rect = this.getBounds();
+
+			ctx.strokeStyle = "#f00";
+			ctx.lineWidth = .5;
+			ctx.beginPath();
+			ctx.moveTo(this.points[0].x, this.points[0].y)
+			for(var i = 1, l = this.points.length;i < l;i ++)
+			{
+				ctx.lineTo(this.points[i].x, this.points[i].y);
+			}
+			ctx.closePath();
+			ctx.stroke();
+
+			ctx.strokeStyle = "#00f";
+			ctx.beginPath();
+			ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+			ctx.stroke();
+			ctx.restore();
+		}
 	};
 
 	DisplayObject.prototype.setCenter = function()
@@ -1053,7 +1079,15 @@
 		return false;
 	};
 
-
+	DisplayObject.prototype.hitTestObject = function(obj)
+	{
+		if(this.getBounds().intersects(obj.getBounds()))
+		{
+			return true;
+			// return new Polygon(this.points).hit(new Polygon(obj.points));
+		}
+		return false;
+	};
 
 })(FL);
 
@@ -1248,7 +1282,7 @@
 	{
 		Sprite.call(this, x, y);
 
-		this.time = 0;
+		this._time = 0;
 		this.isPlay = false;
 		this.isLoop = false;
 		this.frameNum = 0;
@@ -1272,12 +1306,12 @@
 			this.isLoop = data.loop;
 			this.delay = data.delay||this.delay;
 			this.frameNum = 0;
-			this.time = 0;
+			this._time = 0;
 			this._setFrame();
 		}
 		if(!this.isPlay)
 		{
-			this.time = 0;
+			this._time = 0;
 			this.isPlay = true;
 		}
 	};
@@ -1316,10 +1350,10 @@
 
 	MovieClip.prototype._update = function()
 	{
-		this.time += this.timeStep;
-		if(this.time >= this.delay)
+		this._time += this.timeStep;
+		if(this._time >= this.delay)
 		{
-			this.time = this.time - this.delay;
+			this._time = this._time - this.delay;
 			this.frameNum ++;
 			if(this.frameNum >= this.totalFrame)
 			{

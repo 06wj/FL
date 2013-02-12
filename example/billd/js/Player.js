@@ -2,8 +2,8 @@
 	var ns = FL.ns("billd");
 	FL.import(FL, this, "Utils, MovieClip, Keyboard");
 
-	var speed1 = 1;
-	var speed2 = 3;
+	var speed1 = 2;
+	var speed2 = 3.5;
 	
 	var Player = ns.Player = function()
 	{
@@ -15,6 +15,7 @@
 		this.pos = new Vector();
 		this.v = new Vector();
 		this.a = new Vector(0, .2);
+		this.alive = true;
 	};
 	Utils.extends(Player, MovieClip);
 
@@ -107,10 +108,18 @@
 		}
 	};
 
-	Player.prototype.update = function()
+	Player.prototype.die  =function()
 	{
-		this.time += this.timeStep;
+		this.alive = false;
+		var that = this;
+		setTimeout(function(){
+			that.alive = true;
+			that.alpha = 1;
+		}, 2000);
+	}
 
+	Player.prototype.update = function()
+	{		
 		this.v.plus(this.a);
 		if(this.v.y > 5) this.v.y = 5;
 		this.pos.plus(this.v);
@@ -122,6 +131,19 @@
 		this.y = this.pos.y;
 
 		this.keyAction();
+	
+		if(!this.alive)
+		{
+			this.time++;
+			if(this.time%10>5)
+			{
+				this.alpha = 1;
+			}
+			else
+			{
+				this.alpha = 0;
+			}
+		}	
 	};
 
 	Player.create = function()

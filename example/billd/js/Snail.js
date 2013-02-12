@@ -4,7 +4,7 @@
 	var speed = .5;
 	var Snail = ns.Snail = function(){
 		MovieClip.apply(this, arguments);
-
+		this.alive = true;
 		this.pos = new Vector();
 		this.v = new Vector(speed, 0);
 		this.a = new Vector(0, .2);
@@ -63,7 +63,7 @@
 		this.pos.plus(this.v);
 		this.a.x = 0;
 		
-		this.checkMap(Snail.map);
+		this.alive && this.checkMap(Snail.map);
 
 		if(this.pos.x < this.width) {
 			this.pos.x = this.width;
@@ -76,7 +76,7 @@
 		this.x = this.pos.x + Snail.map.x;
 		this.y = this.pos.y + Snail.map.y;
 
-		this.doSth();
+		this.alive && this.doSth();
 	};
 
 	Snail.create = function(x, y)
@@ -85,6 +85,7 @@
 		ball.init();
 		ball.play("stand");
 		ball.pos.set(x||0, y||0);
+		ball.update();
 		return ball;
 	}
 
