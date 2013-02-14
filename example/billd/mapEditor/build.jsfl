@@ -4,35 +4,58 @@ var baseURI = fl.baseURI = fl.scriptURI.slice(0, fl.scriptURI.lastIndexOf("/")) 
 fl.runScript(baseURI + "utils.jsfl");
 log(baseURI, "start");
 
-shape = elems[0];
-edges = shape.edges;
+var data = {};
 
-var indexHash = {};
-edges.forEach(function(edge){
-	if(!indexHash[edge.cubicSegmentIndex]){
-		indexHash[edge.cubicSegmentIndex] = {isLine:edge.isLine}
-	}
-});
+data.shape = getShapeData();
+data.mc = getMcData();
 
-function createPoint(obj){
+function createPoint(obj)
+{
 	return {x:obj.x, y:obj.y};
 }
 
-data = {lines:[], beziers:[]};
-lines = data.lines;
-beziers = data.beziers;
-for(var index in indexHash)
+function getShapeData()
 {
-	var isLine = indexHash[index].isLine;
-	var arr = shape.getCubicSegmentPoints(parseInt(index));
-	if(isLine)
+	var data = {lines:[], beziers:[]};
+	var shape = fl.getLayerByName("shape").frames[0].elements[0];
+	var edges = shape.edges;
+	
+	var indexHash = {};
+	edges.forEach(function(edge){
+		if(!indexHash[edge.cubicSegmentIndex]){
+			indexHash[edge.cubicSegmentIndex] = {isLine:edge.isLine}
+		}
+	});
+	
+	var lines = data.lines;
+	var beziers = data.beziers;
+	
+	for(var index in indexHash)
 	{
-		lines.push([createPoint(arr[0]), createPoint(arr[2])]);
+		var isLine = indexHash[index].isLine;
+		var arr = shape.getCubicSegmentPoints(parseInt(index));
+		if(isLine)
+		{
+			lines.push([createPoint(arr[0]), createPoint(arr[2])]);
+		}
+		else
+		{
+			beziers.push([createPoint(arr[0]), createPoint(arr[1]),createPoint(arr[2]), createPoint(arr[3])])
+		}
 	}
-	else
-	{
-		beziers.push([createPoint(arr[0]), createPoint(arr[1]),createPoint(arr[2]), createPoint(arr[3])])
-	}
+	return data;
+}
+
+function getMcData()
+{
+	var data = {};
+	var elems = fl.getLayerByName("mc").frames[0].elements;
+	elems.forEach(function(elem){
+		var name = fl.getLibraryName(elem);
+		data[name] = data[name]||[];
+		data[name].push(createPoint(elem))
+	});
+	return data;
 }
 
 var str = "var mapData = " + JSON.stringify(data);

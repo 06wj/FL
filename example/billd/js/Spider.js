@@ -8,6 +8,7 @@
 		this.pos = new Vector();
 		this.v = new Vector(speed, 0);
 		this.a = new Vector(0, .2);
+		this.onGround = false;
 	};
 	Utils.extends(Spider, MovieClip);
 
@@ -29,7 +30,6 @@
 		{
 			this.v.x = -1 * speed;
 		}
-		if(r < .01) this.v.y = -.1;
 	};
 
 	Spider.prototype.checkMap = function(map)
@@ -47,10 +47,18 @@
 						this.v.y = 0;
 						this.angle = data.ang;
 						this.a.x = Math.sin(this.angle) * (Math.cos(this.angle)>0?1:-1) * .07;
+						this.onGround = true;
 						break;
 					}
 				}
 			}
+		}
+		if(map && this.v.y > 0 && this.onGround)
+		{
+			this.onGround = false;
+			this.pos.minus(this.v);
+			this.v.x *= -1;
+			this.v.y = 0;
 		}
 	};
 
