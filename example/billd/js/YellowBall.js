@@ -8,6 +8,8 @@
 		this.pos = new Vector();
 		this.v = new Vector(speed, 0);
 		this.a = new Vector(0, .2);
+		this.alive = true;
+		this.onGround = false;
 	};
 	Utils.extends(YellowBall, MovieClip);
 
@@ -25,7 +27,10 @@
 	{
 		var r = Math.random();
 		if(r < .005) this.v.x *= -1;
-		if(r < .01) this.v.y = -5;
+		if(r < .01) {
+			this.v.y = -5;
+			this.onGround = false;
+		}
 	};
 
 	YellowBall.prototype.update = function()
@@ -50,11 +55,20 @@
 						this.v.y = 0;
 						this.angle = lines[i].getAngle();
 						this.a.x = Math.sin(this.angle) * (Math.cos(this.angle)>0?1:-1) * .07;
-
+						this.onGround = true;
 						break;
 					}
 				}
 			}
+
+			if(map && this.v.y > 0 && this.onGround)
+			{
+				this.onGround = false;
+				this.pos.minus(this.v);
+				this.v.x *= -1;
+				this.v.y = 0;
+			}
+			
 			if(this.pos.x < this.width) {
 				this.pos.x = this.width;
 				this.v.x = speed;
