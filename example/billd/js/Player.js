@@ -147,12 +147,12 @@
 		}	
 	};
 
-	Player.create = function()
+	Player.create = function(x, y)
 	{
 		var player = new Player();
 		player.init();
 		player.play("play1");
-		player.pos.set(width>>1, height);
+		player.pos.set(x, y);
 		return player;
 	}
 

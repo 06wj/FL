@@ -5,8 +5,8 @@ FL.import(FL, this, "Stage, LoadProgress, ImageLoader");
 FL.debug = false;
 
 var	canvas = document.querySelector("canvas");
-var width = 550;
-var height = 200;
+var width = 800;
+var height = 300;
 var fps = 60;
 var mc;
 var life = 99;
@@ -39,7 +39,7 @@ setInterval(function(){
 
 function init(){
 	map = new Map();
-	map.init(width*2, height*2);
+	map.init(1100, 400);
 	stage.addChild(map);
 	Spider.map = YellowBall.map = map;
 
@@ -47,15 +47,17 @@ function init(){
 	player.map = map;
 	stage.addChild(player);
 
-	for(var i = 0; i < 15;i ++)
+	for(var i = 0; i < mapData.mc.yellow_ball.length;i ++)
 	{
-		ball = YellowBall.create(100, 100);
+		pos = mapData.mc.yellow_ball[i];
+		ball = YellowBall.create(pos.x, pos.y);
 		stage.addChild(ball);
 	}
 
-	for(var i = 0; i < 15;i ++)
+	for(var i = 0; i < mapData.mc.spider.length;i ++)
 	{
-		spider = Spider.create(Math.random()*(width*2-50)+50, Math.random()>.5?10:200);
+		pos = mapData.mc.spider[i];
+		spider = Spider.create(pos.x, pos.y);
 		stage.addChild(spider);
 		spiders.push(spider);
 	}
