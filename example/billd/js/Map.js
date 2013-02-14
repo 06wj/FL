@@ -18,15 +18,16 @@
 
 		this.lines = [];
 
-		for(var i = 0, l = mapData.beziers.length;i < l;i ++)
+		var shape = mapData.shape;
+		for(var i = 0, l = shape.beziers.length;i < l;i ++)
 		{
-			var points = mapData.beziers[i];
+			var points = shape.beziers[i];
 			this.lines = this.lines.concat(getLinesByBezier(new Bezier(points[0], points[1], points[2], points[3]))); 
 		}
 
-		for(var i = 0, l = mapData.lines.length;i < l;i ++)
+		for(var i = 0, l = shape.lines.length;i < l;i ++)
 		{
-			var points = mapData.lines[i];
+			var points = shape.lines[i];
 			log(points)
 			this.lines.push(new Line(new Vector(points[0].x, points[0].y), new Vector(points[1].x, points[1].y)));
 		}

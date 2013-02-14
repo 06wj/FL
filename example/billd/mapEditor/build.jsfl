@@ -8,7 +8,6 @@ var data = {};
 
 data.shape = getShapeData();
 data.mc = getMcData();
-data.player = getPlayerData();
 
 function createPoint(obj)
 {
@@ -47,22 +46,16 @@ function getShapeData()
 	return data;
 }
 
-function getMcData = function()
+function getMcData()
 {
 	var data = {};
-	var elems = fl.getLayerByName("mc").frames[0];
+	var elems = fl.getLayerByName("mc").frames[0].elements;
 	elems.forEach(function(elem){
 		var name = fl.getLibraryName(elem);
 		data[name] = data[name]||[];
 		data[name].push(createPoint(elem))
 	});
 	return data;
-}
-
-function getPlayerData = function()
-{
-	var player = fl.getLayerByName("player").frames[0].elements[0];
-	return createPoint(player);
 }
 
 var str = "var mapData = " + JSON.stringify(data);
