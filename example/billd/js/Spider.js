@@ -62,6 +62,14 @@
 		}
 	};
 
+	Spider.prototype.attack = function(){
+		this.scaleX = this.scaleY = 1.4;
+		var that = this;
+		setTimeout(function(){
+			that.scaleX = that.scaleY = 1;
+		}, 300)
+	};
+
 	Spider.prototype.update = function()
 	{
 		this.time += this.timeStep;
