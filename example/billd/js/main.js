@@ -118,6 +118,10 @@ function update(){
 			}	
 			else if(player.alive){
 				player.die();
+				spider.attack();
+				player.v.set(0, 0);
+				player.a.x = spider.pos.x > player.pos.x ? -3:3;
+				spider.v.x *= (spider.pos.x - player.pos.x) * spider.v.x < 0? 1:-1;
 				life --;
 			}
 			break;

@@ -39,7 +39,7 @@
 	};
 
 	Player.prototype.keyAction = function(){
-		if(Keyboard.getIsDown("LEFT"))
+		if(Math.abs(this.a.x) < .001 && Keyboard.getIsDown("LEFT"))
 		{
 			if(Keyboard.getKeyDelay("LEFT") < 300)
 			{
@@ -51,7 +51,7 @@
 			}
 			this.scaleX = -1;
 		}
-		else if(Keyboard.getIsDown("RIGHT"))
+		else if(Math.abs(this.a.x) < .001 && Keyboard.getIsDown("RIGHT"))
 		{
 			if(Keyboard.getKeyDelay("RIGHT") < 300)
 			{
@@ -89,7 +89,7 @@
 
 	Player.prototype.checkMap = function(map)
 	{
-		if(map && this.v.y > 0)
+		if(map && this.v.y >= 0)
 		{
 			var dataArr = map.mapData[this.pos.x>>0];
 			if(dataArr){
@@ -101,7 +101,6 @@
 						this.pos.y = data.y;
 						this.v.y = 0;
 						this.angle = data.ang;
-						this.a.x = Math.sin(this.angle) * (Math.cos(this.angle)>0?1:-1) * .07;
 						break;
 					}
 				}
@@ -123,8 +122,11 @@
 	{		
 		this.v.plus(this.a);
 		if(this.v.y > 5) this.v.y = 5;
+		if(this.v.x > speed2) this.v.x = speed2;
+		if(this.v.x < -1*speed2) this.v.x = -1*speed2;
+
 		this.pos.plus(this.v);
-		this.a.x = 0;
+		this.a.x *= .9;
 
 		this.checkMap(this.map);
 
@@ -133,7 +135,7 @@
 
 		this.keyAction();
 	
-		if(!this.alive)
+		if( !this.alive)
 		{
 			this.time++;
 			if(this.time%10>5)
