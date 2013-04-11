@@ -5,8 +5,8 @@ FL.import(FL, this, "Stage, LoadProgress, ImageLoader");
 FL.debug = false;
 
 var	canvas = document.querySelector("canvas");
-var width = 800;
-var height = 300;
+var width = 400;
+var height = 200;
 var fps = 60;
 var mc;
 var life = 99;
@@ -39,7 +39,7 @@ setInterval(function(){
 
 function init(){
 	map = new Map();
-	map.init(1100, 400);
+	map.init(600, 400);
 	stage.addChild(map);
 	Spider.map = YellowBall.map = map;
 
