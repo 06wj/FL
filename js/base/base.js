@@ -1,8 +1,16 @@
 (function(win){
 	var FL = win.FL = {};
-	var log = win.log = function(){
-		console.log.apply(console, arguments);	
-	};
+	try{
+		log = function(){
+			console.log.apply(console,arguments);
+		};
+		log(1);
+	}
+	catch(e){
+		log=function(){
+			console.dir(arguments);
+		}
+	}
 		
 	var DEG_TO_RAD = win.DEG_TO_RAD = Math.PI/180;
 
