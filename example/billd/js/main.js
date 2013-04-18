@@ -5,7 +5,7 @@ FL.import(FL, this, "Stage, LoadProgress, ImageLoader");
 FL.debug = false;
 
 var	canvas = document.querySelector("canvas");
-var width = 400;
+var width = 600;
 var height = 200;
 var fps = 60;
 var mc;
@@ -39,7 +39,7 @@ setInterval(function(){
 
 function init(){
 	map = new Map();
-	map.init(600, 400);
+	map.init(1000, 400);
 	stage.addChild(map);
 	Spider.map = YellowBall.map = map;
 
@@ -63,9 +63,9 @@ function init(){
 	}
 	
 	stage.update = update;
-	map.y = 0;
-	player.pos.x = 288;
-	player.pos.y = player.y = 377;
+	map.y = 200;
+	player.pos.x = player.x = mapData.mc.player[0].x;
+	player.pos.y = player.y = mapData.mc.player[0].y;
 }
 
 function update(){
@@ -79,14 +79,14 @@ function update(){
 		map.x = width * .4 - player.pos.x;
 	}
 
-	if(player.y <= Math.ceil(height * .2))
+	if(player.y <= Math.ceil(height * .3))
 	{
-		map.y = height * .2 - player.pos.y;
+		map.y = height * .3 - player.pos.y;
 	}
 	
-	else if(player.y >= Math.floor(height * .8) && map.y > height - map.height)
+	else if(player.y >= Math.floor(height * .7) && map.y > height - map.height)
 	{
-		map.y = height * .8 - player.pos.y;
+		map.y = height * .7 - player.pos.y;
 
 	}
 
@@ -123,6 +123,7 @@ function update(){
 				player.a.x = spider.pos.x > player.pos.x ? -3:3;
 				spider.v.x *= (spider.pos.x - player.pos.x) * spider.v.x < 0? 1:-1;
 				life --;
+				FL.Shake.shake(stage, .8, .02, "y")
 			}
 			break;
 		}

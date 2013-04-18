@@ -91,6 +91,7 @@
 	{
 		if(map && this.v.y >= 0)
 		{
+			this.angle = 0;
 			var dataArr = map.mapData[this.pos.x>>0];
 			if(dataArr){
 				for(var i = 0, l = dataArr.length;i < l;i ++)

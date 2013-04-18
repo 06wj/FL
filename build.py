@@ -28,7 +28,10 @@ files = [
 	"js/base/MovieClip.js",
 	"js/base/LoadProgress.js",
 
-	"js/base/Stage.js"
+	"js/base/Stage.js",
+
+	"js/game/Camera.js",
+	"js/game/Shake.js"
 ]
 
 def cat(files, toFile):

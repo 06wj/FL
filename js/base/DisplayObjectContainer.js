@@ -46,11 +46,14 @@
 
 	DisplayObjectContainer.prototype._draw = function(ctx){
 		var l = this.children.length-1;
+		ctx.save();
+		ctx.translate(this.x, this.y);
 		while(l >= 0)
 		{
 			this.children[l].render(ctx);
 			l --;
 		}
+		ctx.restore();
 	};
 
 	DisplayObjectContainer.prototype.setAll = function(props)
