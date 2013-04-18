@@ -1,0 +1,69 @@
+function checkv()
+		{	
+			var Question = 1;
+			
+			if(parseInt(data.Qtype)==1 || parseInt(data.Qtype)==2)
+			{
+				var c = "";
+				var p = $(":input[checked][name='r']");
+				for(var i=0;i<p.length;i++)
+				{
+				  c = c+ p.eq(i).val();
+				  if(i<p.length-1)	
+					c = c+",";
+				}
+			
+				if(c=="")
+				{
+					console.log("您未选择任何答案,请重新选择.");
+					return false;
+				}
+				if(Answer==c)
+				{
+				
+					if(parseInt(Question)==parseInt(answerCount))
+					{
+						window.location.href= url;
+					}else
+					{
+						answerCount = parseInt(answerCount) +1;
+						createHtml();
+					}
+
+				}
+				else
+				{
+					console.log("回答错误,请重新选择正确答案.");
+				}
+			}
+			else
+			{
+				var k = $("#ticketQuestion").val();
+				if(k=="")
+				{
+					console.log("您未填写答案,请重新填写.");
+					$("#ticketQuestion").focus();
+					return false;
+				}
+				
+				if(data.Secondname==k)
+				{
+					if(parseInt(Question)==parseInt(answerCount))
+					{
+						window.location.href= url;
+					}else
+					{
+						answerCount = parseInt(answerCount) +1;
+						createHtml();
+					}
+				}
+				else
+				{
+						console.log("答案有误,请斟酌后再填写.");
+						$("#ticketQuestion").val("");
+						$("#ticketQuestion").focus();
+				}
+			}
+			
+			
+		}
