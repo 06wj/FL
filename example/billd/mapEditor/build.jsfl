@@ -8,10 +8,19 @@ var data = {};
 
 data.shape = getShapeData();
 data.mc = getMcData();
+data.map = getMapData();
 
 function createPoint(obj)
 {
 	return {x:obj.x, y:obj.y};
+}
+
+function getMapData()
+{
+	return {
+		width:doc.width,
+		height:doc.height,
+	};
 }
 
 function getShapeData()

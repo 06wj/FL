@@ -8,9 +8,11 @@
 			background: #eee;
 			border:solid 1px black;
 			position:absolute;
+			/*-webkit-transform:scale(.4, .4);*/
 		}
 		p{
 			margin:0px 50px;
+			display:none;
 		}
 		.board{
 			margin:4px;
@@ -20,6 +22,7 @@
 			font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
 			color: #F563C0;
 			position:absolute;
+			display:none;
 		}
 
 		#game{
@@ -41,7 +44,7 @@
 </head>
 <body>
 	<div id = "game">
-		<canvas width = "800" height = "300"></canvas>
+		<canvas></canvas>
 		<div class = "board">
 			<span id = "life">life:99</span>
 			<span id = "score">score:0</span>
