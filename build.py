@@ -50,7 +50,6 @@ def cat(files, toFile):
 	print("\n")
 cat(files, outPut)
 
-
-os.system("pause")
+#os.system("pause")
 
 

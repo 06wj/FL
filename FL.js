@@ -14,6 +14,24 @@
 		
 	var DEG_TO_RAD = win.DEG_TO_RAD = Math.PI/180;
 
+	FL.getUrlParams = function()
+	{
+		var params = {};
+		var url = window.location.href;
+		var idx = url.indexOf("?");
+		if(idx > 0)
+		{
+			var queryStr = url.substring(idx + 1);
+			var args = queryStr.split("&");
+			for(var i = 0, a, nv; a = args[i]; i++)
+			{
+				nv = args[i] = a.split("=");
+				params[nv[0]] = nv.length > 1 ? nv[1] : true;
+			}
+		}
+		return params;
+	};
+
 	FL.ns = function(str)
 	{
 		var arr = str.split(".");
@@ -35,6 +53,8 @@
 			to[obj] = from[obj];
 		});
 	};
+
+	FL.debug = FL.getUrlParams().debug;
 })(window);
 (function(win){
 		var Utils = win.Utils = {};
@@ -1665,9 +1685,6 @@
 				_dataList.splice(index, 1);
 				_targetList.splice(index, 1);
 			}
-		},
-		getList:function(){
-			return _dataList.slice()
 		}
 	};
 

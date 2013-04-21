@@ -1,8 +1,6 @@
 var ns = FL.ns("billd");
 FL.import(ns, this, "Player, Map, YellowBall, Spider");
-FL.import(FL, this, "Stage, LoadProgress, ImageLoader");
-
-FL.debug = false;
+FL.import(FL, this, "Stage, LoadProgress, ImageLoader, Camera");
 
 var	canvas = document.querySelector("canvas");
 var width = 600;
@@ -39,9 +37,11 @@ setInterval(function(){
 
 function init(){
 	map = new Map();
-	map.init(1000, 400);
+	map.init(mapData.map.width, mapData.map.height);
 	stage.addChild(map);
 	Spider.map = YellowBall.map = map;
+
+	camera = new Camera(0, 0, width, height);
 
 	player = Player.create();
 	player.map = map;
