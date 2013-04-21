@@ -2,8 +2,6 @@ var ns = FL.ns("billd");
 FL.import(ns, this, "Player, Map, YellowBall, Spider");
 FL.import(FL, this, "Stage, LoadProgress, ImageLoader, Camera");
 
-FL.debug = false;
-
 var	canvas = document.querySelector("canvas");
 var width = 600;
 var height = 200;
