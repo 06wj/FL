@@ -28,7 +28,6 @@
 		for(var i = 0, l = shape.lines.length;i < l;i ++)
 		{
 			var points = shape.lines[i];
-			log(points)
 			this.lines.push(new Line(new Vector(points[0].x, points[0].y), new Vector(points[1].x, points[1].y)));
 		}
 		
@@ -76,7 +75,6 @@
 			{
 				point = points[j];
 				hash[point.x] = hash[point.x] || [];
-				log(point.ang)
 				if(Math.abs(point.ang)>Math.PI*.5) point.ang += Math.PI;
 				hash[point.x].push({y:point.y, ang:point.ang});
 			}

@@ -50,6 +50,7 @@ def cat(files, toFile):
 	print("\n")
 cat(files, outPut)
 
-#os.system("pause")
+if os.name == "nt":
+	os.system("pause")
 
 

@@ -4,31 +4,32 @@
 	<meta charset="UTF-8">
 	<title>billd</title>
 	<style type="text/css">
+		body,div,canvas,p{
+			margin:0;
+			padding:0;
+		}
+		
 		canvas{
 			background: #eee;
 			border:solid 1px black;
-			position:absolute;
-			/*-webkit-transform:scale(.4, .4);*/
 		}
-		p{
-			margin:0px 50px;
-			display:none;
-		}
-		.board{
-			margin:4px;
-			font: 16px;
-			width:800px;
-			line-height: 1.5;
-			font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-			color: #F563C0;
-			position:absolute;
-			display:none;
+
+		#stage{
+			position: absolute;
 		}
 
 		#game{
-			width:800px;
-			height:300px;
 			margin:10px 50px;
+		}
+
+		#board{
+			margin:0px 0px;
+			font: 16px;
+			line-height: 1.5;
+			font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+			color: #F563C0;
+			position: absolute;
+			width:600px;
 		}
 
 		#life{
@@ -44,13 +45,15 @@
 </head>
 <body>
 	<div id = "game">
-		<canvas></canvas>
-		<div class = "board">
+		<div id = "stage">
+			<canvas></canvas>
+			<p>左右键移动，上跳跃，连按两次方向键快跑</p>
+		</div>
+		<div id = "board">
 			<span id = "life">life:99</span>
 			<span id = "score">score:0</span>
 		</div>
 	</div>
-	<p>左右键移动，上跳跃，连按两次方向键快跑</p>
 	<script type="text/javascript" src="../../FL.js"></script>
 	<script type="text/javascript" src="../../lib/TweenLite.min.js"></script>
 	<script type="text/javascript" src="R.js"></script>

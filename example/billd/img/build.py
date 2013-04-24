@@ -9,7 +9,7 @@ R = "../R.js"
 
 obj = []
    
-for f in os.listdir():
+for f in os.listdir(os.getcwd()):
     names = splitext(f)
     if names[1] !=".py" and names[1] !="":
         print(names[0])
@@ -19,5 +19,6 @@ fp = codecs.open(R, "w", "utf-8")
 fp.write("R={};R.images=" + json.dumps(obj, ensure_ascii=False))
 fp.close()
 
-os.system("pause")
+if os.name=="nt":
+	os.system("pause")
 

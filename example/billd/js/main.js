@@ -82,6 +82,36 @@ function init(){
 		ground.yy=ground.y;
 		ground.update = function(){this.x = map.x+this.xx;this.y=map.y+this.yy}
 	}
+
+	mapData.mc.star = mapData.mc.star||[];
+	for(var i = 0; i < mapData.mc.star.length;i ++)
+	{
+		pos = mapData.mc.star[i];
+		var star = new FL.Bitmap(pos.x, pos.y, R.images.star)
+		stage.addChild(star);
+		star.xx=star.x;
+		star.yy=star.y;
+		star.update = function(){
+			this.x = map.x+this.xx;
+			this.y=map.y+this.yy
+			if(player.hitTestObject(this))
+			{
+				this.update = null;
+				var that = this;
+				TweenLite.to(this, 1, {
+					angle:11,
+					scaleX:0,
+					scaleY:0,
+					x:578,
+					y:12,
+					onComplete:function() {
+						score += 10;
+						stage.removeChild(that);
+					}
+				})
+			}
+		}
+	}
 	
 	stage.update = update;
 	map.y = 200;
@@ -119,6 +149,7 @@ function update(){
 			isShake = false;
 			map.y = 200;
 			map.x = 0;
+			player.die();
 			player.pos.x = player.x = mapData.mc.player[0].x;
 			player.pos.y = player.y = mapData.mc.player[0].y;
 		}, 1000);
@@ -159,6 +190,19 @@ function update(){
 				life --;
 				FL.Shake.shake(stage, .5, .02, "xy")
 			}
+			break;
+		}
+	}
+
+	for(var i = 0, l = fishs.length;i < l;i ++)
+	{
+		var fish = fishs[i];
+		if(player.hitTestObject(fish) && player.alive)
+		{
+			player.die();
+			player.v.y = -4;
+			player.a.x = player.v.x>0 ? -3:3;
+			FL.Shake.shake(stage, .5, .02, "xy")
 			break;
 		}
 	}
