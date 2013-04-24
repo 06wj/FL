@@ -18,7 +18,7 @@
 
 		this.lines = [];
 
-		var shape = mapData.shape;
+		var shape = mapData.hit;
 		for(var i = 0, l = shape.beziers.length;i < l;i ++)
 		{
 			var points = shape.beziers[i];
@@ -32,19 +32,26 @@
 			this.lines.push(new Line(new Vector(points[0].x, points[0].y), new Vector(points[1].x, points[1].y)));
 		}
 		
-		draw(this.ctx, this.lines);
+		draw(this.ctx, mapData.shape);
 		this.mapData = createMapData(this.lines);
 	};
 
 	function draw(ctx, lines){
 		ctx.beginPath();
-		ctx.lineWidth = 1;
-		ctx.strokeStyle = "#222";
-		for(var i = 0, l = lines.length;i<l;i ++)
-		{
-			ctx.moveTo(lines[i].p0.x, lines[i].p0.y)
-			ctx.lineTo(lines[i].p1.x, lines[i].p1.y)
-		}
+		ctx.fillStyle = "#222";
+		ctx.lineStyle = "#222";
+		ctx.lineWidth = .1;
+		ctx.beginPath();
+		
+		lines.forEach(function(line){
+			var p = line.shift();
+			ctx.moveTo(p[0].x, p[0].y);
+			ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
+			line.forEach(function(p){
+				ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
+			});
+		});
+		ctx.fill();
 		ctx.stroke();
 	}
 
@@ -69,6 +76,8 @@
 			{
 				point = points[j];
 				hash[point.x] = hash[point.x] || [];
+				log(point.ang)
+				if(Math.abs(point.ang)>Math.PI*.5) point.ang += Math.PI;
 				hash[point.x].push({y:point.y, ang:point.ang});
 			}
 		}

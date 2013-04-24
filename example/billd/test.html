@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+	<title>test</title>
+	<style type="text/css">
+		canvas{
+			border:1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<canvas></canvas>
+	<script src = "mapData.js"></script>
+	<script>
+		d = mapData;
+		mapData = mapData.shape.drawData;
+
+		ctx = document.querySelector("canvas").getContext("2d");
+		document.querySelector("canvas").width = d.map.width;
+		document.querySelector("canvas").height = d.map.height;
+		ctx.fillStyle = "#ff9966";
+		ctx.strokeStyle = "#9966ff";
+		ctx.beginPath();
+		
+		mapData.forEach(function(line){
+			var p = line.shift();
+			ctx.moveTo(p[0].x, p[0].y);
+			ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
+			line.forEach(function(p){
+				ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
+			});
+		});
+		ctx.stroke();
+		ctx.fill();
+	</script>
+</body>
+</html>

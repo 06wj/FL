@@ -1,10 +1,10 @@
 var ns = FL.ns("billd");
-FL.import(ns, this, "Player, Map, YellowBall, Spider");
+FL.import(ns, this, "Player, Map, YellowBall, Spider, Fish");
 FL.import(FL, this, "Stage, LoadProgress, ImageLoader, Camera");
 
 var	canvas = document.querySelector("canvas");
 var width = 600;
-var height = 200;
+var height = 300;
 var fps = 60;
 var mc;
 var life = 99;
@@ -12,6 +12,7 @@ var score = 0;
 
 var stage = new Stage(canvas, width, height, fps);
 stage.start();
+var isShake = false;
 
 var loadProgress = new LoadProgress(new ImageLoader());
 loadProgress.x = width>>1;loadProgress.y=height>>1;
@@ -30,6 +31,7 @@ stage.initKeyboardEvent();
 
 var map, player;
 var spiders = [];
+var fishs = [];
 
 setInterval(function(){
 	stage.render();
@@ -39,7 +41,7 @@ function init(){
 	map = new Map();
 	map.init(mapData.map.width, mapData.map.height);
 	stage.addChild(map);
-	Spider.map = YellowBall.map = map;
+	Spider.map = YellowBall.map = Fish.map = map;
 
 	camera = new Camera(0, 0, width, height);
 
@@ -60,6 +62,25 @@ function init(){
 		spider = Spider.create(pos.x, pos.y);
 		stage.addChild(spider);
 		spiders.push(spider);
+	}
+
+	for(var i = 0; i < mapData.mc.fish.length;i ++)
+	{
+		pos = mapData.mc.fish[i];
+		fish = Fish.create(pos.x, pos.y);
+		stage.addChild(fish);
+		fishs.push(fish);
+	}
+
+	mapData.mc.ground = mapData.mc.ground||[];
+	for(var i = 0; i < mapData.mc.ground.length;i ++)
+	{
+		pos = mapData.mc.ground[i];
+		var ground = new FL.Bitmap(pos.x, pos.y, R.images.ground)
+		stage.addChild(ground);
+		ground.xx=ground.x;
+		ground.yy=ground.y;
+		ground.update = function(){this.x = map.x+this.xx;this.y=map.y+this.yy}
 	}
 	
 	stage.update = update;
@@ -88,6 +109,19 @@ function update(){
 	{
 		map.y = height * .7 - player.pos.y;
 
+	}
+
+	if(player.pos.y > map.height && !isShake)
+	{
+		FL.Shake.shake(stage, .5, .03, "xy");
+		isShake = true;
+		setTimeout(function(){
+			isShake = false;
+			map.y = 200;
+			map.x = 0;
+			player.pos.x = player.x = mapData.mc.player[0].x;
+			player.pos.y = player.y = mapData.mc.player[0].y;
+		}, 1000);
 	}
 
 	if(player.pos.x < player.width*.5){
@@ -123,7 +157,7 @@ function update(){
 				player.a.x = spider.pos.x > player.pos.x ? -3:3;
 				spider.v.x *= (spider.pos.x - player.pos.x) * spider.v.x < 0? 1:-1;
 				life --;
-				FL.Shake.shake(stage, .8, .02, "y")
+				FL.Shake.shake(stage, .5, .02, "xy")
 			}
 			break;
 		}
