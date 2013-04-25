@@ -35,6 +35,10 @@
 
 	YellowBall.prototype.update = function()
 	{
+		this.x = this.pos.x + YellowBall.map.x;
+		this.y = this.pos.y + YellowBall.map.y;
+		if(!this.isInStage) return;
+		this.bounds = this.getBounds();
 		this.time += this.timeStep;
 
 		this.v.plus(this.a);
@@ -77,9 +81,6 @@
 				this.pos.x = YellowBall.map.width-this.width;
 				this.v.x = speed * -1;
 			}
-			this.x = this.pos.x + YellowBall.map.x;
-			this.y = this.pos.y + YellowBall.map.y;
-
 			this.doSth();
 		}
 	};

@@ -121,6 +121,8 @@
 
 	Player.prototype.update = function()
 	{		
+		this.bounds = this.getBounds();
+		
 		this.v.plus(this.a);
 		if(this.v.y > 5) this.v.y = 5;
 		if(this.v.x > speed2) this.v.x = speed2;

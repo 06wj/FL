@@ -26,7 +26,8 @@
 	
 	DisplayObject.prototype.render = function(ctx)
 	{
-		if(!ctx) return;
+		this.isInStage = this._inStage();
+		if(!ctx || !this.isInStage) return;
 		ctx.save();
 		ctx.globalAlpha = this.alpha;
 		ctx.translate(this.x, this.y);
@@ -77,6 +78,11 @@
 		this.timeStep = timeStep;
 	}
 
+	DisplayObject.prototype._inStage =function()
+	{
+		return this.stage && this.x + this.width > 0 && this.y + this.height > 0 && this.x < this.stage.width && this.y < this.stage.height;
+	}
+
 	DisplayObject.prototype.getBounds = function()
 	{
 		var cos = Math.cos(this.angle);
@@ -125,7 +131,8 @@
 
 	DisplayObject.prototype.hitTestObject = function(obj)
 	{
-		if(this.getBounds().intersects(obj.getBounds()))
+		var bounds = this.bounds || this.getBounds();
+		if(bounds.intersects(obj.bounds||obj.getBounds()))
 		{
 			return true;
 			// return new Polygon(this.points).hit(new Polygon(obj.points));

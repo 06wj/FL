@@ -115,8 +115,8 @@ function init(){
 	
 	stage.update = update;
 	map.y = 200;
-	player.pos.x = player.x = mapData.mc.player[0].x;
-	player.pos.y = player.y = mapData.mc.player[0].y;
+	player.pos.x = mapData.mc.player[0].x;
+	player.pos.y = mapData.mc.player[0].y;
 }
 
 function update(){
@@ -166,7 +166,7 @@ function update(){
 	for(var i = 0, l = spiders.length;i < l;i ++)
 	{
 		var spider = spiders[i];
-		if(	spider.alive && player.hitTestObject(spider))
+		if(	spider.alive && spider.isInStage && player.hitTestObject(spider))
 		{
 			if(player.v.y > 0){
 				player.v.y = -5;

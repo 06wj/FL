@@ -72,6 +72,11 @@
 
 	Spider.prototype.update = function()
 	{
+		this.x = this.pos.x + Spider.map.x;
+		this.y = this.pos.y + Spider.map.y;
+		
+		if(!this.isInStage) return;
+		this.bounds = this.getBounds();
 		this.time += this.timeStep;
 
 		this.v.plus(this.a);
@@ -89,8 +94,7 @@
 			this.pos.x = Spider.map.width-this.width;
 			this.v.x = speed * -1;
 		}
-		this.x = this.pos.x + Spider.map.x;
-		this.y = this.pos.y + Spider.map.y;
+		
 
 		this.alive && this.doSth();
 	};
