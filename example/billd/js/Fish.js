@@ -29,7 +29,7 @@
 		this.v.plus(this.a);
 		this.pos.plus(this.v);
 
-		if(this.pos.y > Fish.map.height + this.height) 
+		if(this.pos.y > ns.map.height + this.height) 
 		{
 			this.v.y = -speed;
 		}
@@ -38,8 +38,8 @@
 		this.scaleY = this.v.y>0?-scale:scale;
 		this.scaleX = scale;
 
-		this.x = this.pos.x + Fish.map.x;
-		this.y = this.pos.y + Fish.map.y;
+		this.x = this.pos.x + ns.map.x;
+		this.y = this.pos.y + ns.map.y;
 
 	};
 

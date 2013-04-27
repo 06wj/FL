@@ -72,8 +72,8 @@
 
 	Spider.prototype.update = function()
 	{
-		this.x = this.pos.x + Spider.map.x;
-		this.y = this.pos.y + Spider.map.y;
+		this.x = this.pos.x + ns.map.x;
+		this.y = this.pos.y + ns.map.y;
 		
 		if(!this.isInStage) return;
 		this.bounds = this.getBounds();
@@ -84,14 +84,14 @@
 		this.pos.plus(this.v);
 		this.a.x = 0;
 		
-		this.alive && this.checkMap(Spider.map);
+		this.alive && this.checkMap(ns.map);
 
 		if(this.pos.x < this.width) {
 			this.pos.x = this.width;
 			this.v.x = speed;
 		}
-		if(this.pos.x > Spider.map.width-this.width) {
-			this.pos.x = Spider.map.width-this.width;
+		if(this.pos.x > ns.map.width-this.width) {
+			this.pos.x = ns.map.width-this.width;
 			this.v.x = speed * -1;
 		}
 		

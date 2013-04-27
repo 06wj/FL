@@ -31,8 +31,10 @@
 			this.lines.push(new Line(new Vector(points[0].x, points[0].y), new Vector(points[1].x, points[1].y)));
 		}
 		
-		draw(this.ctx, mapData.shape);
+		draw(this.ctx, mapData.shape.bezier);
+		drawDebug(this.ctx, this.lines);
 		this.mapData = createMapData(this.lines);
+
 	};
 
 	function draw(ctx, lines){
@@ -52,6 +54,18 @@
 		});
 		ctx.fill();
 		ctx.stroke();
+	}
+
+	function drawDebug(ctx, lines){
+		ctx.beginPath();
+		ctx.lineStyle = "#ff0000";
+		ctx.lineWidth = 2;
+		lines.forEach(function(line){
+			ctx.moveTo(line.p0.x, line.p0.y);
+			ctx.lineTo(line.p1.x, line.p1.y);
+		});
+		ctx.stroke();
+		ctx.fill();
 	}
 
 	function getLinesByBezier(bezier)

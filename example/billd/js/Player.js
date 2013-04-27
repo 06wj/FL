@@ -17,6 +17,8 @@
 		this.v = new Vector();
 		this.a = new Vector(0, .2);
 		this.alive = true;
+
+		this.floorV = 0;
 	};
 	Utils.extends(Player, MovieClip);
 
@@ -36,6 +38,7 @@
 		this.setImg(R.images["billd_mc"], 22, 22);
 		this.originX = this.width>>1;
 		this.originY = this.height;
+		this.bounds = this.getBounds();
 	};
 
 	Player.prototype.keyAction = function(){
@@ -102,7 +105,7 @@
 						this.pos.y = data.y;
 						this.v.y = 0;
 						this.angle = data.ang;
-						break;
+						return;
 					}
 				}
 			}
@@ -119,22 +122,44 @@
 		}, 2000);
 	}
 
+	Player.prototype.checkFloors = function(floors){
+		if(this.v.y>=0)
+		{
+			for(var i = 0, l =floors.length;i < l;i ++)
+			{
+				var floor = floors[i];
+				if(this.bounds.left < floor.x+floor.width && this.bounds.right > floor.x)
+				{
+					if(floor.pos.y <= this.pos.y + 2 && floor.pos.y >= this.pos.y - 5) 
+					{
+						this.pos.y = floor.pos.y;
+						this.v.y = 0;
+						this.floorV = floor.v.x;
+						return;
+					}
+				}
+			}
+			this.floorV = 0;
+		}
+	}
+
 	Player.prototype.update = function()
 	{		
 		this.bounds = this.getBounds();
-		
 		this.v.plus(this.a);
 		if(this.v.y > 5) this.v.y = 5;
 		if(this.v.x > speed2) this.v.x = speed2;
 		if(this.v.x < -1*speed2) this.v.x = -1*speed2;
 
 		this.pos.plus(this.v);
+		this.pos.x += this.floorV;
 		this.a.x *= .9;
 
-		this.checkMap(this.map);
+		this.checkMap(ns.map);
+		this.checkFloors(ns.floors);
 
-		this.x = this.pos.x + this.map.x;
-		this.y = this.pos.y + this.map.y;
+		this.x = this.pos.x + ns.map.x;
+		this.y = this.pos.y + ns.map.y;
 
 		this.keyAction();
 	

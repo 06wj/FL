@@ -35,8 +35,8 @@
 
 	YellowBall.prototype.update = function()
 	{
-		this.x = this.pos.x + YellowBall.map.x;
-		this.y = this.pos.y + YellowBall.map.y;
+		this.x = this.pos.x + ns.map.x;
+		this.y = this.pos.y + ns.map.y;
 		if(!this.isInStage) return;
 		this.bounds = this.getBounds();
 		this.time += this.timeStep;
@@ -45,11 +45,11 @@
 		if(this.v.y > 5) this.v.y = 5;
 		this.pos.plus(this.v);
 		this.a.x = 0;
-		if(YellowBall.map)
+		if(ns.map)
 		{
 			if(this.v.y > 0)
 			{
-				for(var i = 0, lines = YellowBall.map.lines,l = lines.length;i < l;i ++)
+				for(var i = 0, lines = ns.map.lines,l = lines.length;i < l;i ++)
 				{
 					var y = lines[i].getY(this.pos.x);
 					
@@ -77,8 +77,8 @@
 				this.pos.x = this.width;
 				this.v.x = speed;
 			}
-			if(this.pos.x > YellowBall.map.width-this.width) {
-				this.pos.x = YellowBall.map.width-this.width;
+			if(this.pos.x > ns.map.width-this.width) {
+				this.pos.x = ns.map.width-this.width;
 				this.v.x = speed * -1;
 			}
 			this.doSth();

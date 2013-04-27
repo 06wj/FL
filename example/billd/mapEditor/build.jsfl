@@ -26,6 +26,8 @@ function getMapData()
 
 function getHitData()
 {
+	if(!fl.getLayerByName("hit")) return null;
+
 	var data = {lines:[], beziers:[]};
 	var shape = fl.getLayerByName("hit").frames[0].elements[0];
 	var edges = shape.edges;
@@ -58,43 +60,70 @@ function getHitData()
 }
 
 function getShapeData()
-{
-	var shape = fl.getLayerByName("shape").frames[0].elements[0];
-	var edges = shape.edges;
-
-	var indexHash = {};
-	edges.forEach(function(edge){
-		if(!indexHash[edge.cubicSegmentIndex]){
-			indexHash[edge.cubicSegmentIndex] = {isLine:edge.isLine}
+{	
+	if(!fl.getLayerByName("shape")) return null;
+	
+	var getData = function(elem){
+		var edges = elem.edges;
+		var result = [];
+		var type;
+		
+		if(elem.isRectangleObject)
+		{
+			type = "rect";
+			result = [{x:elem.left, y:elem.top, width:elem.width, height:elem.height}];
 		}
-	});
-	
-	var lines = data.lines;
-	var beziers = data.beziers;
-	
-	var drawData = [];
+		else if(elem.isOvalObject)
+		{
+			type = "oval";
+		}
+		else
+		{
+			type = "bezier";
 
-	for(var index in indexHash)
-	{
-		var isLine = indexHash[index].isLine;
-		var arr = shape.getCubicSegmentPoints(parseInt(index));
-		drawData.push([createPoint(arr[0]), createPoint(arr[1]),createPoint(arr[2]), createPoint(arr[3])]);
+			var indexHash = {};
+			edges.forEach(function(edge){
+				if(!indexHash[edge.cubicSegmentIndex]){
+					indexHash[edge.cubicSegmentIndex] = {isLine:edge.isLine}
+				}
+			});
+			
+			var lines = data.lines;
+			var beziers = data.beziers;
+			
+			var drawData = [];
+
+			for(var index in indexHash)
+			{
+				var arr = elem.getCubicSegmentPoints(parseInt(index));
+				drawData.push([createPoint(arr[0]), createPoint(arr[1]),createPoint(arr[2]), createPoint(arr[3])]);
+			}
+
+			while(drawData.length > 0)
+			{
+				var subData = [];
+				subData.push(drawData.shift());
+				while (getNext(subData, drawData)) {
+							
+				}
+				result.push(subData);
+			}
+		}
+
+		return {type:type, data:result};
 	}
 
-
-	var result = [];
-
-	while(drawData.length > 0)
+	var data = {};
+	for each(var elem in fl.getLayerByName("shape").frames[0].elements)
 	{
-		var subData = [];
-		subData.push(drawData.shift());
-		while (getNext(subData, drawData)) {
-					
-		}
-		result.push(subData);
-	}
+		var tmp = getData(elem);
+		log(JSON.stringify(tmp))
+		data[tmp.type] = data[tmp.type]||[];
 
-	return result;
+		tmp.data = Object.prototype.toString.call([])=="[object Array]"?tmp.data:[tmp.data];
+		data[tmp.type] = data[tmp.type].concat(tmp.data);
+	}
+	return data;
 }
 
 function getNext(arr, drawData)
@@ -115,6 +144,8 @@ function getNext(arr, drawData)
 
 function getMcData()
 {
+	if(!fl.getLayerByName("mc")) return null;
+
 	var data = {};
 	var elems = fl.getLayerByName("mc").frames[0].elements;
 	elems.forEach(function(elem){
@@ -127,5 +158,4 @@ function getMcData()
 var str = "var mapData = " + JSON.stringify(data);
 FLfile.write(baseURI + "/mapData.js", str)
 log("end\n");
-
 

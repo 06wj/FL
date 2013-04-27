@@ -13,26 +13,41 @@
 	<canvas></canvas>
 	<script src = "mapData.js"></script>
 	<script>
-		d = mapData;
-		mapData = mapData.shape;
+		var d = JSON.parse(JSON.stringify(mapData));
+		var shapeData = mapData.shape;
+		var arr;
 
 		ctx = document.querySelector("canvas").getContext("2d");
-		document.querySelector("canvas").width = d.map.width;
-		document.querySelector("canvas").height = d.map.height;
-		ctx.fillStyle = "#ff9966";
-		ctx.strokeStyle = "#9966ff";
-		ctx.beginPath();
+		document.querySelector("canvas").width = mapData.map.width;
+		document.querySelector("canvas").height = mapData.map.height;
 		
-		mapData.forEach(function(line){
-			var p = line.shift();
-			ctx.moveTo(p[0].x, p[0].y);
-			ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
-			line.forEach(function(p){
-				ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
-			});
-		});
-		ctx.stroke();
-		ctx.fill();
+		for(var type in shapeData){
+			arr = shapeData[type];
+			ctx.save();
+			if(type == "bezier")
+			{
+				arr.forEach(function(data){
+					ctx.fillStyle = "#000000";
+					ctx.strokeStyle = "#9966ff";
+					ctx.beginPath();
+					var p = data.shift();
+					ctx.moveTo(p[0].x, p[0].y);
+					ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
+					data.forEach(function(p){
+						ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
+					});
+					ctx.fill();
+				});				
+			}
+			else if(type == "rect")
+			{
+				arr.forEach(function(data){
+					ctx.fillStyle = "#000000";
+					ctx.fillRect(data.x, data.y, data.width, data.height);
+				});		
+			}
+			ctx.restore();
+		}
 	</script>
 </body>
 </html>

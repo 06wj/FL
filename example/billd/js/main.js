@@ -1,5 +1,5 @@
 var ns = FL.ns("billd");
-FL.import(ns, this, "Player, Map, YellowBall, Spider, Fish");
+FL.import(ns, this, "Player, Map, YellowBall, Spider, Fish, Floor");
 FL.import(FL, this, "Stage, LoadProgress, ImageLoader, Camera");
 
 var	canvas = document.querySelector("canvas");
@@ -32,16 +32,16 @@ stage.initKeyboardEvent();
 var map, player;
 var spiders = [];
 var fishs = [];
+var floors = [];
 
 setInterval(function(){
 	stage.render();
 }, 1000/fps);
 
 function init(){
-	map = new Map();
+	map = ns.map = new Map();
 	map.init(mapData.map.width, mapData.map.height);
 	stage.addChild(map);
-	Spider.map = YellowBall.map = Fish.map = map;
 
 	camera = new Camera(0, 0, width, height);
 
@@ -113,10 +113,37 @@ function init(){
 		}
 	}
 	
-	stage.update = update;
 	map.y = 200;
 	player.pos.x = mapData.mc.player[0].x;
 	player.pos.y = mapData.mc.player[0].y;
+
+	ns.floors = [];
+	
+	var floor = new Floor(0, 600);
+	stage.addChild(floor);
+	ns.floors.push(floor);
+
+	var floor = new Floor(160, 530);
+	stage.addChild(floor);
+	ns.floors.push(floor);
+
+	var floor = new Floor(1160, 460);
+	stage.addChild(floor);
+	ns.floors.push(floor);
+
+	var floor = new Floor(1360, 500);
+	stage.addChild(floor);
+	ns.floors.push(floor);
+
+	var floor = new Floor(960, 400);
+	stage.addChild(floor);
+	ns.floors.push(floor);
+
+	var floor = new Floor(1400, 330);
+	stage.addChild(floor);
+	ns.floors.push(floor);
+
+	stage.update = update;
 }
 
 function update(){
@@ -162,6 +189,8 @@ function update(){
 	if(player.pos.x > map.width-player.width*.5){
 		player.pos.x = map.width-player.width*.5;
 	}
+
+
 
 	for(var i = 0, l = spiders.length;i < l;i ++)
 	{

@@ -63,18 +63,18 @@
 		this.pos.plus(this.v);
 		this.a.x = 0;
 		
-		this.alive && this.checkMap(Snail.map);
+		this.alive && this.checkMap(ns.map);
 
 		if(this.pos.x < this.width) {
 			this.pos.x = this.width;
 			this.v.x = speed;
 		}
-		if(this.pos.x > Snail.map.width-this.width) {
-			this.pos.x = Snail.map.width-this.width;
+		if(this.pos.x > ns.map.width-this.width) {
+			this.pos.x = ns.map.width-this.width;
 			this.v.x = speed * -1;
 		}
-		this.x = this.pos.x + Snail.map.x;
-		this.y = this.pos.y + Snail.map.y;
+		this.x = this.pos.x + ns.map.x;
+		this.y = this.pos.y + ns.map.y;
 
 		this.alive && this.doSth();
 	};
