@@ -191,5 +191,5 @@ function getFloorData()
 }
   
 var str = "var mapData = " + JSON.stringify(data);
-FLfile.write(baseURI + "/mapData.js", str)
+FLfile.write(baseURI.replace("mapEditor/","") + "mapData.js", str)
 log("end\n");

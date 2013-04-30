@@ -120,29 +120,12 @@ function init(){
 
 	ns.floors = [];
 	
-	var floor = new Floor(0, 600);
-	stage.addChild(floor);
-	ns.floors.push(floor);
-
-	var floor = new Floor(160, 530);
-	stage.addChild(floor);
-	ns.floors.push(floor);
-
-	var floor = new Floor(1160, 460);
-	stage.addChild(floor);
-	ns.floors.push(floor);
-
-	var floor = new Floor(1360, 500);
-	stage.addChild(floor);
-	ns.floors.push(floor);
-
-	var floor = new Floor(960, 400);
-	stage.addChild(floor);
-	ns.floors.push(floor);
-
-	var floor = new Floor(1400, 330);
-	stage.addChild(floor);
-	ns.floors.push(floor);
+	for(var i = 0;i < mapData.floor.length;i ++)
+	{
+		var floor = new ns.Floor(mapData.floor[i]);
+		stage.addChild(floor);
+		ns.floors.push(floor);
+	}
 
 	stage.update = update;
 }
