@@ -1,21 +1,24 @@
 ﻿fl.showIdleMessage(false);
-
+ 
 var baseURI = fl.baseURI = fl.scriptURI.slice(0, fl.scriptURI.lastIndexOf("/")) + "/";
 fl.runScript(baseURI + "utils.jsfl");
 log(baseURI, "start");
-
+ 
 var data = {};
-
+ 
 data.shape = getShapeData();
 data.mc = getMcData();
 data.map = getMapData();
 data.hit = getHitData();
+data.floor = getFloorData();
+
+logstr(data); 
 
 function createPoint(obj)
 {
   return {x:obj.x, y:obj.y};
 }
-
+ 
 function getMapData()
 {
 	return {
@@ -23,15 +26,15 @@ function getMapData()
 		height:doc.height,
 	};
 }
-
+ 
 function getHitData()
 {
 	if(!fl.getLayerByName("hit")) return null;
-
+ 
 	var data = {lines:[], beziers:[]};
 	var shape = fl.getLayerByName("hit").frames[0].elements[0];
 	var edges = shape.edges;
-
+ 
 	var indexHash = {};
 	edges.forEach(function(edge){
 		if(!indexHash[edge.cubicSegmentIndex]){
@@ -46,7 +49,7 @@ function getHitData()
 	{
 		var isLine = indexHash[index].isLine;
 		var arr = shape.getCubicSegmentPoints(parseInt(index));
-
+ 
 		if(isLine)
 		{
 			lines.push([createPoint(arr[0]), createPoint(arr[3])]);
@@ -58,7 +61,7 @@ function getHitData()
 	}
 	return data;
 }
-
+ 
 function getShapeData()
 {	
 	if(!fl.getLayerByName("shape")) return null;
@@ -80,7 +83,7 @@ function getShapeData()
 		else
 		{
 			type = "bezier";
-
+ 
 			var indexHash = {};
 			edges.forEach(function(edge){
 				if(!indexHash[edge.cubicSegmentIndex]){
@@ -92,13 +95,13 @@ function getShapeData()
 			var beziers = data.beziers;
 			
 			var drawData = [];
-
+ 
 			for(var index in indexHash)
 			{
 				var arr = elem.getCubicSegmentPoints(parseInt(index));
 				drawData.push([createPoint(arr[0]), createPoint(arr[1]),createPoint(arr[2]), createPoint(arr[3])]);
 			}
-
+ 
 			while(drawData.length > 0)
 			{
 				var subData = [];
@@ -109,23 +112,23 @@ function getShapeData()
 				result.push(subData);
 			}
 		}
-
+ 
 		return {type:type, data:result};
 	}
-
+ 
 	var data = {};
 	for each(var elem in fl.getLayerByName("shape").frames[0].elements)
 	{
 		var tmp = getData(elem);
 		log(JSON.stringify(tmp))
 		data[tmp.type] = data[tmp.type]||[];
-
+ 
 		tmp.data = Object.prototype.toString.call([])=="[object Array]"?tmp.data:[tmp.data];
 		data[tmp.type] = data[tmp.type].concat(tmp.data);
 	}
 	return data;
 }
-
+ 
 function getNext(arr, drawData)
 {
 	var last = arr[arr.length - 1];
@@ -141,11 +144,11 @@ function getNext(arr, drawData)
 	}
 	return null;
 }
-
+ 
 function getMcData()
 {
 	if(!fl.getLayerByName("mc")) return null;
-
+ 
 	var data = {};
 	var elems = fl.getLayerByName("mc").frames[0].elements;
 	elems.forEach(function(elem){
@@ -155,7 +158,38 @@ function getMcData()
 	});
 	return data;
 }
+ 
+function getFloorData()
+{
+	fl.editItem("floor");
+	var data = [];
+ 
+	for each(var layer in layers)
+	{
+		var points = [];
+		for(var i = 0;i < layer.frames.length;)
+		{
+			var f = layer.frames[i];
+			var elem = f.elements[0];
+			var fd = f.duration;
+			var data;
+			points.push({
+				x:elem.x,
+				y:elem.y
+			});
+			i += fd;
+		}
+		data.push({
+			name:fl.getLibraryName(elem),
+			data:points
+		});
+	}
+
+	fl.getDocumentDOM().exitEditMode();
+	fl.init();
+	return data;
+}
+  
 var str = "var mapData = " + JSON.stringify(data);
 FLfile.write(baseURI + "/mapData.js", str)
 log("end\n");
-

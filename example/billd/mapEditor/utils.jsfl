@@ -1,7 +1,13 @@
 ﻿function log(){
 	[].forEach.call(arguments, function(elem){
-		fl.trace(elem)}
-	);
+		fl.trace(elem)
+	});
+}
+
+function logstr(){
+	[].forEach.call(arguments, function(elem){
+		fl.trace(JSON.stringify(elem))
+	});
 }
 
 function clear(){
@@ -41,7 +47,7 @@ var JSON = {
 
 	            }else{  
 	                var string = [];  
-	                for (var p in obj) string.push('"' + p + '"' + ':' + this.stringify(obj[p]));  
+	                for (var p in obj) string.push(p + ':' + this.stringify(obj[p]));  
 	                return '{' + string.join(',') + '}';  
 	            }  
 	        case 'number':  

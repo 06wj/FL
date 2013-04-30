@@ -91,6 +91,7 @@ function init(){
 		stage.addChild(star);
 		star.xx=star.x;
 		star.yy=star.y;
+		star.originX = star.originY = 0;
 		star.update = function(){
 			this.x = map.x+this.xx;
 			this.y=map.y+this.yy
