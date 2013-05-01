@@ -31,34 +31,46 @@
 			this.lines.push(new Line(new Vector(points[0].x, points[0].y), new Vector(points[1].x, points[1].y)));
 		}
 		
-		draw(this.ctx, mapData.shape.bezier);
-		drawDebug(this.ctx, this.lines);
+		draw(this.ctx, mapData.shape);
+		FL.debug && drawDebug(this.ctx, this.lines);
 		this.mapData = createMapData(this.lines);
 
 	};
 
-	function draw(ctx, lines){
-		ctx.beginPath();
-		ctx.fillStyle = "#222";
-		ctx.lineStyle = "#222";
-		ctx.lineWidth = .1;
-		ctx.beginPath();
-		
-		lines.forEach(function(line){
-			var p = line.shift();
-			ctx.moveTo(p[0].x, p[0].y);
-			ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
-			line.forEach(function(p){
-				ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
-			});
-		});
-		ctx.fill();
-		ctx.stroke();
-	}
+	function draw(ctx, shape){
+		for(var type in shape){
+			arr = shape[type];
+			ctx.save();
+			if(type == "bezier")
+			{
+				ctx.fillStyle = "#000000";
+				ctx.strokeStyle = "#9966ff";
+				arr.forEach(function(data){
+					ctx.beginPath();
+					var p = data.shift();
+					ctx.moveTo(p[0].x, p[0].y);
+					ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
+					data.forEach(function(p){
+						ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
+					});
+					ctx.fill();		
+				});	
 
+			}
+			else if(type == "rect")
+			{
+				arr.forEach(function(data){
+					ctx.fillStyle = data.color;
+					ctx.fillRect(data.x, data.y, data.width, data.height);
+				});		
+			}
+			ctx.restore();
+		}
+	}
+		
 	function drawDebug(ctx, lines){
 		ctx.beginPath();
-		ctx.lineStyle = "#ff0000";
+		ctx.strokeStyle = "#ff0000";
 		ctx.lineWidth = 2;
 		lines.forEach(function(line){
 			ctx.moveTo(line.p0.x, line.p0.y);

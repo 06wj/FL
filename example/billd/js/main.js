@@ -41,13 +41,18 @@ setInterval(function(){
 function init(){
 	map = ns.map = new Map();
 	map.init(mapData.map.width, mapData.map.height);
-	stage.addChild(map);
+
 
 	camera = new Camera(0, 0, width, height);
 
 	player = Player.create();
 	player.map = map;
 	stage.addChild(player);
+
+	map.y = -474.95000000000005;
+	player.pos.x = mapData.mc.player[0].x;
+	player.pos.y = mapData.mc.player[0].y;
+	player.y = player.pos.y + map.y;
 
 	for(var i = 0; i < mapData.mc.yellow_ball.length;i ++)
 	{
@@ -114,10 +119,6 @@ function init(){
 		}
 	}
 	
-	map.y = 200;
-	player.pos.x = mapData.mc.player[0].x;
-	player.pos.y = mapData.mc.player[0].y;
-
 	ns.floors = [];
 	
 	for(var i = 0;i < mapData.floor.length;i ++)
@@ -128,6 +129,18 @@ function init(){
 	}
 
 	stage.update = update;
+	stage.addChild(map);
+
+	bg = new FL.Bitmap();
+	bg.setImg(R.images.bg);
+	stage.addChild(bg);
+	bgSX = (bg.width-width)/(map.width-width);
+	bgSY = (bg.height-height)/(map.height-height);
+
+	bg.update = function(){
+		bg.x = map.x * bgSX;
+		bg.y = map.y * bgSY ;
+	}
 }
 
 function update(){

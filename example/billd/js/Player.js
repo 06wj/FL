@@ -139,8 +139,8 @@
 					}
 				}
 			}
-			this.floorV = 0;
 		}
+		this.floorV = 0;
 	}
 
 	Player.prototype.update = function()

@@ -12,7 +12,7 @@ data.map = getMapData();
 data.hit = getHitData();
 data.floor = getFloorData();
 
-logstr(data); 
+//logstr(data); 
 
 function createPoint(obj)
 {
@@ -74,7 +74,7 @@ function getShapeData()
 		if(elem.isRectangleObject)
 		{
 			type = "rect";
-			result = [{x:elem.left, y:elem.top, width:elem.width, height:elem.height}];
+			result = [{color:elem.contours[1].fill.color,x:elem.left, y:elem.top, width:elem.width, height:elem.height}];
 		}
 		else if(elem.isOvalObject)
 		{
@@ -120,7 +120,6 @@ function getShapeData()
 	for each(var elem in fl.getLayerByName("shape").frames[0].elements)
 	{
 		var tmp = getData(elem);
-		log(JSON.stringify(tmp))
 		data[tmp.type] = data[tmp.type]||[];
  
 		tmp.data = Object.prototype.toString.call([])=="[object Array]"?tmp.data:[tmp.data];

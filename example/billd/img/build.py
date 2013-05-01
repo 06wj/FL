@@ -4,7 +4,6 @@ import codecs
 import json
 
 base_url = "img/"
-# base_url = "https://raw.github.com/lasoy/FL/master/img/"
 R = "../R.js"
 
 obj = []
