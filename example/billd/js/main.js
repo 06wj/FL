@@ -1,5 +1,5 @@
 var ns = FL.ns("billd");
-FL.import(ns, this, "Player, Map, YellowBall, Spider, Fish, Floor");
+FL.import(ns, this, "Player, Map, YellowBall, Spider, Fish, Floor, Bat");
 FL.import(FL, this, "Stage, LoadProgress, ImageLoader, Camera");
 
 var	canvas = document.querySelector("canvas");
@@ -26,7 +26,7 @@ loadProgress.addEventListener("complete", function(){
 loadProgress.load(R.images);
 stage.addChild(loadProgress);
 
-stage.initMouseEvent();
+// stage.initMouseEvent();
 stage.initKeyboardEvent();
 
 var map, player;
@@ -128,6 +128,11 @@ function init(){
 		ns.floors.push(floor);
 	}
 
+
+	var bat = Bat.create(100, 40);
+	stage.addChild(bat);
+	bat.target = player;
+
 	stage.update = update;
 	stage.addChild(map);
 
@@ -141,6 +146,8 @@ function init(){
 		bg.x = map.x * bgSX;
 		bg.y = map.y * bgSY ;
 	}
+
+	
 }
 
 function update(){

@@ -155,7 +155,8 @@
 	Vector.prototype.plus = function(v)
 	{
 		this.x += v.x;
-		this.y += v.y;	
+		this.y += v.y;
+		return this;	
 	}
 	
 	Vector.prototype.plusNew = function(v)
@@ -167,6 +168,7 @@
 	{
 		this.x -= v.x;
 		this.y -= v.y;
+		return this;
 	}
 	
 	Vector.prototype.minusNew = function(v)
