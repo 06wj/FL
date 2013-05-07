@@ -12,8 +12,6 @@ data.map = getMapData();
 data.hit = getHitData();
 data.floor = getFloorData();
 
-//logstr(data); 
-
 function createPoint(obj)
 {
   return {x:obj.x, y:obj.y};

@@ -64,10 +64,10 @@
 	Bat.create = function(x, y)
 	{
 		var bat = new Bat();
-		bat.init();
+		/*bat.init();
 		bat.play("move");
 		bat.pos.set(x||0, y||0);
-		bat.update();
+		bat.update();*/
 		return bat;
 	}
 

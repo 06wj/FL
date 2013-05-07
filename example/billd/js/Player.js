@@ -125,10 +125,10 @@
 	Player.prototype.checkFloors = function(floors){
 		if(this.v.y>=0)
 		{
-			for(var i = 0, l =floors.length;i < l;i ++)
+			for(var i = 0, l = floors.length;i < l;i ++)
 			{
 				var floor = floors[i];
-				if(this.bounds.left < floor.x+floor.width && this.bounds.right > floor.x)
+				if(this.bounds.left < floor.x + floor.width && this.bounds.right > floor.x)
 				{
 					if(floor.pos.y <= this.pos.y + 2 && floor.pos.y >= this.pos.y - 5) 
 					{
@@ -143,6 +143,25 @@
 		this.floorV = 0;
 	}
 
+	Player.prototype.checkSprings = function(springs){
+		if(this.v.y>0)
+		{
+			for(var i = 0, l = springs.length;i < l;i ++)
+			{
+				var spring = springs[i];
+				if(!spring.isJump && this.bounds.left < spring.x + spring.width && this.bounds.right > spring.x)
+				{
+					if(spring.pos.y - spring.height <= this.pos.y + 2 && spring.pos.y - spring.height >= this.pos.y - 5) 
+					{
+						spring.jump(this);
+						player.spring = spring;
+						return;
+					}
+				}
+			}
+		}
+	}
+
 	Player.prototype.update = function()
 	{		
 		this.bounds = this.getBounds();
@@ -150,13 +169,14 @@
 		if(this.v.y > 5) this.v.y = 5;
 		if(this.v.x > speed2) this.v.x = speed2;
 		if(this.v.x < -1*speed2) this.v.x = -1*speed2;
-
+		
 		this.pos.plus(this.v);
 		this.pos.x += this.floorV;
 		this.a.x *= .9;
 
 		this.checkMap(ns.map);
 		this.checkFloors(ns.floors);
+		this.checkSprings(ns.springs);
 
 		this.x = this.pos.x + ns.map.x;
 		this.y = this.pos.y + ns.map.y;

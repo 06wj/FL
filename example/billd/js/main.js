@@ -1,6 +1,6 @@
 (function(){
 	var ns = FL.ns("billd");
-	eval(FL.import("ns", "Player, Map, YellowBall, Spider, Fish, Floor, Bat"));
+	eval(FL.import("ns", "Player, Map, YellowBall, Spider, Fish, Floor, Bat, Spring"));
 	eval(FL.import("FL", "Stage, LoadProgress, ImageLoader, Camera"));
 
 	var	canvas = document.querySelector("canvas");
@@ -33,8 +33,10 @@
 	var map, player;
 	var spiders = [];
 	var fishs = [];
-	var floors = [];
 	var camera;
+
+	var floors = ns.floors = [];
+	var springs = ns.springs = [];
 
 	setInterval(function(){
 		stage.render();
@@ -43,7 +45,6 @@
 	function init(){
 		map = ns.map = new Map();
 		map.init(mapData.map.width, mapData.map.height);
-
 
 		camera = new Camera(0, 0, width, height);
 
@@ -55,6 +56,15 @@
 		player.pos.x = mapData.mc.player[0].x;
 		player.pos.y = mapData.mc.player[0].y;
 		player.y = player.pos.y + map.y;
+
+		for(var i = 0; i < mapData.mc.spring.length;i ++)
+		{
+			var pos = mapData.mc.spring[i];
+			var spring = Spring.create(pos.x, pos.y);
+			stage.addChild(spring);
+			springs.push(spring);
+		}
+
 
 		for(var i = 0; i < mapData.mc.yellow_ball.length;i ++)
 		{
@@ -78,16 +88,12 @@
 			stage.addChild(fish);
 			fishs.push(fish);
 		}
-
-		mapData.mc.ground = mapData.mc.ground||[];
-		for(var i = 0; i < mapData.mc.ground.length;i ++)
+		
+		for(var i = 0;i < mapData.floor.length;i ++)
 		{
-			var pos = mapData.mc.ground[i];
-			var ground = new FL.Bitmap(pos.x, pos.y, R.images.ground)
-			stage.addChild(ground);
-			ground.xx=ground.x;
-			ground.yy=ground.y;
-			ground.update = function(){this.x = map.x+this.xx;this.y=map.y+this.yy}
+			var floor = new ns.Floor(mapData.floor[i]);
+			stage.addChild(floor);
+			floors.push(floor);
 		}
 
 		mapData.mc.star = mapData.mc.star||[];
@@ -120,16 +126,6 @@
 				}
 			}
 		}
-		
-		ns.floors = [];
-		
-		for(var i = 0;i < mapData.floor.length;i ++)
-		{
-			var floor = new ns.Floor(mapData.floor[i]);
-			stage.addChild(floor);
-			ns.floors.push(floor);
-		}
-
 
 		var bat = Bat.create(100, 40);
 		stage.addChild(bat);
@@ -148,8 +144,6 @@
 			bg.x = map.x * bgSX;
 			bg.y = map.y * bgSY ;
 		}
-
-		
 	}
 
 	function update(){
