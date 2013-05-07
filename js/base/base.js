@@ -45,13 +45,14 @@
 	};
 
 	/**
-	 *   将from的模块导入到to里
 	 *   modules: "Movieclip, Utils..."
 	*/
-	FL.import = function(from, to, modules){
+	FL.import = function(from, modules){
+		var str = "";
 		modules.replace(/\s/g,"").split(",").forEach(function(obj){
-			to[obj] = from[obj];
+			str += "var " + obj + "=" + from + "." + obj + ";";
 		});
+		return str;
 	};
 
 	FL.debug = FL.getUrlParams().debug;

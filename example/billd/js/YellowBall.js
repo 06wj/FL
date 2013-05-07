@@ -1,6 +1,7 @@
 (function(win){
 	var ns = FL.ns("billd");
-	FL.import(FL, this, "Utils, MovieClip");
+	eval(FL.import("FL", "Utils, MovieClip"));
+
 	var speed = 2;
 	var YellowBall = ns.YellowBall = function(){
 		MovieClip.apply(this, arguments);
@@ -65,7 +66,7 @@
 				}
 			}
 
-			if(map && this.v.y > 0 && this.onGround)
+			if(ns.map && this.v.y > 0 && this.onGround)
 			{
 				this.onGround = false;
 				this.pos.minus(this.v);

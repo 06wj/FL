@@ -1,6 +1,6 @@
 (function(win){
 	var ns = FL.ns("billd");
-	FL.import(FL, this, "Utils, MovieClip");
+	eval(FL.import("FL", "Utils, MovieClip"));
 	var speed = 7;
 	var Bat = ns.Bat = function(){
 		MovieClip.apply(this, arguments);

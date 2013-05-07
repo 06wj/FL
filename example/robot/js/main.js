@@ -1,6 +1,6 @@
 (function(){
 	var ns = FL.ns("robot");
-	FL.import(FL, this, "Stage, LoadProgress, ImageLoader, MovieClip");
+	eval(FL.import("FL", "Stage, LoadProgress, ImageLoader, MovieClip"));
 	
 	var	canvas = document.querySelector("canvas");
 	var width = 550;

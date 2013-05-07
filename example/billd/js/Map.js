@@ -1,6 +1,6 @@
 (function(win){
 	var ns = FL.ns("billd");
-	FL.import(FL, this, "Bitmap, Utils, Bezier, Line");
+	eval(FL.import("FL", "Bitmap, Utils, Bezier, Line"));
 
 	var Map = ns.Map = function(x, y){
 		Bitmap.call(this, x, y);

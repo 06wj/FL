@@ -1,7 +1,7 @@
 (function(win){
 	var ns = FL.ns("billd");
 
-	FL.import(FL, this, "Utils, Canvas");
+	eval(FL.import("FL", "Utils, Canvas"));
 
 	var speedx = 2;
 	var speedy = 2;

@@ -1,6 +1,6 @@
 (function(win){
 	var ns = FL.ns("billd");
-	FL.import(FL, this, "Utils, MovieClip, Keyboard");
+	eval(FL.import("FL", "Utils, MovieClip, Keyboard"));
 
 	var speed1 = 2;
 	var speed2 = 3.5;
