@@ -154,7 +154,7 @@
 					if(spring.pos.y - spring.height <= this.pos.y + 2 && spring.pos.y - spring.height >= this.pos.y - 5) 
 					{
 						spring.jump(this);
-						player.spring = spring;
+						this.spring = spring;
 						return;
 					}
 				}

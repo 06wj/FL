@@ -1,6 +1,6 @@
 (function(){
 	var ns = FL.ns("billd");
-	eval(FL.import("ns", "Player, Map, YellowBall, Spider, Fish, Floor, Bat, Spring"));
+	eval(FL.import("ns", "Player, Map, YellowBall, Spider, Fish, Floor, Bat, Spring, InstanceFactory"));
 	eval(FL.import("FL", "Stage, LoadProgress, ImageLoader, Camera"));
 
 	var	canvas = document.querySelector("canvas");
@@ -9,7 +9,7 @@
 	var fps = 60;
 	var mc;
 	var life = 99;
-	var score = 0;
+	ns.score = 0;
 
 	var stage = new Stage(canvas, width, height, fps);
 	stage.start();
@@ -30,11 +30,10 @@
 	// stage.initMouseEvent();
 	stage.initKeyboardEvent();
 
-	var map, player;
-	var spiders = [];
-	var fishs = [];
-	var camera;
+	var map, player, camera;
 
+	var spiders = ns.spiders = [];
+	var fishs = ns.fishs = [];
 	var floors = ns.floors = [];
 	var springs = ns.springs = [];
 
@@ -44,92 +43,26 @@
 
 	function init(){
 		map = ns.map = new Map();
+		player = ns.player = Player.create();
+
 		map.init(mapData.map.width, mapData.map.height);
-
 		camera = new Camera(0, 0, width, height);
-
-		player = Player.create();
-		player.map = map;
 		stage.addChild(player);
 
-		map.y = -474.95000000000005;
+		map.y = -474.95;
 		player.pos.x = mapData.mc.player[0].x;
 		player.pos.y = mapData.mc.player[0].y;
 		player.y = player.pos.y + map.y;
 
-		for(var i = 0; i < mapData.mc.spring.length;i ++)
+		for(var type in mapData.mc)
 		{
-			var pos = mapData.mc.spring[i];
-			var spring = Spring.create(pos.x, pos.y);
-			stage.addChild(spring);
-			springs.push(spring);
-		}
-
-
-		for(var i = 0; i < mapData.mc.yellow_ball.length;i ++)
-		{
-			var pos = mapData.mc.yellow_ball[i];
-			var ball = YellowBall.create(pos.x, pos.y);
-			stage.addChild(ball);
-		}
-
-		for(var i = 0; i < mapData.mc.spider.length;i ++)
-		{
-			var pos = mapData.mc.spider[i];
-			var spider = Spider.create(pos.x, pos.y);
-			stage.addChild(spider);
-			spiders.push(spider);
-		}
-
-		for(var i = 0; i < mapData.mc.fish.length;i ++)
-		{
-			var pos = mapData.mc.fish[i];
-			var fish = Fish.create(pos.x, pos.y);
-			stage.addChild(fish);
-			fishs.push(fish);
-		}
-		
-		for(var i = 0;i < mapData.floor.length;i ++)
-		{
-			var floor = new ns.Floor(mapData.floor[i]);
-			stage.addChild(floor);
-			floors.push(floor);
-		}
-
-		mapData.mc.star = mapData.mc.star||[];
-		for(var i = 0; i < mapData.mc.star.length;i ++)
-		{
-			var pos = mapData.mc.star[i];
-			var star = new FL.Bitmap(pos.x, pos.y, R.images.star)
-			stage.addChild(star);
-			star.xx=star.x;
-			star.yy=star.y;
-			star.originX = star.originY = 0;
-			star.update = function(){
-				this.x = map.x+this.xx;
-				this.y=map.y+this.yy
-				if(player.hitTestObject(this))
-				{
-					this.update = null;
-					var that = this;
-					TweenLite.to(this, 1, {
-						angle:11,
-						scaleX:0,
-						scaleY:0,
-						x:578,
-						y:12,
-						onComplete:function() {
-							score += 10;
-							stage.removeChild(that);
-						}
-					})
-				}
+			var arr = mapData.mc[type]||[];
+			for(var i = 0,l = arr.length;i < l;i ++)
+			{
+				var mc = InstanceFactory.create(type, arr[i]);
+				mc && stage.addChild(mc);
 			}
 		}
-
-		var bat = Bat.create(100, 40);
-		stage.addChild(bat);
-		bat.target = player;
 
 		stage.update = update;
 		stage.addChild(map);
@@ -208,7 +141,7 @@
 						stage.removeChild(spider);
 					}})
 					spider.alive = false;
-					score += 5;
+					ns.score += 5;
 				}	
 				else if(player.alive){
 					player.die();
@@ -237,7 +170,7 @@
 		}
 
 		document.getElementById("life").innerHTML = "life:" + life;
-		document.getElementById("score").innerHTML = "score:" + score;
+		document.getElementById("score").innerHTML = "score:" + ns.score;
 	}
 
 

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE HTML>
 <html lang="en-US">
 <head>
@@ -10,19 +12,18 @@
 		}
 		
 		canvas{
-			/*background: url(img/bg.png);*/
 			background: #eee;
 			border:solid 1px black;
 		}
 
-		#stage{
-			position: absolute;
-		}
-
 		#game{
-			margin:10px 50px;
+        	width:600px;
+        	margin:40px auto;
 		}
-
+      	
+      	#stage{
+        	position:absolute;
+      	}
 		#board{
 			margin:0px 0px;
 			font: 16px;
@@ -45,9 +46,12 @@
 	</style>
 </head>
 <body>
-	<div id = "game">
+  <a href="https://github.com/06wj/FL">
+      <img style="position: absolute; top: 0; right: 0; border: 0;" src="http://littlebilld.duapp.com/FL/forkme_right_red_aa0000.png" alt="Fork me on GitHub">
+  </a>
+  <div id = "game">
 		<div id = "stage">
-			<canvas></canvas>
+			<canvas width = 600 height = 300></canvas>
 			<p>左右键移动，上跳跃，连按两次方向键快跑</p>
 		</div>
 		<div id = "board">
@@ -68,6 +72,7 @@
 	<script type="text/javascript" src="js/Bat.js"></script>
 	<script type="text/javascript" src="js/Spring.js"></script>
 	<script type="text/javascript" src="js/Map.js"></script>
+	<script type="text/javascript" src="js/InstanceFactory.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
