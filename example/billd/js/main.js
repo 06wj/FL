@@ -54,6 +54,7 @@
 		player.pos.y = mapData.mc.player[0].y;
 		player.y = player.pos.y + map.y;
 
+		mapData.mc.floor = mapData.floor;
 		for(var type in mapData.mc)
 		{
 			var arr = mapData.mc[type]||[];
