@@ -32,8 +32,10 @@
 		}
 		
 		draw(this.ctx, mapData.shape);
-		FL.debug && drawDebug(this.ctx, this.lines);
-		this.mapData = createMapData(this.lines);
+		FL.getUrlParams().hit && drawDebug(this.ctx, this.lines);
+		var data = createMapData(this.lines);
+		this.mapData = data.ground;
+		this.wallData = data.wall;
 
 	};
 
@@ -93,19 +95,34 @@
 
 	function createMapData(lines)
 	{
-		var hash = {}, point;
+		var ground = {}, wall = {};
 		for(var i = 0, l = lines.length;i < l;i ++)
 		{
-			var points = lines[i].createPoints();
-			for(var j = 0, pl = points.length;j < pl;j ++)
+			var line = lines[i];
+			if((line.p0.x>>0) == (line.p1.x>>0))
 			{
-				point = points[j];
-				hash[point.x] = hash[point.x] || [];
-				if(Math.abs(point.ang)>Math.PI*.5) point.ang += Math.PI;
-				hash[point.x].push({y:point.y, ang:point.ang});
+				var a = Math.min(line.p0.y, line.p1.y)>>0;
+				var b = Math.max(line.p0.y, line.p1.y)>>0;
+				for(var j = a;j <= b;j ++)
+				{
+					wall[j] = wall[j]||[];
+					wall[j].push(line.p0.x);
+				}
+			}
+			else
+			{
+				var points = line.createPoints();
+				for(var j = 0, pl = points.length;j < pl;j ++)
+				{
+					point = points[j];
+					ground[point.x] = ground[point.x] || [];
+					if(Math.abs(point.ang)>Math.PI*.5) point.ang += Math.PI;
+					ground[point.x].push({y:point.y, ang:point.ang});
+				}
 			}
 		}
-		return hash;
+		log(wall)
+		return {wall:wall, ground:ground};
 	}
 
 })(window);

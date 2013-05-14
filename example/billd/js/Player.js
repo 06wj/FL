@@ -1,10 +1,12 @@
-(function(win){
+// (function(win){
 	var ns = FL.ns("billd");
 	eval(FL.import("FL", "Utils, MovieClip, Keyboard"));
 
 	var speed1 = 2;
 	var speed2 = 3.5;
 	var jumpSpeed = -6;
+	var maxSpeed = 7;
+	var g = .2;
 
 	var Player = ns.Player = function()
 	{
@@ -15,7 +17,7 @@
 
 		this.pos = new Vector();
 		this.v = new Vector();
-		this.a = new Vector(0, .2);
+		this.a = new Vector(0, g);
 		this.alive = true;
 
 		this.floorV = 0;
@@ -105,6 +107,68 @@
 						this.pos.y = data.y;
 						this.v.y = 0;
 						this.angle = data.ang;
+						break;
+					}
+				}
+			}
+		}
+		var dataArr = map.wallData[(this.pos.y-this.height)>>0];
+		if(map && this.v.x > 0)
+		{
+			if(dataArr){
+				for(var i = 0, l = dataArr.length;i < l;i ++)
+				{
+					var x = dataArr[i];
+					if(x <= this.pos.x + this.width*.5 && x >= this.pos.x + this.width*.5 - 5)
+					{
+						this.pos.x = x - this.width*.5;
+						this.v.x = 0;
+						return;
+					}
+				}
+			}
+		}
+		else if(map && this.v.x < 0)
+		{
+			if(dataArr){
+				for(var i = 0, l = dataArr.length;i < l;i ++)
+				{
+					var x = dataArr[i];
+					if(x <= this.pos.x - this.width*.5 + 5&& x >= this.pos.x - this.width*.5)
+					{
+						this.pos.x = x + this.width*.5;
+						this.v.x = 0;
+						return;
+					}
+				}
+			}
+		}
+		var dataArr = map.wallData[(this.pos.y)>>0];
+		if(map && this.v.x > 0)
+		{
+			if(dataArr){
+				for(var i = 0, l = dataArr.length;i < l;i ++)
+				{
+					var x = dataArr[i];
+					if(x <= this.pos.x + this.width*.5 && x >= this.pos.x + this.width*.5 - 5)
+					{
+						this.pos.x = x - this.width*.5;
+						this.v.x = 0;
+						return;
+					}
+				}
+			}
+		}
+		else if(map && this.v.x < 0)
+		{
+			if(dataArr){
+				for(var i = 0, l = dataArr.length;i < l;i ++)
+				{
+					var x = dataArr[i];
+					if(x <= this.pos.x - this.width*.5 + 5&& x >= this.pos.x - this.width*.5)
+					{
+						this.pos.x = x + this.width*.5;
+						this.v.x = 0;
 						return;
 					}
 				}
@@ -166,7 +230,7 @@
 	{		
 		this.bounds = this.getBounds();
 		this.v.plus(this.a);
-		if(this.v.y > 5) this.v.y = 5;
+		if(this.v.y > maxSpeed) this.v.y = maxSpeed;
 		if(this.v.x > speed2) this.v.x = speed2;
 		if(this.v.x < -1*speed2) this.v.x = -1*speed2;
 		
@@ -206,4 +270,4 @@
 		return player;
 	}
 
-})(window);
+// })(window);
