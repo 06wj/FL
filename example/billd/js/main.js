@@ -43,16 +43,34 @@
 
 	function init(){
 		map = ns.map = new Map();
+
 		player = ns.player = Player.create();
 
 		map.init(mapData.map.width, mapData.map.height);
 		camera = new Camera(0, 0, width, height);
-		stage.addChild(player);
-
+		
 		map.y = -474.95;
 		player.pos.x = mapData.mc.player[0].x;
 		player.pos.y = mapData.mc.player[0].y;
 		player.y = player.pos.y + map.y;
+
+		
+		stage.update = update;
+
+		bg = new FL.Bitmap();
+		bg.setImg(R.images.bg);
+		
+		bgSX = (bg.width-width)/(map.width-width);
+		bgSY = (bg.height-height)/(map.height-height);
+
+		bg.update = function(){
+			bg.x = map.x * bgSX;
+			bg.y = map.y * bgSY ;
+		}
+
+		stage.addChild(bg);
+		stage.addChild(map);
+		stage.addChild(player);
 
 		mapData.mc.floor = mapData.floor;
 		for(var type in mapData.mc)
@@ -63,20 +81,6 @@
 				var mc = InstanceFactory.create(type, arr[i]);
 				mc && stage.addChild(mc);
 			}
-		}
-
-		stage.update = update;
-		stage.addChild(map);
-
-		bg = new FL.Bitmap();
-		bg.setImg(R.images.bg);
-		stage.addChild(bg);
-		bgSX = (bg.width-width)/(map.width-width);
-		bgSY = (bg.height-height)/(map.height-height);
-
-		bg.update = function(){
-			bg.x = map.x * bgSX;
-			bg.y = map.y * bgSY ;
 		}
 	}
 
@@ -123,8 +127,6 @@
 		if(player.pos.x > map.width-player.width*.5){
 			player.pos.x = map.width-player.width*.5;
 		}
-
-
 
 		for(var i = 0, l = spiders.length;i < l;i ++)
 		{

@@ -4,7 +4,7 @@ import codecs
 import json
 
 base_url = "img/"
-R = "../R.js"
+R = os.path.join("..", "R.js")
 
 obj = []
    

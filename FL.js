@@ -1156,20 +1156,26 @@
 
 	DisplayObjectContainer.prototype.addChild = function()
 	{
-		var l = arguments.length;
-		while(l-- > 0)
+		for(var i = 0, l = arguments.length;i < l;i ++)
 		{
-			this._addChild(arguments[l]);
+			this._addChild(arguments[i]);
 		}
-		
 	};
 
 	DisplayObjectContainer.prototype._addChild = function(obj)
 	{
-		if(this.children.indexOf(obj) == -1)
+		var index = this.children.indexOf(obj)
+		if(index != -1){
+			this.children.splice(index, 1);
+		}
+		this.children.push(obj);
+		obj.parent = this;
+
+		if(this.stage)
 		{
-			this.children.push(obj);
-			obj.parent = this;
+			var prop = {stage:this.stage, timeStep:this.timeStep};
+			if(obj instanceof DisplayObjectContainer) obj.setAll(prop);
+			else utils.merge(obj, prop);
 		}
 	};
 
@@ -1179,18 +1185,15 @@
 		if(index < 0) {
 			return;
 		}
+		this.children[index].parent = null;
 		this.children.splice(index, 1);
-		obj.parent = null;
 	};
 
 	DisplayObjectContainer.prototype._draw = function(ctx){
-		var l = this.children.length-1;
 		ctx.save();
 		ctx.translate(this.x, this.y);
-		while(l >= 0)
-		{
-			this.children[l].render(ctx);
-			l --;
+		for(var i = 0, l = this.children.length;i < l;i ++){
+			this.children[i].render(ctx);
 		}
 		ctx.restore();
 	};
@@ -1207,15 +1210,28 @@
 			{
 				obj.setAll(props);
 			}
+			else
+			{
+				Utils.merge(this, props);
+			}
 		}
 	};
 
 	DisplayObjectContainer.prototype.callAll = function(func)
 	{
+		if(this[func]) this[func]();
 		var children = this.children;
 		for(var i = children.length - 1;i >= 0; i--)
 		{
-			children[i][func] && children[i][func]();
+			var obj = children[i];
+			if(obj instanceof DisplayObjectContainer)
+			{
+				obj.callAll(func);
+			}
+			else if(obj[func])
+			{
+				obj[func]();
+			}
 		}
 	};
 

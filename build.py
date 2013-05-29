@@ -41,6 +41,7 @@ def cat(files, toFile):
 	ff.close()
 	ff = codecs.open(toFile, "a", "utf-8")
 	for file in files:
+		file = file.replace("/", os.sep)
 		f = codecs.open(file, "r", "utf-8")
 		ff.write(f.read())
 		ff.write("\n")
