@@ -82,30 +82,17 @@ function getShapeData()
 		{
 			type = "bezier";
  
-			var indexHash = {};
+			var drawData = [];
 			edges.forEach(function(edge){
-				if(!indexHash[edge.cubicSegmentIndex]){
-					indexHash[edge.cubicSegmentIndex] = {isLine:edge.isLine}
-				}
+				drawData.push([createPoint(edge.getControl(0)), createPoint(edge.getControl(1)),createPoint(edge.getControl(2))]);
 			});
 			
-			var lines = data.lines;
-			var beziers = data.beziers;
-			
-			var drawData = [];
- 
-			for(var index in indexHash)
-			{
-				var arr = elem.getCubicSegmentPoints(parseInt(index));
-				drawData.push([createPoint(arr[0]), createPoint(arr[1]),createPoint(arr[2]), createPoint(arr[3])]);
-			}
- 
 			while(drawData.length > 0)
 			{
 				var subData = [];
 				subData.push(drawData.shift());
 				while (getNext(subData, drawData)) {
-							
+					
 				}
 				result.push(subData);
 			}
@@ -132,7 +119,7 @@ function getNext(arr, drawData)
 	for (var i = 0; i < drawData.length; i ++)
 	{
 		var tmp = drawData[i];
-		if (tmp[0].x == last[3].x && tmp[0].y == last[3].y)
+		if (tmp[0].x == last[2].x && tmp[0].y == last[2].y)
 		{
 			drawData.splice(i, 1);
 			arr.push(tmp);
