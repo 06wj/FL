@@ -6,7 +6,6 @@
 	{
 		if(parent)
 		{
-			this.parent = parent;
 			parent.addChild(this);
 		}
 		DisplayObject.call(this, x, y);
@@ -22,6 +21,12 @@
 			this._addChild(arguments[i]);
 		}
 	};
+
+	
+	DisplayObjectContainer.prototype._debugDraw = function(ctx){
+		
+	};
+
 
 	DisplayObjectContainer.prototype._addChild = function(obj)
 	{

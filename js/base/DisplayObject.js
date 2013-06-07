@@ -34,32 +34,35 @@
 		ctx.rotate(this.angle);
 		ctx.scale(this.scaleX, this.scaleY);
 		this._draw(ctx);
-
 		ctx.restore();
-		
+
 		if(FL.debug)
 		{
-			ctx.save();
-			var rect = this.getBounds();
-
-			ctx.strokeStyle = "#f00";
-			ctx.lineWidth = .5;
-			ctx.beginPath();
-			ctx.moveTo(this.points[0].x, this.points[0].y)
-			for(var i = 1, l = this.points.length;i < l;i ++)
-			{
-				ctx.lineTo(this.points[i].x, this.points[i].y);
-			}
-			ctx.closePath();
-			ctx.stroke();
-
-			ctx.strokeStyle = "#00f";
-			ctx.beginPath();
-			ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
-			ctx.stroke();
-			ctx.restore();
+			this._debugDraw(ctx);
 		}
 	};
+
+	DisplayObject.prototype._debugDraw = function(ctx)
+	{
+		ctx.save();
+		var rect = this.getBounds();
+		ctx.strokeStyle = "#f00";
+		ctx.lineWidth = .5;
+		ctx.beginPath();
+		ctx.moveTo(this.points[0].x, this.points[0].y)
+		for(var i = 1, l = this.points.length;i < l;i ++)
+		{
+			ctx.lineTo(this.points[i].x, this.points[i].y);
+		}
+		ctx.closePath();
+		ctx.stroke();
+
+		ctx.strokeStyle = "#00f";
+		ctx.beginPath();
+		ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+		ctx.stroke();
+		ctx.restore();
+	}
 
 	DisplayObject.prototype.setCenter = function()
 	{

@@ -15,7 +15,7 @@
 			var time = this.time;
 			var delay = this.delay;
 			var that = this;
-			elem.onkeydown = function(e){
+			elem.addEventListener("keydown", function(e){
 				e.preventDefault();
 				if(key[e.keyCode] !== true)
 				{
@@ -24,12 +24,12 @@
 					time[e.keyCode] = new Date();
 					that.keyDown();
 				}
-			};
-			elem.onkeyup = function(e){
+			});
+			elem.addEventListener("keyup", function(e){
 				e.preventDefault();
 				key[e.keyCode] = false;
 				that.keyUp();
-			}
+			});
 		},
 		getIsDown:function(key){
 			return this.key[KEY[key]];

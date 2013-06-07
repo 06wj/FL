@@ -28,6 +28,7 @@
 			for(var type in shape){
 				arr = shape[type];
 				ctx.save();
+
 				if(type == "bezier")
 				{
 					ctx.fillStyle = "#000000";
@@ -40,7 +41,8 @@
 						data.forEach(function(p){
 							ctx.quadraticCurveTo(p[1].x, p[1].y, p[2].x, p[2].y);
 						});
-						ctx.fill();		
+						ctx.stroke();
+						ctx.fill();	
 					});	
 				}
 				else if(type == "rect")

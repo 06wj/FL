@@ -1,6 +1,7 @@
 import codecs
 import os
 outPut = "FL.js"
+outMinPut = "FL.min.js"
 files = [
 	"js/base/base.js",
 	"js/base/utils.js",
@@ -12,11 +13,11 @@ files = [
 	"js/base/goem/Bezier.js",
 
 	# "js/base/data/Heap.js",
-	"js/base/data/QuadTree.js",
+	#"js/base/data/QuadTree.js",
 
 	"js/base/EventDispatcher.js",
 	"js/base/ImageLoader.js",
-	"js/base/Timer.js",
+	#"js/base/Timer.js",
 	"js/base/Mouse.js",
 	"js/base/Keyboard.js",
 
@@ -49,8 +50,19 @@ def cat(files, toFile):
 		print(file)
 	ff.close()
 	print("\n")
-cat(files, outPut)
+#cat(files, outPut)
 
+filesStr = ""
+for file in files:
+	file = file.replace("/", os.sep)
+	filesStr = filesStr + file + " "
+
+os.system("uglifyjs " +  filesStr +
+	" -o " + outMinPut + 
+	" --source-map FL.min.js.map" +
+	" --source-map-root http://littlebilld.duapp.com/FL"
+	" -p 5 -c -m"
+)
 if os.name == "nt":
 	os.system("pause")
 

@@ -8,6 +8,9 @@
 	var maxSpeed = 7;
 	var g = .2;
 
+	var idleActions = ["play1", "play2", "stand1", "attack", "stand3"];
+	var IDLE_TIME = 300;
+
 	var Player = ns.Player = function()
 	{
 		MovieClip.apply(this, arguments);
@@ -19,7 +22,9 @@
 		this.v = new Vector();
 		this.a = new Vector(0, g);
 		this.alive = true;
-
+		this.idle = false;
+		this.idleTime = 0;
+		this.idleAction = idleActions[0];
 		this.floorV = 0;
 	};
 	Utils.extends(Player, MovieClip);
@@ -32,7 +37,7 @@
 		this.addAnimation("run2", "20-23", true, 4);
 		this.addAnimation("run1", "24-29", true, 6);
 		this.addAnimation("play1", "40-54", true, 6);
-		this.addAnimation("play0", "55-59", true, 6);
+		this.addAnimation("play2", "55-59", true, 6);
 		this.addAnimation("jump2", "60-70", false, 8);
 		this.addAnimation("jump1", "71-77", false, 6);
 		this.addAnimation("attack", "80-87", true, 6);
@@ -81,17 +86,47 @@
 
 		if(this.v.y == 0 && Keyboard.getIsDown("SPACE"))
 		{
-			this.play("attack")
+			this.playAction("attack");
+			this.idleTime = 0;
 		}
 		else if(this.v.y != 0) 
 		{
-			this.play("jump2")
+			this.playAction("jump2");
+			this.idleTime = 0;
 		}
-		else if(Math.abs(this.v.x) == speed1) this.play("run1");
-		else if(Math.abs(this.v.x) == speed2) this.play("run2");
-		else if(this.v.x < speed1) this.play("stand2");
+		else if(Math.abs(this.v.x) == speed1) this.playAction("run1");
+		else if(Math.abs(this.v.x) == speed2) this.playAction("run2");
+		else if(this.v.x < speed1) 
+		{
+			this.playAction("idle");
+		}
 	};
 
+	Player.prototype.playAction = function(name){
+		if(name == "idle")
+		{
+			this.idleTime ++;
+			if(this.idleTime > IDLE_TIME)
+			{
+				if(this.idleTime > IDLE_TIME+100)
+				{
+					this.idleAction = idleActions[Math.floor(Math.random()*idleActions.length)];
+					this.idleTime = IDLE_TIME+1;
+				}
+				this.play(this.idleAction);
+			}
+			else
+			{
+				this.play("stand2");
+			}
+		}
+		else
+		{
+			this.idleTime = 0;
+			this.play(name);
+		}
+	};
+	
 	Player.prototype.checkMap = function(map)
 	{
 		if(map && this.v.y >= 0)

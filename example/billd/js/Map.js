@@ -51,9 +51,9 @@
 					ctx.beginPath();
 					var p = data.shift();
 					ctx.moveTo(p[0].x, p[0].y);
-					ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
+					ctx.quadraticCurveTo(p[1].x, p[1].y, p[2].x, p[2].y);
 					data.forEach(function(p){
-						ctx.bezierCurveTo(p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
+						ctx.quadraticCurveTo(p[1].x, p[1].y, p[2].x, p[2].y);
 					});
 					ctx.fill();		
 				});	
