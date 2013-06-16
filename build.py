@@ -50,7 +50,7 @@ def cat(files, toFile):
 		print(file)
 	ff.close()
 	print("\n")
-#cat(files, outPut)
+cat(files, outPut)
 
 filesStr = ""
 for file in files:
@@ -59,9 +59,10 @@ for file in files:
 
 os.system("uglifyjs " +  filesStr +
 	" -o " + outMinPut + 
+	" --screw-ie8 --lint" +
 	" --source-map FL.min.js.map" +
-	" --source-map-root http://littlebilld.duapp.com/FL"
-	" -p 5 -c -m"
+	" --source-map-root ./"
+	" -c -m "
 )
 if os.name == "nt":
 	os.system("pause")

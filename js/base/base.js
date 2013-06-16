@@ -1,18 +1,17 @@
 (function(win){
 	var FL = win.FL = {};
 	try{
-		log = function(){
+		win.log = function(){
 			console.log.apply(console,arguments);
 		};
-		log(1);
 	}
 	catch(e){
-		log=function(){
+		win.log = function(){
 			console.dir(arguments);
 		}
 	}
 		
-	var DEG_TO_RAD = win.DEG_TO_RAD = Math.PI/180;
+	win.DEG_TO_RAD = Math.PI/180;
 
 	FL.getUrlParams = function()
 	{
