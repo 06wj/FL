@@ -1,8 +1,8 @@
 (function(){
 	var ns = FL.ns("star");
-	eval(FL.import("FL", "Bitmap, Utils"));
+	eval(FL.import("FL", "Canvas, Utils"));
 
-	var 
+	var a = new Canvas();
 
 })();
 
