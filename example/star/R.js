@@ -1,0 +1,1 @@
+R={};R.images=[{"src": "img/star.png?121", "id": "star", "size": 16.68}]
