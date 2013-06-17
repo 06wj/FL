@@ -66,14 +66,16 @@
 		explosion.x = 300;
 		explosion.play("bomb");
 
-		var ani = ["", "", "", ""];
-		for(var i = 0;i < 4;i ++)
+		var ani = ["0-4,5-9", "10-25", "25-31,32-42,32-42,32-42,32-42"];
+		var fps = [10, 15, 10, 10];
+		for(var i = 0;i < ani.length;i ++)
 		{
 			player = new MovieClip;
 			player.setImg(R.images.player, 58, 65);
-			player.addAnimation("bomb", ani[i], true, 10);
+			player.addAnimation("bomb", ani[i], true, fps[i]);
 			stage.addChild(player);
-			player.x = 500;
+			player.x = 470;
+			player.y = i*player.height;
 			player.play("bomb");
 		}
 	}
