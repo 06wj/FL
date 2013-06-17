@@ -48,19 +48,29 @@
 		}
 		this.isPlay = false;
 	};
-
+	
 	MovieClip.prototype.addAnimation = function(name, frames, loop, frameRate)
 	{
 		if(typeof(frames) === "string")
 		{
-			var temp = frames.split("-");
+			var all = frames.split(",");
 			frames = [];
-			for(var i = parseInt(temp[0]), l = parseInt(temp[1]);i <= l;i ++)
+			for(var j = 0, jl = all.length;j < jl;j ++)
 			{
-				frames.push(i);
+				var temp = all[j].split("-");
+				if(temp.length == 1)
+				{
+					frames.push(parseInt(temp[0]));
+				}
+				else
+				{
+					for(var i = parseInt(temp[0]), l = parseInt(temp[1]);i <= l;i ++)
+					{
+						frames.push(i);
+					}
+				}
 			}
 		}
-		
 		var obj = {frames:frames, loop:loop||false};
 		frameRate > 0 && (obj.delay = 1000/frameRate);
 		this.data[name] = obj;

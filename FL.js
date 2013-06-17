@@ -562,7 +562,7 @@
 
 	EventDispatcher.prototype.removeAllEventListener = function()
 	{
-		this.eventListeners = null;
+		this.eventListeners = {};
 	}
 
 	/**
@@ -574,6 +574,7 @@
 		e.target = this;
 		if(arr && arr.length > 0)
 		{
+			arr = arr.slice(0);
 			for(var i = 0,l = arr.length;i < l;i ++)
 			{
 				arr[i].call(this, e);
@@ -900,7 +901,7 @@
 
 	DisplayObject.prototype._inStage =function()
 	{
-		return this.stage && this.x + this.width > 0 && this.y + this.height > 0 && this.x < this.stage.width && this.y < this.stage.height;
+		return this.stage && this.x + this.width*2 > 0 && this.y + this.height*2 > 0 && this.x - 2*this.width< this.stage.width && this.y - 2*this.height< this.stage.height;
 	}
 
 	DisplayObject.prototype.getBounds = function()
@@ -933,6 +934,33 @@
 		}
 		this.points = points;
 		return new Rect(minx, miny, maxx - minx, maxy - miny);
+	};
+
+	/**
+	 * copy from https://github.com/quark-dev-team/quarkjs/blob/master/src/base/display/DisplayObject.js
+	 * 获得一个对象相对于其某个祖先（默认即舞台）的连接矩阵。
+	 * @private
+	 */
+	DisplayObject.prototype.getConcatenatedMatrix = function(ancestor) 
+	{	
+		var mtx = new FL.Matrix(1, 0, 0, 1, 0, 0);
+		if(ancestor == this) return mtx;
+		for(var o = this; o.parent != null && o.parent != ancestor; o = o.parent)
+		{		
+			var cos = 1, sin = 0;
+			if(o.rotation%360 != 0)
+			{
+				var r = o.rotation * DEG_TO_RAD;
+				cos = Math.cos(r);
+				sin = Math.sin(r);
+			}
+			
+			if(o.regX != 0) mtx.tx -= o.regX;
+			if(o.regY != 0) mtx.ty -= o.regY;
+			
+			mtx.concat(new FL.Matrix(cos*o.scaleX, sin*o.scaleX, -sin*o.scaleY, cos*o.scaleY, o.x, o.y));
+		}
+		return mtx;
 	};
 
 	DisplayObject.prototype.hitTestPoint = function(x, y)
@@ -1219,19 +1247,29 @@
 		}
 		this.isPlay = false;
 	};
-
+	
 	MovieClip.prototype.addAnimation = function(name, frames, loop, frameRate)
 	{
 		if(typeof(frames) === "string")
 		{
-			var temp = frames.split("-");
+			var all = frames.split(",");
 			frames = [];
-			for(var i = parseInt(temp[0]), l = parseInt(temp[1]);i <= l;i ++)
+			for(var j = 0, jl = all.length;j < jl;j ++)
 			{
-				frames.push(i);
+				var temp = all[j].split("-");
+				if(temp.length == 1)
+				{
+					frames.push(parseInt(temp[0]));
+				}
+				else
+				{
+					for(var i = parseInt(temp[0]), l = parseInt(temp[1]);i <= l;i ++)
+					{
+						frames.push(i);
+					}
+				}
 			}
 		}
-		
 		var obj = {frames:frames, loop:loop||false};
 		frameRate > 0 && (obj.delay = 1000/frameRate);
 		this.data[name] = obj;
