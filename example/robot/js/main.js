@@ -66,6 +66,16 @@
 		explosion.x = 300;
 		explosion.play("bomb");
 
+		var ani = ["", "", "", ""];
+		for(var i = 0;i < 4;i ++)
+		{
+			player = new MovieClip;
+			player.setImg(R.images.player, 58, 65);
+			player.addAnimation("bomb", ani[i], true, 10);
+			stage.addChild(player);
+			player.x = 500;
+			player.play("bomb");
+		}
 	}
 
 	log(this)

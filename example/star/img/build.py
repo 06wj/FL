@@ -20,4 +20,3 @@ fp.close()
 
 if os.name=="nt":
 	os.system("pause")
-
