@@ -19,7 +19,7 @@
 
 	EventDispatcher.prototype.removeAllEventListener = function()
 	{
-		this.eventListeners = null;
+		this.eventListeners = {};
 	}
 
 	/**
@@ -31,6 +31,7 @@
 		e.target = this;
 		if(arr && arr.length > 0)
 		{
+			arr = arr.slice(0);
 			for(var i = 0,l = arr.length;i < l;i ++)
 			{
 				arr[i].call(this, e);

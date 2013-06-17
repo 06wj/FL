@@ -83,7 +83,7 @@
 
 	DisplayObject.prototype._inStage =function()
 	{
-		return this.stage && this.x + this.width > 0 && this.y + this.height > 0 && this.x < this.stage.width && this.y < this.stage.height;
+		return this.stage && this.x + this.width*2 > 0 && this.y + this.height*2 > 0 && this.x - 2*this.width< this.stage.width && this.y - 2*this.height< this.stage.height;
 	}
 
 	DisplayObject.prototype.getBounds = function()
