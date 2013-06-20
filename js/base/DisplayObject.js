@@ -18,6 +18,7 @@
 		this.alpha = 1;
 		this.timeStep = 0;
 		this.mouseEnable = false;
+		this.visible = true;
 		this.rect = new Rect();
 		EventDispatcher.call(this);
 	};
@@ -27,7 +28,7 @@
 	DisplayObject.prototype.render = function(ctx)
 	{
 		this.isInStage = this._inStage();
-		if(!ctx || !this.isInStage) return;
+		if(!this.visible||!ctx || !this.isInStage) return;
 		ctx.save();
 		ctx.globalAlpha = this.alpha;
 		ctx.translate(this.x, this.y);
