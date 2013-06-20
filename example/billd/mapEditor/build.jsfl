@@ -16,7 +16,7 @@ function createPoint(obj)
 {
   return {x:obj.x, y:obj.y};
 }
- 
+
 function getMapData()
 {
 	return {
@@ -27,7 +27,7 @@ function getMapData()
  
 function getHitData()
 {
-	if(!fl.getLayerByName("hit")) return null;
+	if(!fl.getLayerByName("hit") || fl.getLayerByName("hit").frames[0].elements.length==0) return null;
  
 	var data = {lines:[], beziers:[]};
 	var shape = fl.getLayerByName("hit").frames[0].elements[0];
@@ -145,7 +145,7 @@ function getMcData()
  
 function getFloorData()
 {
-	fl.editItem("floor");
+	fl.editItem("floor_1");
 	var data = [];
  
 	for each(var layer in layers)

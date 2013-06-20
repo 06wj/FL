@@ -3,6 +3,8 @@
 	eval(FL.import("ns", "Player, Map, YellowBall, Spider, Fish, Floor, Bat, Spring, InstanceFactory"));
 	eval(FL.import("FL", "Stage, LoadProgress, ImageLoader, Camera"));
 
+	var lifeDom = document.querySelector("#life");
+	var scoreDom = document.querySelector("#score");
 	var	canvas = document.querySelector("canvas");
 	var width = 600;
 	var height = 300;
@@ -59,7 +61,8 @@
 
 		bg = new FL.Bitmap();
 		bg.setImg(R.images.bg);
-		
+		bg.visible = false;
+
 		bgSX = (bg.width-width)/(map.width-width);
 		bgSY = (bg.height-height)/(map.height-height);
 
@@ -172,8 +175,8 @@
 			}
 		}
 
-		document.getElementById("life").innerHTML = "life:" + life;
-		document.getElementById("score").innerHTML = "score:" + ns.score;
+		lifeDom.innerHTML = "life:" + life;
+		scoreDom.innerHTML = "score:" + ns.score;
 	}
 
 

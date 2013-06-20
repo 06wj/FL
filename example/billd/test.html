@@ -48,6 +48,10 @@
 				else if(type == "rect")
 				{
 					arr.forEach(function(data){
+						if(data.color.length>7){
+							ctx.globalApha = Number("0x"+data.color.slice(-2))/255;
+							data.color = data.color.slice(0, 7);
+						}
 						ctx.fillStyle = data.color;
 						ctx.fillRect(data.x, data.y, data.width, data.height);
 					});		

@@ -8,7 +8,7 @@
 	var maxSpeed = 7;
 	var g = .2;
 
-	var idleActions = ["play1", "play2", "stand1", "attack", "stand3"];
+	var idleActions = ["play1", "play2", "play3", "stand1", "attack", "stand3"];
 	var IDLE_TIME = 300;
 
 	var Player = ns.Player = function()
@@ -36,8 +36,10 @@
 		this.addAnimation("stand1", "12-19", true, 6);
 		this.addAnimation("run2", "20-23", true, 4);
 		this.addAnimation("run1", "24-29", true, 6);
+		this.addAnimation("swim", "30-35 ", true, 6);
 		this.addAnimation("play1", "40-54", true, 6);
 		this.addAnimation("play2", "55-59", true, 6);
+		this.addAnimation("play3", "88-93", true, 6);
 		this.addAnimation("jump2", "60-70", false, 8);
 		this.addAnimation("jump1", "71-77", false, 6);
 		this.addAnimation("attack", "80-87", true, 6);
@@ -129,6 +131,7 @@
 	
 	Player.prototype.checkMap = function(map)
 	{
+		//脚碰地
 		if(map && this.v.y >= 0)
 		{
 			this.angle = 0;
@@ -147,8 +150,10 @@
 				}
 			}
 		}
-		var dataArr = map.wallData[(this.pos.y-this.height)>>0];
-		if(map && this.v.x > 0)
+
+		//头碰墙
+		var dataArr = map.wallData[(this.pos.y-this.height+2)>>0];
+		if(map && this.v.x > 0)//碰右边墙
 		{
 			if(dataArr){
 				for(var i = 0, l = dataArr.length;i < l;i ++)
@@ -163,7 +168,7 @@
 				}
 			}
 		}
-		else if(map && this.v.x < 0)
+		else if(map && this.v.x < 0)//碰左边墙
 		{
 			if(dataArr){
 				for(var i = 0, l = dataArr.length;i < l;i ++)
@@ -178,8 +183,9 @@
 				}
 			}
 		}
-		var dataArr = map.wallData[(this.pos.y)>>0];
-		if(map && this.v.x > 0)
+		//脚碰墙
+		var dataArr = map.wallData[(this.pos.y-2)>>0];
+		if(map && this.v.x > 0)//碰右边墙
 		{
 			if(dataArr){
 				for(var i = 0, l = dataArr.length;i < l;i ++)
@@ -194,7 +200,7 @@
 				}
 			}
 		}
-		else if(map && this.v.x < 0)
+		else if(map && this.v.x < 0)//碰左边墙
 		{
 			if(dataArr){
 				for(var i = 0, l = dataArr.length;i < l;i ++)

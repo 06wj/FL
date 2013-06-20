@@ -12,8 +12,9 @@
 
 		Canvas.call(this, 0, 0);
 		this.cacheCtx.save();
-		this.cacheCtx.fillStyle = "#000";
+		this.cacheCtx.fillStyle = "#BF8230";
 		this.cacheCtx.fillRect(0, 0, width, height);
+		this.cacheCtx.strokeRect(0, 0, width, height);
 		this.cacheCtx.restore();
 		this.setImage(width, height);
 
