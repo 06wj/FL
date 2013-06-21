@@ -12,6 +12,8 @@ data.map = getMapData();
 data.hit = getHitData();
 data.floor = getFloorData();
 
+var stageFrame = 1;
+
 function createPoint(obj)
 {
   return {x:obj.x, y:obj.y};
@@ -24,15 +26,29 @@ function getMapData()
 		height:doc.height,
 	};
 }
- 
+
+function getElementsByLayerFrame(layerName, frameNum)
+{
+	var layer = fl.getLayerByName(layerName);
+	if(layer)
+	{
+		if(layer.frames[frameNum] && layer.frames[frameNum].elements.length > 0)
+		{
+			return layer.frames[frameNum].elements;
+		}
+	}
+	return null;
+}
+
 function getHitData()
 {
-	if(!fl.getLayerByName("hit") || fl.getLayerByName("hit").frames[0].elements.length==0) return null;
+	var elem = getElementsByLayerFrame("hit", stageFrame);
+	if(!elem) return;
  
 	var data = {lines:[], beziers:[]};
-	var shape = fl.getLayerByName("hit").frames[0].elements[0];
+	var shape = elem;
 	var edges = shape.edges;
- 
+ 	
 	var indexHash = {};
 	edges.forEach(function(edge){
 		if(!indexHash[edge.cubicSegmentIndex]){
@@ -47,7 +63,7 @@ function getHitData()
 	{
 		var isLine = indexHash[index].isLine;
 		var arr = shape.getCubicSegmentPoints(parseInt(index));
- 
+ 		
 		if(isLine)
 		{
 			lines.push([createPoint(arr[0]), createPoint(arr[3])]);
@@ -62,8 +78,8 @@ function getHitData()
  
 function getShapeData()
 {	
-	if(!fl.getLayerByName("shape")) return null;
-	
+	if(!getElementsByLayerFrame("shape", stageFrame)) return;
+
 	var getData = function(elem){
 		var edges = elem.edges;
 		var result = [];
@@ -102,7 +118,7 @@ function getShapeData()
 	}
  
 	var data = {};
-	for each(var elem in fl.getLayerByName("shape").frames[0].elements)
+	for each(var elem in fl.getLayerByName("shape").frames[stageFrame].elements)
 	{
 		var tmp = getData(elem);
 		data[tmp.type] = data[tmp.type]||[];
@@ -134,7 +150,7 @@ function getMcData()
 	if(!fl.getLayerByName("mc")) return null;
  
 	var data = {};
-	var elems = fl.getLayerByName("mc").frames[0].elements;
+	var elems = fl.getLayerByName("mc").frames[stageFrame].elements;
 	elems.forEach(function(elem){
 		var name = fl.getLibraryName(elem);
 		data[name] = data[name]||[];
@@ -145,6 +161,8 @@ function getMcData()
  
 function getFloorData()
 {
+	if(!fl.getLayerByName("floor")) return null;
+
 	fl.editItem("floor_1");
 	var data = [];
  

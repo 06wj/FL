@@ -28,14 +28,13 @@
 					ns.fishs.push(mc);
 					break;
 				case "star":
-					mc = new FL.Bitmap(data.x, data.y, R.images.star)
+					mc = new Bitmap(data.x, data.y, R.images.star);
 					mc.pos = new Vector(data.x, data.y);
 					mc.originX = mc.originY = 0;
 					mc.update = function(){
 						this.x = ns.map.x + this.pos.x;
 						this.y = ns.map.y + this.pos.y;
-						if(ns.player.hitTestObject(this))
-						{
+						if(ns.player.hitTestObject(this)){
 							this.update = null;
 							var that = this;
 							TweenLite.to(this, 1, {
@@ -49,6 +48,22 @@
 									that.parent.removeChild(that);
 								}
 							})
+						}
+					}
+					break;
+				case "door":
+					mc = new Bitmap(data.x, data.y, R.images.door);
+					mc.pos = new Vector(data.x, data.y);
+					mc.originX = 42.8;
+					mc.originY = 45;
+					mc.setCenter();
+					mc.update = function(){
+						this.x = -ns.map.x*600/ns.map.width;
+						this.y = 10-ns.map.y*20/ns.map.height;
+						this.angle+=.01;
+						if(ns.player.hitTestObject(this)){
+							//this.update = null;
+							//alert("a")
 						}
 					}
 					break;
