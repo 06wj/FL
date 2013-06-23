@@ -52,15 +52,17 @@
 					}
 					break;
 				case "door":
-					mc = new Bitmap(data.x, data.y, R.images.door);
+					ns.door = mc = new Bitmap(data.x, data.y, R.images.door);
 					mc.pos = new Vector(data.x, data.y);
 					mc.originX = 42.8;
 					mc.originY = 45;
 					mc.setCenter();
 					mc.update = function(){
-						this.x = -ns.map.x*600/ns.map.width;
-						this.y = 10-ns.map.y*20/ns.map.height;
-						this.angle+=.01;
+						this.x = 80-ns.map.x*100/ns.map.width;
+						this.y = 30-ns.map.y*10/ns.map.height;
+						this.scaleX = this.scaleY = 1+Math.pow(ns.bg.y/100, 2);
+						log(ns.bg.y)
+						this.angle+=.08;
 						if(ns.player.hitTestObject(this)){
 							//this.update = null;
 							//alert("a")

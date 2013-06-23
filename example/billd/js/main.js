@@ -56,19 +56,16 @@
 		player.pos.y = mapData.mc.player[0].y;
 		player.y = player.pos.y + map.y;
 
-		
-		stage.update = update;
-
-		bg = new FL.Bitmap();
+		var bg = ns.bg = new FL.Bitmap();
 		bg.setImg(R.images.bg);
-		bg.visible = false;
+		bg.visible = true;
 
 		bgSX = (bg.width-width)/(map.width-width);
-		bgSY = (bg.height-height)/(map.height-height);
+		bgSY = (bg.height-height)/(map.height-height+420);
 
 		bg.update = function(){
 			bg.x = map.x * bgSX;
-			bg.y = map.y * bgSY ;
+			bg.y = Math.min(map.y * bgSY, 0) ;
 		}
 
 		stage.addChild(bg);
@@ -85,6 +82,10 @@
 				mc && stage.addChild(mc);
 			}
 		}
+
+		stage.addChildAt(ns.door, 1);
+
+		stage.update = update;
 	}
 
 	function update(){

@@ -1012,35 +1012,32 @@
 
 	Utils.extends(DisplayObjectContainer, DisplayObject);
 
+	DisplayObjectContainer.prototype.addChildAt = function(child, at) {
+		at = at=="undefined"?this.children.length:at;
+		this.removeChild(child);
+		this.children.splice(at, 0, child);
+		child.parent = this;
+		
+		if(this.stage)
+		{
+			var prop = {stage:this.stage, timeStep:this.timeStep};
+			if(child instanceof DisplayObjectContainer) child.setAll(prop);
+			else Utils.merge(child, prop);
+		}
+	};
+
 	DisplayObjectContainer.prototype.addChild = function()
 	{
+		var at = this.children.length;
 		for(var i = 0, l = arguments.length;i < l;i ++)
 		{
-			this._addChild(arguments[i]);
+			this.addChildAt(arguments[i], at++);
 		}
 	};
 
 	
 	DisplayObjectContainer.prototype._debugDraw = function(ctx){
 		
-	};
-
-
-	DisplayObjectContainer.prototype._addChild = function(obj)
-	{
-		var index = this.children.indexOf(obj)
-		if(index != -1){
-			this.children.splice(index, 1);
-		}
-		this.children.push(obj);
-		obj.parent = this;
-
-		if(this.stage)
-		{
-			var prop = {stage:this.stage, timeStep:this.timeStep};
-			if(obj instanceof DisplayObjectContainer) obj.setAll(prop);
-			else utils.merge(obj, prop);
-		}
 	};
 
 	DisplayObjectContainer.prototype.removeChild = function(obj)
@@ -1396,12 +1393,10 @@
 		this.ctx = canvas.getContext("2d");
 	}
 
-	Stage.prototype._addChild = function(obj)
+	Stage.prototype.addChildAt = function(obj, at)
 	{
-		this.superClass._addChild.call(this, obj);
-		var prop = {stage:this, timeStep:this.timeStep};
-		if(obj instanceof DisplayObjectContainer) obj.setAll(prop);
-		else Utils.merge(obj, prop);
+		this.stage = this;
+		this.superClass.addChildAt.call(this, obj, at);
 	};
 
 	Stage.prototype.render = function()
