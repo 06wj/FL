@@ -21,12 +21,10 @@
 		this.ctx = canvas.getContext("2d");
 	}
 
-	Stage.prototype._addChild = function(obj)
+	Stage.prototype.addChildAt = function(obj, at)
 	{
-		this.superClass._addChild.call(this, obj);
-		var prop = {stage:this, timeStep:this.timeStep};
-		if(obj instanceof DisplayObjectContainer) obj.setAll(prop);
-		else Utils.merge(obj, prop);
+		this.stage = this;
+		this.superClass.addChildAt.call(this, obj, at);
 	};
 
 	Stage.prototype.render = function()
