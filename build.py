@@ -61,7 +61,7 @@ os.system("uglifyjs " +  filesStr +
 	" -o " + outMinPut + 
 	" --screw-ie8 --lint" +
 	" --source-map FL.min.js.map" +
-	" --source-map-root ./"
+	" --source-map-root ./" +
 	" -c -m "
 )
 if os.name == "nt":

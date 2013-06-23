@@ -17,8 +17,8 @@ filesStr = "\
 os.system("uglifyjs " +  filesStr +
 	" -o game.min.js" + 
 	" --source-map game.min.js.map" +
-	" --source-map-root http://littlebilld.duapp.com/FL/example/billd"
-	" -p 5 -c -m"
+	" --source-map-root ./" +
+	" -c -m"
 )
 if os.name == "nt":
 	os.system("pause")
