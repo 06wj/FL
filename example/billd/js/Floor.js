@@ -33,10 +33,10 @@
 	}
 
 	Floor.prototype.setState = function(state) {
-		this.state = state%this.length;
+		this.state = state%this.points.length;
 
 		this.point = this.points[this.state];
-		this.dis = this.point.minusNew(this.points[(this.state+this.length-1)%this.length]);
+		this.dis = this.point.minusNew(this.points[(this.state+this.length-1)%this.points.length]);
 		this.v.x = this.dis.x == 0?0:this.dis.x > 0?speedx:-speedy;
 		this.v.y = this.dis.y == 0?0:this.dis.y > 0?speedy:-speedy;
 	};
