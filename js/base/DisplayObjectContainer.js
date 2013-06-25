@@ -38,9 +38,9 @@
 	};
 
 	
-	DisplayObjectContainer.prototype._debugDraw = function(ctx){
+	// DisplayObjectContainer.prototype._debugDraw = function(ctx){
 		
-	};
+	// };
 
 	DisplayObjectContainer.prototype.removeChild = function(obj)
 	{

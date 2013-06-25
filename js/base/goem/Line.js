@@ -26,8 +26,8 @@
 	};
 
 	Line.prototype.getY = function(x){
-		this.lx = this.lx||Math.min(this.p0.x, this.p1.x);
-		this.rx = this.rx||Math.max(this.p0.x, this.p1.x);
+		this.lx = this.lx||min(this.p0.x, this.p1.x);
+		this.rx = this.rx||max(this.p0.x, this.p1.x);
 		if(x < this.lx || x > this.rx) return null;
 		this._getY = this._getY || function(x){
 			var x1 = this.p0.x;
@@ -44,8 +44,8 @@
 	Line.prototype.createPoints = function()
 	{
 		var points = [];
-		this.lx = this.lx||Math.min(this.p0.x, this.p1.x);
-		this.rx = this.rx||Math.max(this.p0.x, this.p1.x);
+		this.lx = this.lx||min(this.p0.x, this.p1.x);
+		this.rx = this.rx||max(this.p0.x, this.p1.x);
 		var ang = this.getAngle();
 		for(var i = this.lx>>0;i <= this.rx; i ++)
 		{

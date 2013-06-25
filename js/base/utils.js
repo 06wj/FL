@@ -19,7 +19,7 @@
 			return {x:x, y:y};
 		};
 
-		Utils.merge = function(obj, props, strict)
+		Utils.merge = function(obj, props)
 		{
 			for(var key in props)
 			{

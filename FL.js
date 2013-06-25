@@ -77,7 +77,7 @@
 			return {x:x, y:y};
 		};
 
-		Utils.merge = function(obj, props, strict)
+		Utils.merge = function(obj, props)
 		{
 			for(var key in props)
 			{
@@ -340,8 +340,8 @@
 	};
 
 	Line.prototype.getY = function(x){
-		this.lx = this.lx||Math.min(this.p0.x, this.p1.x);
-		this.rx = this.rx||Math.max(this.p0.x, this.p1.x);
+		this.lx = this.lx||min(this.p0.x, this.p1.x);
+		this.rx = this.rx||max(this.p0.x, this.p1.x);
 		if(x < this.lx || x > this.rx) return null;
 		this._getY = this._getY || function(x){
 			var x1 = this.p0.x;
@@ -358,8 +358,8 @@
 	Line.prototype.createPoints = function()
 	{
 		var points = [];
-		this.lx = this.lx||Math.min(this.p0.x, this.p1.x);
-		this.rx = this.rx||Math.max(this.p0.x, this.p1.x);
+		this.lx = this.lx||min(this.p0.x, this.p1.x);
+		this.rx = this.rx||max(this.p0.x, this.p1.x);
 		var ang = this.getAngle();
 		for(var i = this.lx>>0;i <= this.rx; i ++)
 		{
@@ -839,6 +839,18 @@
 		this.visible = true;
 		this.rect = new Rect();
 		EventDispatcher.call(this);
+
+		// var height = 0;
+		// var that = this;
+
+		// Object.defineProperty(this, "height", {
+		// 	get:function(){
+		// 		return that.scaleY*height;
+		// 	},
+		// 	set:function(value){
+		// 		height = value
+		// 	}
+		// })
 	};
 	
 	Utils.extends(DisplayObject, EventDispatcher);
@@ -907,12 +919,15 @@
 
 	DisplayObject.prototype.getBounds = function()
 	{
+		var scaleX = Math.abs(this.scaleX);
+		var scaleY = Math.abs(this.scaleY);
 		var cos = Math.cos(this.angle);
 		var sin = Math.sin(this.angle);
-		var originX = this.originX;
-		var originY = this.originY;
+		var originX = this.originX*scaleX;
+		var originY = this.originY*scaleY;
 		var minx, miny, maxx, maxy;
-		var points = [[0, 0], [0, this.height], [this.width, this.height], [this.width, 0]];
+
+		var points = [[0, 0], [0, this.height*scaleY], [this.width*scaleX, this.height*scaleY], [this.width*scaleX, 0]];
 		for(var i = 3;i >= 0;i --)
 		{
 			var tx = points[i][0] - originX;
@@ -968,7 +983,9 @@
 	{
 		if(this.angle == 0)
 		{
-			return new Rect(this.x - this.originX, this.y - this.originY, this.width, this.height).hitTestPoint(x, y);
+			var scaleX = Math.abs(this.scaleX);
+			var scaleY = Math.abs(this.scaleY);
+			return new Rect(this.x - this.originX*scaleX, this.y - this.originY*scaleY, this.width*scaleX, this.height*scaleY).hitTestPoint(x, y);
 		}
 
 		if(this.getBounds().hitTestPoint(x, y))
@@ -1036,9 +1053,9 @@
 	};
 
 	
-	DisplayObjectContainer.prototype._debugDraw = function(ctx){
+	// DisplayObjectContainer.prototype._debugDraw = function(ctx){
 		
-	};
+	// };
 
 	DisplayObjectContainer.prototype.removeChild = function(obj)
 	{

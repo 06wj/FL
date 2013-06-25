@@ -21,6 +21,18 @@
 		this.visible = true;
 		this.rect = new Rect();
 		EventDispatcher.call(this);
+
+		// var height = 0;
+		// var that = this;
+
+		// Object.defineProperty(this, "height", {
+		// 	get:function(){
+		// 		return that.scaleY*height;
+		// 	},
+		// 	set:function(value){
+		// 		height = value
+		// 	}
+		// })
 	};
 	
 	Utils.extends(DisplayObject, EventDispatcher);
@@ -89,12 +101,15 @@
 
 	DisplayObject.prototype.getBounds = function()
 	{
+		var scaleX = Math.abs(this.scaleX);
+		var scaleY = Math.abs(this.scaleY);
 		var cos = Math.cos(this.angle);
 		var sin = Math.sin(this.angle);
-		var originX = this.originX;
-		var originY = this.originY;
+		var originX = this.originX*scaleX;
+		var originY = this.originY*scaleY;
 		var minx, miny, maxx, maxy;
-		var points = [[0, 0], [0, this.height], [this.width, this.height], [this.width, 0]];
+
+		var points = [[0, 0], [0, this.height*scaleY], [this.width*scaleX, this.height*scaleY], [this.width*scaleX, 0]];
 		for(var i = 3;i >= 0;i --)
 		{
 			var tx = points[i][0] - originX;
@@ -150,7 +165,9 @@
 	{
 		if(this.angle == 0)
 		{
-			return new Rect(this.x - this.originX, this.y - this.originY, this.width, this.height).hitTestPoint(x, y);
+			var scaleX = Math.abs(this.scaleX);
+			var scaleY = Math.abs(this.scaleY);
+			return new Rect(this.x - this.originX*scaleX, this.y - this.originY*scaleY, this.width*scaleX, this.height*scaleY).hitTestPoint(x, y);
 		}
 
 		if(this.getBounds().hitTestPoint(x, y))
