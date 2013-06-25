@@ -1,10 +1,10 @@
-(function(win){
-	var Utils = win.Utils;
-	var DisplayObjectContainer = win.DisplayObjectContainer;
-	var Mouse = win.Mouse;
-	var Keyboard = win.Keyboard;
+(function(){
+	var Utils = FL.Utils;
+	var DisplayObjectContainer = FL.DisplayObjectContainer;
+	var Mouse = FL.Mouse;
+	var Keyboard = FL.Keyboard;
 
-	var Stage = win.Stage = function(canvas, width, height, fps)
+	var Stage = FL.Stage = function(canvas, width, height, fps)
 	{
 		DisplayObjectContainer.call(this);
 		this.init(canvas, width, height, fps);
@@ -79,4 +79,4 @@
 		}
 	}
 
-})(FL);
+})();

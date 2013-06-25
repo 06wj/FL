@@ -1,9 +1,9 @@
-(function(win){
-	var Utils = win.Utils;
-	var DisplayObject = win.DisplayObject;
-	var Rect = win.Rect;
+(function(){
+	var Utils = FL.Utils;
+	var DisplayObject = FL.DisplayObject;
+	var Rect = FL.Rect;
 
-	var Bitmap = win.Bitmap = function(x, y, img)
+	var Bitmap = FL.Bitmap = function(x, y, img)
 	{
 		DisplayObject.call(this, x, y);
 		this.rect = new Rect();
@@ -30,4 +30,4 @@
 		this.height = img.height;
 		this.rect.set(0, 0, this.width, this.height);
 	};
-})(FL);
+})();

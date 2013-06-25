@@ -1,8 +1,8 @@
-(function(win){
-	var Utils = win.Utils;
-	var Sprite = win.Sprite;
+(function(){
+	var Utils = FL.Utils;
+	var Sprite = FL.Sprite;
 
-	var MovieClip = win.MovieClip = function(x, y)
+	var MovieClip = FL.MovieClip = function(x, y)
 	{
 		Sprite.call(this, x, y);
 
@@ -126,4 +126,4 @@
 		this.col = this.img.width/this.width>>0;
 		this.row = this.img.height/this.height>>0;
 	};
-})(FL);
+})();

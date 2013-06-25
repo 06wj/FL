@@ -1,9 +1,9 @@
-(function(win){
-	var Utils = win.Utils;
-	var Rect = win.Rect;
-	var DisplayObjectContainer = win.DisplayObjectContainer;
+(function(){
+	var Utils = FL.Utils;
+	var Rect = FL.Rect;
+	var DisplayObjectContainer = FL.DisplayObjectContainer;
 	
-	var Sprite = win.Sprite = function(x, y, img)
+	var Sprite = FL.Sprite = function(x, y, img)
 	{
 		DisplayObjectContainer.call(this, x, y);
 		this.rect = new Rect();
@@ -31,4 +31,4 @@
 		this.height = img.height;
 		this.rect.set(0, 0, this.width, this.height);
 	};
-})(FL);
+})();

@@ -1,8 +1,8 @@
-(function(win){
-	var Utils = win.Utils;
-	var DisplayObject = win.DisplayObject;
+(function(){
+	var Utils = FL.Utils;
+	var DisplayObject = FL.DisplayObject;
 
-	var DisplayObjectContainer = win.DisplayObjectContainer = function(x, y, parent)
+	var DisplayObjectContainer = FL.DisplayObjectContainer = function(x, y, parent)
 	{
 		if(parent)
 		{
@@ -98,4 +98,4 @@
 		}
 	};
 
-})(FL);
+})();

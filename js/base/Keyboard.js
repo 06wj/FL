@@ -1,7 +1,7 @@
-(function(win){
-	var Utils = win.Utils;
+(function(){
+	var Utils = FL.Utils;
 
-	var Keyboard = win.Keyboard = {
+	var Keyboard = FL.Keyboard = {
 		init:function(){
 			this.elem = document;
 			this.key = {};
@@ -135,4 +135,4 @@
 		F12 : 123
 	};
 
-})(FL);
+})();

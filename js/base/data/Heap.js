@@ -1,5 +1,5 @@
-(function(win){
-	var Heap = function(compare){
+(function(){
+	var Heap = FL.Heap = function(compare){
 		this._heap = [];
 		if(compare){
 			this._compare = compare;
@@ -87,4 +87,4 @@
 	Heap.prototype.toString = Heap.prototype.valueOf = function(){
 		return this._heap.toString();
 	};
-})(FL);
+})();

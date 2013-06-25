@@ -1,6 +1,6 @@
-(function(win){
-	var Game = win.Game = function()
+(function(){
+	var Game = FL.Game = function()
 	{
 		this.frameRate = 60;
 	};
-})(FL);
+})();

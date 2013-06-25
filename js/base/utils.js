@@ -1,5 +1,5 @@
-(function(win){
-		var Utils = win.Utils = {};
+(function(){
+		var Utils = FL.Utils = {};
 
 		Utils.extends = function(childClass, parentClass) 
 		{
@@ -56,4 +56,4 @@
 			return isInt?num>>0:num;
 		};
 
-})(FL);
+})();

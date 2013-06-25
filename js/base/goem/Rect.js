@@ -1,5 +1,5 @@
-(function(win){
-	var Rect = win.Rect = function(x, y, width, height){
+(function(){
+	var Rect = FL.Rect = function(x, y, width, height){
 		this.set(x, y, width, height);
 	};
 
@@ -23,4 +23,4 @@
 		return x>=this.x && x<=this.right&&
 			y>=this.y && y<=this.bottom;
 	}
-})(FL);
+})();

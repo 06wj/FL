@@ -1,4 +1,4 @@
-(function(win){
+(function(){
 	var _dataList = [];
 	var _targetList = [];
 	var _interval = -1;
@@ -49,4 +49,4 @@
 			}
 		}
 	}
-})(FL);
+})();

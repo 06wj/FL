@@ -1,6 +1,6 @@
-(function(win){
-	var Rect = win.Rect;
-	var QuadTree = win.QuadTree = function(rect){
+(function(){
+	var Rect = FL.Rect;
+	var QuadTree = FL.QuadTree = function(rect){
 		this.q1 = null;
 		this.q2 = null;
 		this.q3 = null;
@@ -77,4 +77,4 @@
 		};
 		return result;
 	};
-})(FL);
+})();

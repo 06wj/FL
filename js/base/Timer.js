@@ -1,5 +1,5 @@
-;(function(win){
-	var Timer = win.Timer = function(fps)
+;(function(){
+	var Timer = FL.Timer = function(fps)
 	{
 		this.init(fps);
 	};
@@ -89,4 +89,4 @@
 		}
 	};
 
-})(FL);
+})();

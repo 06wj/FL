@@ -1,5 +1,5 @@
-(function(win){
-	var EventDispatcher = win.EventDispatcher = function()
+(function(){
+	var EventDispatcher = FL.EventDispatcher = function()
 	{
 		this.eventListeners = {};
 	};
@@ -16,7 +16,7 @@
 		var index = this.eventListeners[type].indexOf(listener);
 		if(index != -1) this.eventListeners[type].splice(index, 1);
 	};
-
+	
 	EventDispatcher.prototype.removeAllEventListener = function()
 	{
 		this.eventListeners = {};
@@ -38,4 +38,4 @@
 			}
 		}
 	};
-})(FL);
+})();

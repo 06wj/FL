@@ -1,5 +1,5 @@
-(function(win){
-	var Rect = win.Rect;
+(function(){
+	var Rect = FL.Rect;
 
 	var Camera = FL.Camera = function(x, y, width, height, zoom){
 		this.x = x;
@@ -93,4 +93,4 @@
 		this.bounds.set(x, y, width, height);
 		this.update();
 	}
-})(FL);
+})();

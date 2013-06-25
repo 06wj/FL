@@ -1,11 +1,11 @@
-(function(win){
+(function(){
 	var TOTAL_SIMPSON_STEP = 100;
-	var Point = function(x, y){
+	var Point = FL.Point = function(x, y){
 		this.x = x;
 		this.y = y;
 	};
 
-	var Bezier = win.Bezier = function(){
+	var Bezier = FL.Bezier = function(){
 		var args = arguments;
 		if(args.length == 4){
 			this.p0 = args[0];
@@ -109,4 +109,4 @@
 		return points;
 	};
 
-})(FL);
+})();

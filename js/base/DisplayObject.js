@@ -1,10 +1,10 @@
-(function(win){
-	var Utils = win.Utils;
-	var EventDispatcher = win.EventDispatcher;
-	var Rect = win.Rect;
-	var Polygon = win.Polygon;
+(function(){
+	var Utils = FL.Utils;
+	var EventDispatcher = FL.EventDispatcher;
+	var Rect = FL.Rect;
+	var Polygon = FL.Polygon;
 
-	var DisplayObject = win.DisplayObject = function(x, y)
+	var DisplayObject = FL.DisplayObject = function(x, y)
 	{
 		this.x = x||0;
 		this.y = y||0;
@@ -62,10 +62,10 @@
 		ctx.strokeStyle = "#f00";
 		ctx.lineWidth = .5;
 		ctx.beginPath();
-		ctx.moveTo(this.points[0].x, this.points[0].y)
-		for(var i = 1, l = this.points.length;i < l;i ++)
+		ctx.moveTo(this.hitPoints[0].x, this.hitPoints[0].y)
+		for(var i = 1, l = this.hitPoints.length;i < l;i ++)
 		{
-			ctx.lineTo(this.points[i].x, this.points[i].y);
+			ctx.lineTo(this.hitPoints[i].x, this.hitPoints[i].y);
 		}
 		ctx.closePath();
 		ctx.stroke();
@@ -130,7 +130,7 @@
 				maxy < ey && (maxy = ey);
 			}
 		}
-		this.points = points;
+		this.hitPoints = points;
 		return new Rect(minx, miny, maxx - minx, maxy - miny);
 	};
 
@@ -172,7 +172,7 @@
 
 		if(this.getBounds().hitTestPoint(x, y))
 		{
-			return new Polygon(this.points).hitTestPoint(x, y);
+			return new Polygon(this.hitPoints).hitTestPoint(x, y);
 		}
 		return false;
 	};
@@ -183,12 +183,12 @@
 		if(bounds.intersects(obj.bounds||obj.getBounds()))
 		{
 			return true;
-			// return new Polygon(this.points).hit(new Polygon(obj.points));
+			// return new Polygon(this.hitPoints).hit(new Polygon(obj.points));
 		}
 		return false;
 	};
 
-})(FL);
+})();
 
 
 

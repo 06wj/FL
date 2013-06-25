@@ -1,7 +1,7 @@
-(function(win){
-	var Utils = win.Utils;
+(function(){
+	var Utils = FL.Utils;
 
-	var Mouse = win.Mouse = {
+	var Mouse = FL.Mouse = {
 		stage:null,
 		x:0,
 		y:0,
@@ -38,4 +38,4 @@
 		}
 	};
 
-})(FL);
+})();

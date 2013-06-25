@@ -1,8 +1,8 @@
-(function(win){
-	var DisplayObject = win.DisplayObject;
-	var Utils = win.Utils;
+(function(){
+	var DisplayObject = FL.DisplayObject;
+	var Utils = FL.Utils;
 
-	var LoadProgress = win.LoadProgress = function(loader, x, y)
+	var LoadProgress = FL.LoadProgress = function(loader, x, y)
 	{
 		DisplayObject.call(this, x , y);
 		this.width = 400;
@@ -43,4 +43,4 @@
 		ctx.fillRect(-this.originX+2, -this.originY+2, (this.width-4)*this.progress, this.height-4);
 	};
 
-})(FL);
+})();

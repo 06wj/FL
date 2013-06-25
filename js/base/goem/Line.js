@@ -1,10 +1,10 @@
-(function(win){
-	var Rect = win.Rect;
+(function(){
+	var Rect = FL.Rect;
 	var min = Math.min;
 	var max = Math.max; 
 	var abs = Math.abs;
 
-	var Line = win.Line = function(v0, v1)
+	var Line = FL.Line = function(v0, v1)
 	{
 		this.p0 = v0||new Vector();
 		this.p1 = v1||new Vector();
@@ -87,4 +87,4 @@
 		return new Rect(x, y, abs(w), abs(h));
 	}
 
-})(FL);
+})();

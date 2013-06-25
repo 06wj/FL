@@ -54,5 +54,6 @@
 		return str;
 	};
 
-	FL.debug = FL.getUrlParams().debug;
+	FL.params = FL.getUrlParams();
+	FL.debug = FL.params.debug&&FL.params.debug!=0;
 })(window);

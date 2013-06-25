@@ -1,7 +1,7 @@
-(function(win){
-	var Line = win.Line;
+(function(){
+	var Line = FL.Line;
 
-	var Polygon = win.Polygon = function(points)
+	var Polygon = FL.Polygon = function(points)
 	{
 		this.points = points;
 	}
@@ -24,4 +24,4 @@
 		}
 		return n%2 == 1;
 	}
-})(FL);
+})();

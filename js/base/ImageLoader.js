@@ -1,8 +1,8 @@
-;(function(win){
-	var Utils = win.Utils;
-	var EventDispatcher = win.EventDispatcher;
+;(function(){
+	var Utils = FL.Utils;
+	var EventDispatcher = FL.EventDispatcher;
 	
-	var ImageLoader = win.ImageLoader = function()
+	var ImageLoader = FL.ImageLoader = function()
 	{
 		EventDispatcher.call(this);
 		this.init();
@@ -51,4 +51,4 @@
 		log("load:" + e.target.id + ",  "+Math.floor(this.loadSize)+"/"+Math.floor(this.totalSize));
 	}
 
-})(FL);
+})();

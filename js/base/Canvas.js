@@ -1,6 +1,6 @@
-(function(win){
-	var Utils = win.Utils;
-	var Bitmap = win.Bitmap;
+(function(){
+	var Utils = FL.Utils;
+	var Bitmap = FL.Bitmap;
 
 	var cacheCanvas = document.createElement("canvas");
 	cacheCanvas.width = 1600;
@@ -10,7 +10,7 @@
 	var _canvas = document.createElement("canvas");
 	var _ctx = _canvas.getContext("2d");
 
-	var Canvas = win.Canvas = function(x, y)
+	var Canvas = FL.Canvas = function(x, y)
 	{
 		Bitmap.call(this, x, y);
 		this.cacheCtx = cacheCtx;
@@ -28,4 +28,4 @@
 		this.img = this.img||new Image();
 		this.img.src = _canvas.toDataURL();
 	}
-})(FL);
+})();
