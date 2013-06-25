@@ -52,7 +52,6 @@
 		map.init(mapData.map.width, mapData.map.height);
 		camera = new Camera(0, 0, width, height);
 		
-		map.y = -474.95;
 		player.pos.x = mapData.mc.player[0].x;
 		player.pos.y = mapData.mc.player[0].y;
 		player.y = player.pos.y + map.y;
