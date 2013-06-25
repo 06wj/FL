@@ -1,7 +1,7 @@
 (function(){
 	var ns = FL.ns("billd");
 	eval(FL.import("ns", "Player, Map, YellowBall, Spider, Fish, Floor, Bat, Spring, InstanceFactory"));
-	eval(FL.import("FL", "Stage, LoadProgress, ImageLoader, Camera"));
+	eval(FL.import("FL", "Stage, LoadProgress, ImageLoader, Camera, Utils"));
 
 	var lifeDom = document.querySelector("#life");
 	var scoreDom = document.querySelector("#score");
@@ -12,6 +12,7 @@
 	var mc;
 	var life = 99;
 	ns.score = 0;
+	mapData = mapData[Number(Utils.getUrlParams().stage)||0]
 
 	var stage = new Stage(canvas, width, height, fps);
 	stage.start();
@@ -21,15 +22,15 @@
 	loadProgress.x = width>>1;loadProgress.y=height>>1;
 	loadProgress.addEventListener("complete", function(){
 		stage.removeChild(this);
-		this.removeAllEventListener("complete", arguments.callee);
+		this.removeAllEventListener();
 		loadProgress = null;
-		R.images = this.loader.images; 
+		R.images = this.loader.images;
 		init();
 	});
 	loadProgress.load(R.images);
 	stage.addChild(loadProgress);
 
-	// stage.initMouseEvent();
+	stage.initMouseEvent();
 	stage.initKeyboardEvent();
 
 	var map, player, camera;
@@ -58,11 +59,10 @@
 
 		var bg = ns.bg = new FL.Bitmap();
 		bg.setImg(R.images.bg);
-		bg.visible = true;
+		bg.visible = FL.params.bg!=0&&true;
 
-		bgSX = (bg.width-width)/(map.width-width);
-		bgSY = (bg.height-height)/(map.height-height+420);
-
+		bgSX = bg.width < map.width?(bg.width-width)/(map.width-width):1;
+		bgSY = bg.height < map.height?(bg.height-height)/(map.height-height+420):1;
 		bg.update = function(){
 			bg.x = map.x * bgSX;
 			bg.y = Math.min(map.y * bgSY, 0) ;
@@ -83,7 +83,7 @@
 			}
 		}
 
-		stage.addChildAt(ns.door, 1);
+		if(ns.door)stage.addChildAt(ns.door, 1);
 
 		stage.update = update;
 	}

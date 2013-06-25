@@ -32,11 +32,10 @@
 		}
 		
 		draw(this.ctx, mapData.shape);
-		FL.getUrlParams().hit && drawDebug(this.ctx, this.lines);
+		FL.getUrlParams().hit && FL.getUrlParams().hit!=0 && drawDebug(this.ctx, this.lines);
 		var data = createMapData(this.lines);
 		this.mapData = data.ground;
 		this.wallData = data.wall;
-
 	};
 
 	function draw(ctx, shape){
@@ -55,9 +54,9 @@
 					data.forEach(function(p){
 						ctx.quadraticCurveTo(p[1].x, p[1].y, p[2].x, p[2].y);
 					});
-					ctx.fill();		
+					ctx.stroke();
+					ctx.fill();	
 				});	
-
 			}
 			else if(type == "rect")
 			{

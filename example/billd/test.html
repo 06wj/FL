@@ -15,6 +15,7 @@
 	<script src = "mapData.js"></script>
 	<script>
 		var d = JSON.parse(JSON.stringify(mapData));
+		mapData = mapData[1];
 		var shapeData = mapData.shape;
 		var arr;
 
@@ -31,7 +32,7 @@
 
 				if(type == "bezier")
 				{
-					ctx.fillStyle = "#000000";
+					ctx.fillStyle = "#BF8230";
 					ctx.strokeStyle = "#9966ff";
 					arr.forEach(function(data){
 						ctx.beginPath();

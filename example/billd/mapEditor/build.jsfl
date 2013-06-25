@@ -4,49 +4,50 @@ var baseURI = fl.baseURI = fl.scriptURI.slice(0, fl.scriptURI.lastIndexOf("/")) 
 fl.runScript(baseURI + "utils.jsfl");
 log(baseURI, "start");
  
-var data = {};
- 
-data.shape = getShapeData();
-data.mc = getMcData();
-data.map = getMapData();
-data.hit = getHitData();
-data.floor = getFloorData();
-
-var stageFrame = 1;
+var data = [];
+var stageNum = 3;
+for(var i = 0;i < stageNum;i ++)
+{
+	data[i]= {};
+	data[i].shape = getShapeData(i);
+	data[i].mc = getMcData(i);
+	data[i].map = getMapData(i);
+	data[i].hit = getHitData(i);
+	data[i].floor = getFloorData(i);
+}
 
 function createPoint(obj)
 {
   return {x:obj.x, y:obj.y};
 }
 
-function getMapData()
+function getMapData(stageFrame)
 {
+	var elems = getElementsByLayerFrame("bg", stageFrame);
+	if(!elems) return;
 	return {
-		width:doc.width,
-		height:doc.height,
+		width:elems[0].width,
+		height:elems[0].height,
 	};
 }
 
 function getElementsByLayerFrame(layerName, frameNum)
 {
 	var layer = fl.getLayerByName(layerName);
-	if(layer)
+	if(layer && layer.frames[frameNum] && layer.frames[frameNum].elements.length > 0)
 	{
-		if(layer.frames[frameNum] && layer.frames[frameNum].elements.length > 0)
-		{
-			return layer.frames[frameNum].elements;
-		}
+		return layer.frames[frameNum].elements;
 	}
 	return null;
 }
 
-function getHitData()
+function getHitData(stageFrame)
 {
-	var elem = getElementsByLayerFrame("hit", stageFrame);
-	if(!elem) return;
+	var elems = getElementsByLayerFrame("hit", stageFrame);
+	if(!elems) return;
  
 	var data = {lines:[], beziers:[]};
-	var shape = elem;
+	var shape = elems[0];
 	var edges = shape.edges;
  	
 	var indexHash = {};
@@ -76,9 +77,10 @@ function getHitData()
 	return data;
 }
  
-function getShapeData()
+function getShapeData(stageFrame)
 {	
-	if(!getElementsByLayerFrame("shape", stageFrame)) return;
+	var elems = getElementsByLayerFrame("shape", stageFrame);
+	if(!elems) return;
 
 	var getData = function(elem){
 		var edges = elem.edges;
@@ -118,7 +120,7 @@ function getShapeData()
 	}
  
 	var data = {};
-	for each(var elem in fl.getLayerByName("shape").frames[stageFrame].elements)
+	for each(var elem in elems)
 	{
 		var tmp = getData(elem);
 		data[tmp.type] = data[tmp.type]||[];
@@ -128,7 +130,7 @@ function getShapeData()
 	}
 	return data;
 }
- 
+
 function getNext(arr, drawData)
 {
 	var last = arr[arr.length - 1];
@@ -145,12 +147,12 @@ function getNext(arr, drawData)
 	return null;
 }
  
-function getMcData()
+function getMcData(stageFrame)
 {
-	if(!fl.getLayerByName("mc")) return null;
+	var elems = getElementsByLayerFrame("mc", stageFrame);
+	if(!elems) return;
  
 	var data = {};
-	var elems = fl.getLayerByName("mc").frames[stageFrame].elements;
 	elems.forEach(function(elem){
 		var name = fl.getLibraryName(elem);
 		data[name] = data[name]||[];
@@ -159,11 +161,12 @@ function getMcData()
 	return data;
 }
  
-function getFloorData()
+function getFloorData(stageFrame)
 {
-	if(!fl.getLayerByName("floor")) return null;
+	var elems = getElementsByLayerFrame("floor", stageFrame);
+	if(!elems) return;
 
-	fl.editItem("floor_1");
+	fl.editItem(fl.getLibraryName(elems[0]));
 	var data = [];
  
 	for each(var layer in layers)

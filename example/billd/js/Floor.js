@@ -6,7 +6,7 @@
 	var speedx = 2;
 	var speedy = 2;
 
-	var Floor = ns.Floor = function(points, width, height){
+	var Floor = ns.Floor = function(fpoints, width, height){
 		width = width||84;
 		height = height||9;
 
@@ -18,27 +18,29 @@
 		this.cacheCtx.restore();
 		this.setImage(width, height);
 
-		this.init(points);
+		this.init(fpoints);
 	};
 	Utils.extends(Floor, Canvas);
 
-	Floor.prototype.init = function(points) {
-		this.points = points.data.map(function(p){return new Vector(p.x, p.y)});
-		this.points = this.points.concat(this.points.slice(1,-1).reverse());
-		this.length = this.points.length;
+	Floor.prototype.init = function(fpoints) {
+		this.fpoints = fpoints.data.map(function(p){return new Vector(p.x, p.y)});
+		this.fpoints = this.fpoints.concat(this.fpoints.slice(1,-1).reverse());
+		this.length = this.fpoints.length;
 
-		this.pos = new Vector(this.points[0].x, this.points[0].y);
+		this.pos = new Vector(this.fpoints[0].x, this.fpoints[0].y);
 		this.v = new Vector();
 		this.setState(1);
 	}
 
 	Floor.prototype.setState = function(state) {
-		this.state = state%this.points.length;
+		this.state = state%this.length;
 
-		this.point = this.points[this.state];
-		this.dis = this.point.minusNew(this.points[(this.state+this.length-1)%this.points.length]);
+		this.point = this.fpoints[this.state];
+		this.dis = this.point.minusNew(this.fpoints[(this.state+this.length-1)%this.length]);
 		this.v.x = this.dis.x == 0?0:this.dis.x > 0?speedx:-speedy;
 		this.v.y = this.dis.y == 0?0:this.dis.y > 0?speedy:-speedy;
+		this.v.set(this.dis.x, this.dis.y);
+		this.v.setLength(2);
 	};
 
 	Floor.prototype.update = function(){

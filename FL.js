@@ -54,10 +54,11 @@
 		return str;
 	};
 
-	FL.debug = FL.getUrlParams().debug;
+	FL.params = FL.getUrlParams();
+	FL.debug = FL.params.debug&&FL.params.debug!=0;
 })(window);
-(function(win){
-		var Utils = win.Utils = {};
+(function(){
+		var Utils = FL.Utils = {};
 
 		Utils.extends = function(childClass, parentClass) 
 		{
@@ -114,7 +115,7 @@
 			return isInt?num>>0:num;
 		};
 
-})(FL);
+})();
 (function(win){
 	var Vector = win.Vector = function(x, y)
 	{
@@ -286,8 +287,8 @@
 	}
 
 })(window);
-(function(win){
-	var Rect = win.Rect = function(x, y, width, height){
+(function(){
+	var Rect = FL.Rect = function(x, y, width, height){
 		this.set(x, y, width, height);
 	};
 
@@ -311,14 +312,14 @@
 		return x>=this.x && x<=this.right&&
 			y>=this.y && y<=this.bottom;
 	}
-})(FL);
-(function(win){
-	var Rect = win.Rect;
+})();
+(function(){
+	var Rect = FL.Rect;
 	var min = Math.min;
 	var max = Math.max; 
 	var abs = Math.abs;
 
-	var Line = win.Line = function(v0, v1)
+	var Line = FL.Line = function(v0, v1)
 	{
 		this.p0 = v0||new Vector();
 		this.p1 = v1||new Vector();
@@ -401,11 +402,11 @@
 		return new Rect(x, y, abs(w), abs(h));
 	}
 
-})(FL);
-(function(win){
-	var Line = win.Line;
+})();
+(function(){
+	var Line = FL.Line;
 
-	var Polygon = win.Polygon = function(points)
+	var Polygon = FL.Polygon = function(points)
 	{
 		this.points = points;
 	}
@@ -428,15 +429,15 @@
 		}
 		return n%2 == 1;
 	}
-})(FL);
-(function(win){
+})();
+(function(){
 	var TOTAL_SIMPSON_STEP = 100;
-	var Point = function(x, y){
+	var Point = FL.Point = function(x, y){
 		this.x = x;
 		this.y = y;
 	};
 
-	var Bezier = win.Bezier = function(){
+	var Bezier = FL.Bezier = function(){
 		var args = arguments;
 		if(args.length == 4){
 			this.p0 = args[0];
@@ -540,9 +541,9 @@
 		return points;
 	};
 
-})(FL);
-(function(win){
-	var EventDispatcher = win.EventDispatcher = function()
+})();
+(function(){
+	var EventDispatcher = FL.EventDispatcher = function()
 	{
 		this.eventListeners = {};
 	};
@@ -559,7 +560,7 @@
 		var index = this.eventListeners[type].indexOf(listener);
 		if(index != -1) this.eventListeners[type].splice(index, 1);
 	};
-
+	
 	EventDispatcher.prototype.removeAllEventListener = function()
 	{
 		this.eventListeners = {};
@@ -581,12 +582,12 @@
 			}
 		}
 	};
-})(FL);
-;(function(win){
-	var Utils = win.Utils;
-	var EventDispatcher = win.EventDispatcher;
+})();
+;(function(){
+	var Utils = FL.Utils;
+	var EventDispatcher = FL.EventDispatcher;
 	
-	var ImageLoader = win.ImageLoader = function()
+	var ImageLoader = FL.ImageLoader = function()
 	{
 		EventDispatcher.call(this);
 		this.init();
@@ -635,12 +636,12 @@
 		log("load:" + e.target.id + ",  "+Math.floor(this.loadSize)+"/"+Math.floor(this.totalSize));
 	}
 
-})(FL);
+})();
 
-(function(win){
-	var Utils = win.Utils;
+(function(){
+	var Utils = FL.Utils;
 
-	var Mouse = win.Mouse = {
+	var Mouse = FL.Mouse = {
 		stage:null,
 		x:0,
 		y:0,
@@ -677,11 +678,11 @@
 		}
 	};
 
-})(FL);
-(function(win){
-	var Utils = win.Utils;
+})();
+(function(){
+	var Utils = FL.Utils;
 
-	var Keyboard = win.Keyboard = {
+	var Keyboard = FL.Keyboard = {
 		init:function(){
 			this.elem = document;
 			this.key = {};
@@ -815,14 +816,14 @@
 		F12 : 123
 	};
 
-})(FL);
-(function(win){
-	var Utils = win.Utils;
-	var EventDispatcher = win.EventDispatcher;
-	var Rect = win.Rect;
-	var Polygon = win.Polygon;
+})();
+(function(){
+	var Utils = FL.Utils;
+	var EventDispatcher = FL.EventDispatcher;
+	var Rect = FL.Rect;
+	var Polygon = FL.Polygon;
 
-	var DisplayObject = win.DisplayObject = function(x, y)
+	var DisplayObject = FL.DisplayObject = function(x, y)
 	{
 		this.x = x||0;
 		this.y = y||0;
@@ -880,10 +881,10 @@
 		ctx.strokeStyle = "#f00";
 		ctx.lineWidth = .5;
 		ctx.beginPath();
-		ctx.moveTo(this.points[0].x, this.points[0].y)
-		for(var i = 1, l = this.points.length;i < l;i ++)
+		ctx.moveTo(this.hitPoints[0].x, this.hitPoints[0].y)
+		for(var i = 1, l = this.hitPoints.length;i < l;i ++)
 		{
-			ctx.lineTo(this.points[i].x, this.points[i].y);
+			ctx.lineTo(this.hitPoints[i].x, this.hitPoints[i].y);
 		}
 		ctx.closePath();
 		ctx.stroke();
@@ -948,7 +949,7 @@
 				maxy < ey && (maxy = ey);
 			}
 		}
-		this.points = points;
+		this.hitPoints = points;
 		return new Rect(minx, miny, maxx - minx, maxy - miny);
 	};
 
@@ -990,7 +991,7 @@
 
 		if(this.getBounds().hitTestPoint(x, y))
 		{
-			return new Polygon(this.points).hitTestPoint(x, y);
+			return new Polygon(this.hitPoints).hitTestPoint(x, y);
 		}
 		return false;
 	};
@@ -1001,23 +1002,23 @@
 		if(bounds.intersects(obj.bounds||obj.getBounds()))
 		{
 			return true;
-			// return new Polygon(this.points).hit(new Polygon(obj.points));
+			// return new Polygon(this.hitPoints).hit(new Polygon(obj.points));
 		}
 		return false;
 	};
 
-})(FL);
+})();
 
 
 
 
 
 
-(function(win){
-	var Utils = win.Utils;
-	var DisplayObject = win.DisplayObject;
+(function(){
+	var Utils = FL.Utils;
+	var DisplayObject = FL.DisplayObject;
 
-	var DisplayObjectContainer = win.DisplayObjectContainer = function(x, y, parent)
+	var DisplayObjectContainer = FL.DisplayObjectContainer = function(x, y, parent)
 	{
 		if(parent)
 		{
@@ -1113,13 +1114,13 @@
 		}
 	};
 
-})(FL);
-(function(win){
-	var Utils = win.Utils;
-	var DisplayObject = win.DisplayObject;
-	var Rect = win.Rect;
+})();
+(function(){
+	var Utils = FL.Utils;
+	var DisplayObject = FL.DisplayObject;
+	var Rect = FL.Rect;
 
-	var Bitmap = win.Bitmap = function(x, y, img)
+	var Bitmap = FL.Bitmap = function(x, y, img)
 	{
 		DisplayObject.call(this, x, y);
 		this.rect = new Rect();
@@ -1146,10 +1147,10 @@
 		this.height = img.height;
 		this.rect.set(0, 0, this.width, this.height);
 	};
-})(FL);
-(function(win){
-	var Utils = win.Utils;
-	var Bitmap = win.Bitmap;
+})();
+(function(){
+	var Utils = FL.Utils;
+	var Bitmap = FL.Bitmap;
 
 	var cacheCanvas = document.createElement("canvas");
 	cacheCanvas.width = 1600;
@@ -1159,7 +1160,7 @@
 	var _canvas = document.createElement("canvas");
 	var _ctx = _canvas.getContext("2d");
 
-	var Canvas = win.Canvas = function(x, y)
+	var Canvas = FL.Canvas = function(x, y)
 	{
 		Bitmap.call(this, x, y);
 		this.cacheCtx = cacheCtx;
@@ -1177,13 +1178,13 @@
 		this.img = this.img||new Image();
 		this.img.src = _canvas.toDataURL();
 	}
-})(FL);
-(function(win){
-	var Utils = win.Utils;
-	var Rect = win.Rect;
-	var DisplayObjectContainer = win.DisplayObjectContainer;
+})();
+(function(){
+	var Utils = FL.Utils;
+	var Rect = FL.Rect;
+	var DisplayObjectContainer = FL.DisplayObjectContainer;
 	
-	var Sprite = win.Sprite = function(x, y, img)
+	var Sprite = FL.Sprite = function(x, y, img)
 	{
 		DisplayObjectContainer.call(this, x, y);
 		this.rect = new Rect();
@@ -1211,12 +1212,12 @@
 		this.height = img.height;
 		this.rect.set(0, 0, this.width, this.height);
 	};
-})(FL);
-(function(win){
-	var Utils = win.Utils;
-	var Sprite = win.Sprite;
+})();
+(function(){
+	var Utils = FL.Utils;
+	var Sprite = FL.Sprite;
 
-	var MovieClip = win.MovieClip = function(x, y)
+	var MovieClip = FL.MovieClip = function(x, y)
 	{
 		Sprite.call(this, x, y);
 
@@ -1340,12 +1341,12 @@
 		this.col = this.img.width/this.width>>0;
 		this.row = this.img.height/this.height>>0;
 	};
-})(FL);
-(function(win){
-	var DisplayObject = win.DisplayObject;
-	var Utils = win.Utils;
+})();
+(function(){
+	var DisplayObject = FL.DisplayObject;
+	var Utils = FL.Utils;
 
-	var LoadProgress = win.LoadProgress = function(loader, x, y)
+	var LoadProgress = FL.LoadProgress = function(loader, x, y)
 	{
 		DisplayObject.call(this, x , y);
 		this.width = 400;
@@ -1386,14 +1387,14 @@
 		ctx.fillRect(-this.originX+2, -this.originY+2, (this.width-4)*this.progress, this.height-4);
 	};
 
-})(FL);
-(function(win){
-	var Utils = win.Utils;
-	var DisplayObjectContainer = win.DisplayObjectContainer;
-	var Mouse = win.Mouse;
-	var Keyboard = win.Keyboard;
+})();
+(function(){
+	var Utils = FL.Utils;
+	var DisplayObjectContainer = FL.DisplayObjectContainer;
+	var Mouse = FL.Mouse;
+	var Keyboard = FL.Keyboard;
 
-	var Stage = win.Stage = function(canvas, width, height, fps)
+	var Stage = FL.Stage = function(canvas, width, height, fps)
 	{
 		DisplayObjectContainer.call(this);
 		this.init(canvas, width, height, fps);
@@ -1468,9 +1469,9 @@
 		}
 	}
 
-})(FL);
-(function(win){
-	var Rect = win.Rect;
+})();
+(function(){
+	var Rect = FL.Rect;
 
 	var Camera = FL.Camera = function(x, y, width, height, zoom){
 		this.x = x;
@@ -1564,8 +1565,8 @@
 		this.bounds.set(x, y, width, height);
 		this.update();
 	}
-})(FL);
-(function(win){
+})();
+(function(){
 	var _dataList = [];
 	var _targetList = [];
 	var _interval = -1;
@@ -1616,4 +1617,4 @@
 			}
 		}
 	}
-})(FL);
+})();
