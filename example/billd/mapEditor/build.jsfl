@@ -144,7 +144,12 @@ function getShapeData(stageFrame)
 				while (getNextEdge(subData, drawData)) {
 					
 				}
-				result.push(subData);
+				var tmpData = [];
+				for each(var d in subData)
+				{
+					tmpData.push(d.points);
+				}
+				result.push({data:tmpData, color:subData[0].color});
 			}
 		}
  
