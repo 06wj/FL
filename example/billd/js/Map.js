@@ -44,15 +44,22 @@
 			ctx.save();
 			if(type == "bezier")
 			{
-				ctx.fillStyle = "#000000";
-				ctx.strokeStyle = "#9966ff";
+				ctx.strokeStyle = "#000";
 				arr.forEach(function(data){
 					ctx.beginPath();
 					var p = data.shift();
-					ctx.moveTo(p[0].x, p[0].y);
-					ctx.quadraticCurveTo(p[1].x, p[1].y, p[2].x, p[2].y);
+					if(p.color){
+						ctx.globalAlpha = Number("0x"+p.color.slice(-2))/255;
+						ctx.fillStyle = p.color.slice(0, 7);
+					}
+					else{
+						ctx.globalAlpha = 1;
+						ctx.fillStyle = "#000";
+					}
+					ctx.moveTo(p.points[0].x, p.points[0].y);
+					ctx.quadraticCurveTo(p.points[1].x, p.points[1].y, p.points[2].x, p.points[2].y);
 					data.forEach(function(p){
-						ctx.quadraticCurveTo(p[1].x, p[1].y, p[2].x, p[2].y);
+						ctx.quadraticCurveTo(p.points[1].x, p.points[1].y, p.points[2].x, p.points[2].y);
 					});
 					ctx.stroke();
 					ctx.fill();	

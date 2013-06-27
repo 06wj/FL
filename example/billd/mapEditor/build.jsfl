@@ -77,6 +77,36 @@ function getHitData(stageFrame)
 	return data;
 }
  
+function getEdgeMap(elem)
+{
+	var map = {};
+	for each(var edge in  elem.edges)
+	{
+		map[edge.id] = {
+			points:[createPoint(edge.getControl(0)), createPoint(edge.getControl(1)),createPoint(edge.getControl(2))]
+		}
+	}
+	for each(var cont in elem.contours)
+	{
+		var he = cont.getHalfEdge();
+		var startId = he.id;
+		var id = 0;
+		while (id != startId)
+		{
+			var ed = he.getEdge();
+			if(map[ed.id])
+			{
+				map[ed.id].color = cont.fill.color;
+				log(cont.fill.color)
+			}
+			he = he.getNext();
+			id = he.id;
+		}
+	}
+	return map;
+}
+
+
 function getShapeData(stageFrame)
 {	
 	var elems = getElementsByLayerFrame("shape", stageFrame);
@@ -101,15 +131,17 @@ function getShapeData(stageFrame)
 			type = "bezier";
  
 			var drawData = [];
-			edges.forEach(function(edge){
-				drawData.push([createPoint(edge.getControl(0)), createPoint(edge.getControl(1)),createPoint(edge.getControl(2))]);
-			});
+			var edgeMap = getEdgeMap(elem);
+			for(var id in edgeMap)
+			{
+				drawData.push(edgeMap[id]);
+			}
 			
 			while(drawData.length > 0)
 			{
 				var subData = [];
 				subData.push(drawData.shift());
-				while (getNext(subData, drawData)) {
+				while (getNextEdge(subData, drawData)) {
 					
 				}
 				result.push(subData);
@@ -129,6 +161,22 @@ function getShapeData(stageFrame)
 		data[tmp.type] = data[tmp.type].concat(tmp.data);
 	}
 	return data;
+}
+
+function getNextEdge(arr, drawData)
+{
+	var last = arr[arr.length - 1];
+	for (var i = 0; i < drawData.length; i ++)
+	{
+		var tmp = drawData[i];
+		if (tmp.points[0].x == last.points[2].x && tmp.points[0].y == last.points[2].y)
+		{
+			drawData.splice(i, 1);
+			arr.push(tmp);
+			return tmp;
+		}
+	}
+	return null;
 }
 
 function getNext(arr, drawData)
