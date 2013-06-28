@@ -72,14 +72,15 @@
 			else if(type == "rect")
 			{
 				arr.forEach(function(data){
-					if(data.color.length>7){
-						ctx.globalApha = Number("0x"+data.color.slice(-2))/255;
-						data.color = data.color.slice(0, 7);
-					}
-					ctx.fillStyle = data.color;
-					ctx.fillRect(data.x, data.y, data.width, data.height);
-					ctx.strokeRect(data.x, data.y, data.width, data.height);
-				});		
+						var str = "rgba(";
+						for(var i=0;i<3;i++)
+						{
+							str+=Number("0x"+data.color.slice(1+i*2,3+i*2)) + ",";
+						}
+						ctx.fillStyle = str + (data.color.length>7?Number("0x"+data.color.slice(-2))/255:1) +")";
+						ctx.fillRect(data.x, data.y, data.width, data.height);
+						ctx.strokeRect(data.x, data.y, data.width, data.height);
+					});		
 			}
 			ctx.restore();
 		}

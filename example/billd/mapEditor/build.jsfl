@@ -97,7 +97,6 @@ function getEdgeMap(elem)
 			if(map[ed.id])
 			{
 				map[ed.id].color = cont.fill.color;
-				log(cont.fill.color)
 			}
 			he = he.getNext();
 			id = he.id;
