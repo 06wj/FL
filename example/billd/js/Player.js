@@ -151,8 +151,9 @@
 			}
 		}
 
+		var padding = 3;
 		//头碰墙
-		var dataArr = map.wallData[(this.pos.y-this.height+2)>>0];
+		var dataArr = map.wallData[(this.pos.y-this.height+padding)>>0];
 		if(map && this.v.x > 0)//碰右边墙
 		{
 			if(dataArr){
@@ -184,7 +185,7 @@
 			}
 		}
 		//脚碰墙
-		var dataArr = map.wallData[(this.pos.y-2)>>0];
+		var dataArr = map.wallData[(this.pos.y-padding)>>0];
 		if(map && this.v.x > 0)//碰右边墙
 		{
 			if(dataArr){

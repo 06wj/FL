@@ -12,6 +12,10 @@
 					mc = Spring.create(data.x, data.y);
 					ns.springs.push(mc);
 					break;
+				case "small_spring":
+					mc = Spring.create(data.x, data.y, R.images.small_spring, -8);
+					ns.springs.push(mc);
+					break;
 				case "spider":
 					mc = Spider.create(data.x, data.y);
 					ns.spiders.push(mc);

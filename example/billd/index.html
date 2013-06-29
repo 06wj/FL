@@ -41,6 +41,10 @@
 			float:right;
 			margin:2px 10px;		
 		}
+
+		p{
+			margin-top: 5px;
+		}
 	</style>
 </head>
 <body>
@@ -50,6 +54,14 @@
   <div id = "game">
 		<div id = "stage">
 			<canvas width = 600 height = 300></canvas>
+			<form>
+				<input type="radio" checked="checked" name="stage" value="0" /> 第一关
+				<input type="radio" name="stage" value="1" /> 第二关
+				<input type="radio" name="stage" value="2" /> 第三关
+				<input type="radio" name="stage" value="3" /> 第四关
+				<input id = "debug" type="checkbox" name="stage" value="debug" /> debug
+				<input id = "bg" type="checkbox" name="stage" value="bg" /> bg
+			</form>
 			<p>左右键移动，上跳跃，连按两次方向键快跑</p>
 		</div>
 		<div id = "board">
@@ -75,6 +87,52 @@
 	<script type="text/javascript" src="js/Map.js"></script>
 	<script type="text/javascript" src="js/InstanceFactory.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
-	
+	<script>
+		(function(){
+			var setParams = function(params){
+				var search = "?";
+				for(var key in params)
+				{
+					search += key + "=" + params[key] + "&";
+				}
+				document.location.search = search.slice(0, -1);
+			}
+
+			var setBg = function(visible){
+				if(FL.ns("billd").bg) FL.ns("billd").bg.visible = visible;
+				FL.params.bg = visible?1:0;
+				document.getElementById("bg").checked = visible;
+			}
+
+			var setDebug = function(debug){
+				FL.debug = debug;
+				FL.params.debug = debug?1:0;
+				document.getElementById("debug").checked = debug;
+			}
+
+			var form = document.querySelector("form");
+			var stageNum = FL.params.stage||0;
+			form.getElementsByTagName("input")[stageNum].checked = true;
+					
+			
+			setBg(FL.params.bg && FL.params.bg!=0);
+			setDebug(FL.params.debug && FL.params.debug!=0);
+
+			form.addEventListener("click", function(e){
+				if(e.target.type=="radio"){
+					FL.params.stage = e.target.value;
+					setParams(FL.params);
+				}
+				else if(e.target.type=="checkbox"){
+					if(e.target.value == "debug"){
+						setDebug(e.target.checked);
+					}
+					else if(e.target.value == "bg"){
+						setBg(e.target.checked);
+					}
+				}
+			});
+		})();
+	</script>
 </body>
 </html>

@@ -11,6 +11,7 @@
 		Bitmap.call(this, x, y);
 		this.pos = new Vector(x,  y);
 		this.isJump = false;
+		this.targetSpeed = -13;
 	};
 	Utils.extends(Spring, Bitmap);
 
@@ -31,7 +32,7 @@
 			if(this.vy == UP_SPEED && this.scaleY > 1.5)
 			{
 				this.vy = BACK_SPEED;
-				this.target.v.y = -13;
+				this.target.v.y = this.targetSpeed;
 				this.target = null;
 			}
 			if(this.vy == BACK_SPEED && this.scaleY < 1)
@@ -50,9 +51,10 @@
 		this.y = this.pos.y + ns.map.y;
 	};
 
-	Spring.create = function(x, y){
+	Spring.create = function(x, y, img, targetSpeed){
 		var sp = new Spring(x, y);
-		sp.setImg(R.images.spring);
+		sp.targetSpeed = targetSpeed||-13;
+		sp.setImg(img||R.images.spring);
 		sp.originY = sp.height;
 		return sp;
 	};

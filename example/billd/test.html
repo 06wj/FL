@@ -15,7 +15,7 @@
 	<script src = "mapData.js"></script>
 	<script>
 		var d = JSON.parse(JSON.stringify(mapData));
-		mapData = mapData[1];
+		mapData = mapData[3];
 		var shapeData = mapData.shape;
 		var arr;
 
@@ -33,18 +33,19 @@
 				if(type == "bezier")
 				{
 					ctx.strokeStyle = "#000";
-					ctx.lineWidth = 3;
+					ctx.lineWidth = 4;
 					arr.forEach(function(data){
+						var fill = true;
 						if(data.color){						
 							var str = "rgba(";
 							for(var i=0;i<3;i++)
 							{
 								str+=Number("0x"+data.color.slice(1+i*2,3+i*2)) + ",";
 							}
-							ctx.fillStyle = str + Number("0x"+data.color.slice(-2))/255+")";
+							ctx.fillStyle = str + (data.color.length>7?Number("0x"+data.color.slice(-2))/255:1) +")";
 						}
 						else{
-							ctx.fillStyle = "#000";
+							fill = false;
 						}
 						ctx.beginPath();
 						var p = data.data.shift();
@@ -54,7 +55,7 @@
 							ctx.quadraticCurveTo(p[1].x, p[1].y, p[2].x, p[2].y);
 						});
 						ctx.stroke();
-						ctx.fill();	
+						if(fill) ctx.fill();	
 					});	
 				}
 				else if(type == "rect")

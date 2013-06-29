@@ -12,7 +12,7 @@
 	var mc;
 	var life = 99;
 	ns.score = 0;
-	mapData = mapData[Number(Utils.getUrlParams().stage)||0]
+	mapData = mapData[FL.params.stage||0]
 
 	var stage = new Stage(canvas, width, height, fps);
 	stage.start();
@@ -58,7 +58,7 @@
 
 		var bg = ns.bg = new FL.Bitmap();
 		bg.setImg(R.images.bg);
-		bg.visible = FL.params.bg!=0&&true;
+		bg.visible = FL.params.bg!=0;
 
 		bgSX = bg.width < map.width?(bg.width-width)/(map.width-width):1;
 		bgSY = bg.height < map.height?(bg.height-height)/(map.height-height+420):1;
@@ -134,7 +134,7 @@
 		for(var i = 0, l = spiders.length;i < l;i ++)
 		{
 			var spider = spiders[i];
-			if(	spider.alive && spider.isInStage && player.hitTestObject(spider))
+			if(	spider.alive && spider.isInStage && player.hitTestObject(spider) && player.alive)
 			{
 				if(player.v.y > 0){
 					player.v.y = -5;
@@ -149,7 +149,7 @@
 					spider.alive = false;
 					ns.score += 5;
 				}	
-				else if(player.alive){
+				else{
 					player.die();
 					spider.attack();
 					player.v.set(0, 0);
