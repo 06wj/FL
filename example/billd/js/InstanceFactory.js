@@ -1,6 +1,6 @@
 (function(win){
 	var ns = FL.ns("billd");
-	eval(FL.import("ns", "Spring, Spider, YellowBall, Floor, Fish"));
+	eval(FL.import("ns", "Spring, Spider, YellowBall, Floor, Fish, Snail"));
 	eval(FL.import("FL", "Bitmap"));
 	
 	var InstanceFactory = ns.InstanceFactory = {
@@ -19,6 +19,10 @@
 				case "spider":
 					mc = Spider.create(data.x, data.y);
 					ns.spiders.push(mc);
+					break;
+				case "snail":
+					mc = Snail.create(data.x, data.y);
+					ns.snails.push(mc);
 					break;
 				case "yellow_ball":
 					mc = YellowBall.create(data.x, data.y);

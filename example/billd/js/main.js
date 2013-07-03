@@ -35,6 +35,7 @@
 
 	var map, player, camera;
 
+	var snails = ns.snails = [];
 	var spiders = ns.spiders = [];
 	var fishs = ns.fishs = [];
 	var floors = ns.floors = [];
@@ -106,7 +107,6 @@
 		else if(player.y >= Math.floor(height * .7) && map.y > height - map.height)
 		{
 			map.y = height * .7 - player.pos.y;
-
 		}
 
 		if(player.pos.y > map.height && !isShake)

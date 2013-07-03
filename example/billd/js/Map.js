@@ -32,7 +32,7 @@
 		}
 		
 		draw(this.ctx, mapData.shape);
-		FL.getUrlParams().hit && FL.getUrlParams().hit!=0 && drawDebug(this.ctx, this.lines);
+		FL.debug && drawDebug(this.ctx, this.lines);
 		var data = createMapData(this.lines);
 		this.mapData = data.ground;
 		this.wallData = data.wall;
