@@ -7,7 +7,7 @@
 		y:0,
 		init:function(stage){
 			this.stage = stage;
-			this.element = this.stage.canvas;
+			this.element = document;
 			this.x = 0;
 			this.y = 0;
 			this.isDown = false;
@@ -22,7 +22,7 @@
 			var events = "ontouchstart" in window?["touchstart", "touchmove", "touchend"]:names;
 			var that = this;
 			names.forEach(function(name, i){
-				elem["on" + name] = function(e)
+				elem.addEventListener(name, function(e)
 				{
 					e.preventDefault();
 					
@@ -33,7 +33,7 @@
 					that.x = x - that.offsetX;
 					that.y = y - that.offsetY;
 					that.stage.dispatchEvent({type:name,x:that.x,y:that.y});
-				};
+				});
 			});
 		}
 	};

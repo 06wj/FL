@@ -48,11 +48,14 @@
 	{
 	};
 
-	Stage.prototype.initMouseEvent = function(){
+	Stage.prototype.initMouseEvent = function(mouseChildren){
 		Mouse.init(this);
-		this.addEventListener("mousedown", fireChildrenEvent);
-		this.addEventListener("mousemove", fireChildrenEvent);
-		this.addEventListener("mouseup", fireChildrenEvent);
+		if(mouseChildren)
+		{
+			this.addEventListener("mousedown", fireChildrenEvent);
+			this.addEventListener("mousemove", fireChildrenEvent);
+			this.addEventListener("mouseup", fireChildrenEvent);
+		}
 	};
 
 	Stage.prototype.initKeyboardEvent = function(){
