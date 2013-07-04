@@ -1,7 +1,16 @@
 (function(){
+	document.body.style.webkitTouchCallout = "none";
+	document.body.style.webkitUserSelect = "none";
+	document.body.style.webkitTextSizeAdjust = "none";
+	document.body.style.webkitTapHighlightColor = "rgba(0,0,0,0)";
+
 	var ns = FL.ns("billd");
 	eval(FL.import("ns", "Player, Map, YellowBall, Spider, Fish, Floor, Bat, Spring, InstanceFactory"));
 	eval(FL.import("FL", "Stage, LoadProgress, ImageLoader, Camera, Utils"));
+
+	var getMapData = function(i){
+		return JSON.parse(JSON.stringify(ns.allData[i||0]));
+	}
 
 	var lifeDom = document.querySelector("#life");
 	var scoreDom = document.querySelector("#score");
@@ -12,9 +21,10 @@
 	var mc;
 	var life = 99;
 	ns.score = 0;
-	mapData = mapData[FL.params.stage||0]
+	ns.allData = mapData;
+	mapData = getMapData(FL.params.stage);
 
-	var stage = new Stage(canvas, width, height, fps);
+	var stage = ns.stage = new Stage(canvas, width, height, fps);
 	stage.start();
 	var isShake = false;
 
@@ -40,6 +50,17 @@
 	var fishs = ns.fishs = [];
 	var floors = ns.floors = [];
 	var springs = ns.springs = [];
+
+	ns.setStage = function(i){
+		snails.length = 0;
+		spiders.length = 0;
+		fishs.length = 0;
+		springs.length = 0;
+		floors.length = 0;
+		stage.children.length = 0;
+		mapData = getMapData(i);
+		init();
+	}
 
 	setInterval(function(){
 		stage.render();

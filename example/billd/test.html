@@ -15,7 +15,8 @@
 	<script src = "mapData.js"></script>
 	<script>
 		var d = JSON.parse(JSON.stringify(mapData));
-		mapData = mapData[3];
+		var s = document.location.search.slice(1)||0;
+		mapData = mapData[s];
 		var shapeData = mapData.shape;
 		var arr;
 

@@ -1,6 +1,6 @@
-// (function(win){
+(function(win){
 	var ns = FL.ns("billd");
-	eval(FL.import("FL", "Utils, MovieClip, Keyboard"));
+	eval(FL.import("FL", "Utils, MovieClip, Keyboard, Mouse"));
 
 	var speed1 = 2;
 	var speed2 = 3.5;
@@ -43,6 +43,7 @@
 		this.addAnimation("jump2", "60-70", false, 8);
 		this.addAnimation("jump1", "71-77", false, 6);
 		this.addAnimation("attack", "80-87", true, 6);
+		this.addAnimation("climb", "88-89", true, 6);
 
 		this.setImg(R.images["billd_mc"], 22, 22);
 		this.originX = this.width>>1;
@@ -51,9 +52,9 @@
 	};
 
 	Player.prototype.keyAction = function(){
-		if(Math.abs(this.a.x) < .001 && Keyboard.getIsDown("LEFT"))
+		if(Math.abs(this.a.x) < .001 && (Keyboard.getIsDown("LEFT") || oState["l"]))
 		{
-			if(Keyboard.getKeyDelay("LEFT") < 300)
+			if(Keyboard.getKeyDelay("LEFT") < 300 || oState["l"] > 1)
 			{
 				this.v.x = -1*speed2;
 			}
@@ -63,9 +64,9 @@
 			}
 			this.scaleX = -1;
 		}
-		else if(Math.abs(this.a.x) < .001 && Keyboard.getIsDown("RIGHT"))
+		else if(Math.abs(this.a.x) < .001 && (Keyboard.getIsDown("RIGHT") || oState["r"]))
 		{
-			if(Keyboard.getKeyDelay("RIGHT") < 300)
+			if(Keyboard.getKeyDelay("RIGHT") < 300 || oState["r"] > 1)
 			{
 				this.v.x = speed2;
 			}
@@ -80,7 +81,7 @@
 			this.v.x *= .9;
 		}
 
-		if(this.v.y == 0 && Keyboard.getIsDown("UP"))
+		if(this.v.y == 0 && (Keyboard.getIsDown("UP") || Mouse.isDown))
 		{
 			this.v.y = jumpSpeed;
 			this.angle = 0;
@@ -90,6 +91,7 @@
 		{
 			this.playAction("attack");
 			this.idleTime = 0;
+			ns.stage.addChild(ns.InstanceFactory.create("yellow_ball", {x:this.pos.x, y:this.pos.y-10}, new Vector(-10, this.scaleX*50)));
 		}
 		else if(this.v.y != 0) 
 		{
@@ -312,4 +314,42 @@
 		return player;
 	}
 
-// })(window);
+
+	var oState = {};
+	window.ondeviceorientation =  function(e) 
+	{
+		var ang;
+		var o = window.orientation;
+		if(o == 90){
+			ang = e.beta;
+		}
+		else if(o == -90){
+			ang = -e.beta;
+		}
+		else if(o == 0){
+			ang = e.gamma;	
+		}
+
+		if(ang > 15) 
+		{
+			oState["r"] = 2;
+		}
+		else if(ang > 5)
+		{
+			oState["r"] = 1;
+		}
+		else if(ang < -15) 
+		{
+			oState["l"] = 2;
+		}
+		else if(ang < -5)
+		{
+			oState["l"] = 1;
+		}
+		else
+		{
+			oState["l"] = oState["r"] = false;
+		}
+	}
+})(window);
+

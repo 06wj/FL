@@ -86,12 +86,13 @@
 		}
 	};
 
-	YellowBall.create = function(x, y)
+	YellowBall.create = function(x, y, v)
 	{
 		var ball = new YellowBall();
 		ball.init();
 		ball.play("stand");
 		ball.pos.set(x||0, y||0);
+		if(v) ball.v = v;
 		return ball;
 	}
 

@@ -103,7 +103,7 @@
 				FL.params.bg = visible?1:0;
 				document.getElementById("bg").checked = visible;
 			}
-
+ 
 			var setDebug = function(debug){
 				FL.debug = debug;
 				FL.params.debug = debug?1:0;
@@ -114,14 +114,14 @@
 			var stageNum = FL.params.stage||0;
 			form.getElementsByTagName("input")[stageNum].checked = true;
 					
-			
+			    
 			setBg(FL.params.bg && FL.params.bg!=0);
 			setDebug(FL.params.debug && FL.params.debug!=0);
 
 			form.addEventListener("click", function(e){
 				if(e.target.type=="radio"){
 					FL.params.stage = e.target.value;
-					setParams(FL.params);
+					billd.setStage(FL.params.stage);
 				}
 				else if(e.target.type=="checkbox"){
 					if(e.target.value == "debug"){
