@@ -23,7 +23,6 @@
         	position:absolute;
       	}
 		#board{
-			margin:0px 0px;
 			font: 16px;
 			line-height: 1.5;
 			font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
@@ -33,13 +32,20 @@
 		}
 
 		#life{
-			float:left;
-			margin:2px 4px;
+			position:absolute;
+			margin: 5px;
+		}
+		
+		#fps{
+			position:absolute;
+			margin: 5px;
+			top:270px;
 		}
 
 		#score{
-			float:right;
-			margin:2px 10px;		
+			position:absolute;	
+			margin: 5px;
+			left:500px;
 		}
 
 		p{
@@ -66,6 +72,7 @@
 		</div>
 		<div id = "board">
 			<span id = "life">life:99</span>
+			<span id = "fps">fps:60</span>
 			<span id = "score">score:0</span>
 		</div>
 	</div>
@@ -89,6 +96,11 @@
 	<script type="text/javascript" src="js/main.js"></script>
 	<script>
 		(function(){
+			var ns = FL.ns("billd");
+			ns.fps = 60;
+			if(FL.params.stage == undefined){
+				document.location.search = "?stage=3";
+			}
 			var setParams = function(params){
 				var search = "?";
 				for(var key in params)
@@ -99,7 +111,7 @@
 			}
 
 			var setBg = function(visible){
-				if(FL.ns("billd").bg) FL.ns("billd").bg.visible = visible;
+				if(ns.bg) ns.bg.visible = visible;
 				FL.params.bg = visible?1:0;
 				document.getElementById("bg").checked = visible;
 			}
@@ -114,14 +126,13 @@
 			var stageNum = FL.params.stage||0;
 			form.getElementsByTagName("input")[stageNum].checked = true;
 					
-			    
 			setBg(FL.params.bg && FL.params.bg!=0);
 			setDebug(FL.params.debug && FL.params.debug!=0);
-
+			
 			form.addEventListener("click", function(e){
 				if(e.target.type=="radio"){
 					FL.params.stage = e.target.value;
-					billd.setStage(FL.params.stage);
+					ns.setStage(FL.params.stage);
 				}
 				else if(e.target.type=="checkbox"){
 					if(e.target.value == "debug"){
@@ -132,6 +143,12 @@
 					}
 				}
 			});
+
+			var fpsDiv = document.getElementById("fps");
+			setInterval(function(){
+				fpsDiv.innerHTML = "fps:" + ns.fps;
+				ns.fps = 0;
+			}, 1000);
 		})();
 	</script>
 </body>

@@ -110,6 +110,8 @@
 	}
 
 	function update(){
+		ns.fps ++;
+
 		if(player.x >= Math.floor(width * .6) && map.x > width - map.width)
 		{
 			map.x = width * .6 - player.pos.x;

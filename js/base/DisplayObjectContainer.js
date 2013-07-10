@@ -37,11 +37,6 @@
 		}
 	};
 
-	
-	// DisplayObjectContainer.prototype._debugDraw = function(ctx){
-		
-	// };
-
 	DisplayObjectContainer.prototype.removeChild = function(obj)
 	{
 		var index = typeof(obj) === "number"?obj:this.children.indexOf(obj);
@@ -53,14 +48,14 @@
 	};
 
 	DisplayObjectContainer.prototype._draw = function(ctx){
-		ctx.save();
-		ctx.translate(this.x, this.y);
 		for(var i = 0, l = this.children.length;i < l;i ++){
 			this.children[i].render(ctx);
 		}
-		ctx.restore();
 	};
 
+	/**
+	 *自己及自己的children设置props	
+	*/
 	DisplayObjectContainer.prototype.setAll = function(props)
 	{
 		var children = this.children;
@@ -80,6 +75,9 @@
 		}
 	};
 
+	/**
+	 *自己及自己的children执行func	
+	*/
 	DisplayObjectContainer.prototype.callAll = function(func)
 	{
 		if(this[func]) this[func]();

@@ -20,9 +20,9 @@
 	loadProgress.load(R.images);
 	stage.addChild(loadProgress);
 
-	setInterval(function(){
-		stage.render();
-	}, 1000/fps);
+	// setInterval(function(){
+	// 	stage.render();
+	// }, 1000/fps);
 
 	function init(){
 		bat = new MovieClip();

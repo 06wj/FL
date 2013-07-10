@@ -13,6 +13,7 @@
 
 	Stage.prototype.init = function(canvas, width, height, fps)
 	{
+		this.stage = this;
 		this.canvas = canvas;
 		this.width = canvas.width = width||550;
 		this.height = canvas.height = height||400;
@@ -23,14 +24,13 @@
 
 	Stage.prototype.addChildAt = function(obj, at)
 	{
-		this.stage = this;
 		this.superClass.addChildAt.call(this, obj, at);
 	};
 
 	Stage.prototype.render = function()
 	{
 		this.ctx.clearRect(0, 0, this.width, this.height);
-		this.superClass._draw.call(this, this.ctx);
+		this.superClass.render.call(this, this.ctx)
 	}
 
 	Stage.prototype.start = function()
@@ -39,7 +39,6 @@
 		var that = this;
 		this._interval = setInterval(function(){
 				that.render();
-				that.update();
 				that.callAll("update");
 		}, 1000/this.fps);
 	};
