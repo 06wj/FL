@@ -179,7 +179,7 @@
 				}
 			}
 
-			if(	spider.alive && spider.isInStage && player.hitTestObject(spider))
+			if(	spider.alive && spider.isInStage && player.alive && player.hitTestObject(spider))
 			{
 				if(player.v.y > 0){
 					player.v.y = -5;
