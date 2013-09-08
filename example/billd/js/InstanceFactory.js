@@ -25,7 +25,7 @@
 					ns.snails.push(mc);
 					break;
 				case "yellow_ball":
-					mc = YellowBall.create(data.x, data.y);
+					mc = YellowBall.create(data.x, data.y, data.v);
 					break;
 				case "floor":
 					mc = new Floor(data);

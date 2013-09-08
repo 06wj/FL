@@ -50,6 +50,7 @@
 	var fishs = ns.fishs = [];
 	var floors = ns.floors = [];
 	var springs = ns.springs = [];
+	var yellowBalls = ns.yellowBalls = [];
 
 	ns.setStage = function(i){
 		snails.length = 0;
@@ -96,6 +97,7 @@
 		mapData.mc.floor = mapData.floor;
 		for(var type in mapData.mc)
 		{
+			if(type == "yellow_ball") continue;
 			var arr = mapData.mc[type]||[];
 			for(var i = 0,l = arr.length;i < l;i ++)
 			{
@@ -157,7 +159,27 @@
 		for(var i = 0, l = spiders.length;i < l;i ++)
 		{
 			var spider = spiders[i];
-			if(	spider.alive && spider.isInStage && player.hitTestObject(spider) && player.alive)
+			for(var j = 0, jl = yellowBalls.length;j < jl;j ++){
+				var ball = yellowBalls[j];
+				if(spider.alive && spider.isInStage && !ball.isDie && ball.isInStage && ball.hitTestObject(spider)){
+					spider.v.y = -4;
+					spider.v.x = 0;
+					spider.scaleX = 1;
+					spider.setCenter();
+					spiders.splice(spiders.indexOf(spider), 1);
+					TweenLite.to(spider, 2, {scaleX:.8, scaleY:.8, angle:10, onComplete:function(){
+						stage.removeChild(spider);
+					}})
+					spider.alive = false;
+					ns.score += 5;
+					i--;
+					l--;
+					ball.destroy();
+					break;
+				}
+			}
+
+			if(	spider.alive && spider.isInStage && player.hitTestObject(spider))
 			{
 				if(player.v.y > 0){
 					player.v.y = -5;
@@ -166,6 +188,8 @@
 					spider.scaleX = 1;
 					spider.setCenter();
 					spiders.splice(spiders.indexOf(spider), 1);
+					i--;
+					l--;
 					TweenLite.to(spider, 2, {scaleX:.8, scaleY:.8, angle:10, onComplete:function(){
 						stage.removeChild(spider);
 					}})

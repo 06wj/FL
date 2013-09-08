@@ -3,6 +3,7 @@
 	eval(FL.import("FL", "Utils, MovieClip"));
 
 	var speed = 2;
+	var LIFE_TIME = 3600;
 	var YellowBall = ns.YellowBall = function(){
 		MovieClip.apply(this, arguments);
 
@@ -11,6 +12,9 @@
 		this.a = new Vector(0, .2);
 		this.alive = true;
 		this.onGround = false;
+
+		this.time = 0;
+		this.isDie = false;
 	};
 	Utils.extends(YellowBall, MovieClip);
 
@@ -26,12 +30,7 @@
 
 	YellowBall.prototype.doSth = function()
 	{
-		var r = Math.random();
-		if(r < .005) this.v.x *= -1;
-		if(r < .01) {
-			this.v.y = -5;
-			this.onGround = false;
-		}
+
 	};
 
 	YellowBall.prototype.update = function()
@@ -46,6 +45,7 @@
 		if(this.v.y > 5) this.v.y = 5;
 		this.pos.plus(this.v);
 		this.a.x = 0;
+		this.angle += .1;
 		if(ns.map)
 		{
 			if(this.v.y > 0)
@@ -57,21 +57,22 @@
 					if(y && y <= this.pos.y + 2 && y >= this.pos.y - 5)
 					{
 						this.pos.y = y;
-						this.v.y = 0;
 						this.angle = lines[i].getAngle();
-						this.a.x = Math.sin(this.angle) * (Math.cos(this.angle)>0?1:-1) * .07;
+						this.v.rotate(-this.angle);
+						this.v.y *= -1;
+						this.v.rotate(this.angle);
 						this.onGround = true;
 						break;
 					}
 				}
 			}
 
-			if(ns.map && this.v.y > 0 && this.onGround)
+			if(this.v.y > 0 && this.onGround)
 			{
 				this.onGround = false;
 				this.pos.minus(this.v);
-				this.v.x *= -1;
-				this.v.y = 0;
+				//this.v.x *= -1;
+				this.v.y *= -1;
 			}
 			
 			if(this.pos.x < this.width) {
@@ -83,7 +84,29 @@
 				this.v.x = speed * -1;
 			}
 			this.doSth();
+
+			this.time ++;
+			if(this.time > LIFE_TIME){
+				this.isDie = true;
+			}
+
+			if(this.isDie ||this.v.getLength2() < .5){
+				var d = .01;
+				this.alpha -= d;
+				this.scaleX -= d/3;
+				this.scaleY -= d/3;
+
+				if(this.alpha <= 0){
+					this.destroy();
+				}
+			}
 		}
+	};
+
+	YellowBall.prototype.destroy = function(){
+		var index = ns.yellowBalls.indexOf(this);
+		if(index > -1) ns.yellowBalls.splice(index, index);
+		this.parent && this.parent.removeChild(this);
 	};
 
 	YellowBall.create = function(x, y, v)

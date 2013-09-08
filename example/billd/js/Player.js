@@ -11,6 +11,8 @@
 	var idleActions = ["play1", "play2", "play3", "stand1", "attack", "stand3"];
 	var IDLE_TIME = 300;
 
+	var SHOOT_TIME = 40;
+
 	var Player = ns.Player = function()
 	{
 		MovieClip.apply(this, arguments);
@@ -26,6 +28,8 @@
 		this.idleTime = 0;
 		this.idleAction = idleActions[0];
 		this.floorV = 0;
+
+		this.shootTime = SHOOT_TIME;
 	};
 	Utils.extends(Player, MovieClip);
 
@@ -87,16 +91,31 @@
 			this.angle = 0;
 		}
 
-		if(this.v.y == 0 && Keyboard.getIsDown("SPACE"))
+		if(this.v.y == 0 && Keyboard.getIsDown("SPACE") && this.shootTime >= SHOOT_TIME)
 		{
 			this.playAction("attack");
 			this.idleTime = 0;
-			ns.stage.addChild(ns.InstanceFactory.create("yellow_ball", {x:this.pos.x, y:this.pos.y-10}, new Vector(-10, this.scaleX*50)));
+			this.shootTime = 0;
 		}
 		else if(this.v.y != 0) 
 		{
 			this.playAction("jump2");
 			this.idleTime = 0;
+		}
+		else if(this.shootTime < 36) {
+			this.playAction("attack");
+			if(this.shootTime == 30){
+				var v = new Vector(5, 0);
+				var shootAngle = 0.7;
+				var angle = this.scaleX==1?this.angle-shootAngle:this.angle+Math.PI+shootAngle;
+				v.rotate(angle);
+				var pos = new Vector(this.scaleX*12, -16);
+				pos.rotate(this.angle);
+				pos.plus(this.pos);
+				var ball = ns.InstanceFactory.create("yellow_ball", {x:pos.x, y:pos.y, v:v});
+				ns.stage.addChild(ball);
+				ns.yellowBalls.push(ball);
+			}
 		}
 		else if(Math.abs(this.v.x) == speed1) this.playAction("run1");
 		else if(Math.abs(this.v.x) == speed2) this.playAction("run2");
@@ -272,6 +291,7 @@
 
 	Player.prototype.update = function()
 	{		
+		this.shootTime ++;
 		this.bounds = this.getBounds();
 		this.v.plus(this.a);
 		if(this.v.y > maxSpeed) this.v.y = maxSpeed;
