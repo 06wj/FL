@@ -11,7 +11,7 @@
 	var idleActions = ["play1", "play2", "play3", "stand1", "attack", "stand3"];
 	var IDLE_TIME = 300;
 
-	var SHOOT_TIME = 40;
+	var SHOOT_TIME = 14;
 
 	var Player = ns.Player = function()
 	{
@@ -93,7 +93,7 @@
 
 		if(this.v.y == 0 && Keyboard.getIsDown("SPACE") && this.shootTime >= SHOOT_TIME)
 		{
-			this.playAction("attack");
+			this.playAction("play2");
 			this.idleTime = 0;
 			this.shootTime = 0;
 		}
@@ -102,9 +102,9 @@
 			this.playAction("jump2");
 			this.idleTime = 0;
 		}
-		else if(this.shootTime < 36) {
-			this.playAction("attack");
-			if(this.shootTime == 30){
+		else if(this.shootTime < 12) {
+			this.playAction("play2");
+			if(this.shootTime == 10){
 				var v = new Vector(5, 0);
 				var shootAngle = 0.7;
 				var angle = this.scaleX==1?this.angle-shootAngle:this.angle+Math.PI+shootAngle;
