@@ -5,7 +5,7 @@ fl.runScript(baseURI + "utils.jsfl");
 log(baseURI, "start");
  
 var data = [];
-var stageNum = 4;
+var stageNum = 5;
 for(var i = 0;i < stageNum;i ++)
 {
 	data[i]= {};
