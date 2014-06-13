@@ -661,7 +661,7 @@
 			var names = ["mousedown","mousemove","mouseup"];
 			var events = "ontouchstart" in window?["touchstart", "touchmove", "touchend"]:names;
 			var that = this;
-			names.forEach(function(name, i){
+			events.forEach(function(name, i){
 				elem.addEventListener(name, function(e)
 				{
 					e.preventDefault();
