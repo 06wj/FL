@@ -45,7 +45,7 @@
 			if(type == "bezier")
 			{
 				ctx.strokeStyle = "#000";
-				ctx.lineWidth = 4;
+				ctx.lineWidth = 1;
 				arr.forEach(function(data){
 					var fill = true;
 					if(data.color){						

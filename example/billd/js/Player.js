@@ -59,7 +59,7 @@
 	};
 
 	Player.prototype.keyAction = function(){		
-		if(Math.abs(this.a.x) < .001 && (Keyboard.getIsDown("LEFT") || oState["l"]))
+		if(Math.abs(this.a.x) < .1 && (Keyboard.getIsDown("LEFT") || oState["l"]))
 		{
 			if(Keyboard.getKeyDelay("LEFT") < 300 || oState["l"] > 1)
 			{
@@ -71,7 +71,7 @@
 			}
 			this.scaleX = -1;
 		}
-		else if(Math.abs(this.a.x) < .001 && (Keyboard.getIsDown("RIGHT") || oState["r"]))
+		else if(Math.abs(this.a.x) < .1 && (Keyboard.getIsDown("RIGHT") || oState["r"]))
 		{
 			if(Keyboard.getKeyDelay("RIGHT") < 300 || oState["r"] > 1)
 			{
@@ -100,13 +100,13 @@
 			this.idleTime = 0;
 
 			this.scaleX = this.slowDownType == RIGHT?-1:1;
-			this.a.y = this.v.y > 0?g*.1:g*1.2;
+			this.a.y = this.v.y > 0?g*.2:g*1.2;
 
 			if(Keyboard.getIsDown("UP") || Mouse.isDown){
 				this.v.y = jumpSpeed;
 				this.angle = 0;
 
-				this.a.x = this.slowDownType == RIGHT?-maxSpeed*.1:maxSpeed*.1;
+				this.a.x = this.slowDownType == RIGHT?-maxSpeed*1:maxSpeed*1;
 			}
 		}
 		else if(this.v.y == 0 && Keyboard.getIsDown("SPACE") && this.shootTime >= SHOOT_TIME)
@@ -170,11 +170,15 @@
 	};
 	
 	Player.prototype.checkSlowDown = function(){
-		return !this.onGround && (this.slowDownType == RIGHT && Keyboard.getIsDown("RIGHT") || (this.slowDownType == LEFT && Keyboard.getIsDown("LEFT")))
+		// return !this.onGround && (this.slowDownType == RIGHT && Keyboard.getIsDown("RIGHT") || (this.slowDownType == LEFT && Keyboard.getIsDown("LEFT")))
+		// return !this.onGround && tshis.slowDownType && (Keyboard.getIsDown("RIGHT") || Keyboard.getIsDown("LEFT"));
+		return !this.onGround && this.slowDownType && (1||Keyboard.getIsDown("RIGHT") || Keyboard.getIsDown("LEFT"));
 	}
 
 	Player.prototype.slowDown = function(x, pos){
 		this.v.x = 0;
+		this.a.x = 0;
+		this.v.y = Math.min(this.v.y, 3);
 		if(pos == LEFT){
 			this.pos.x = x + this.width*.5;
 		}
