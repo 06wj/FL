@@ -7,6 +7,8 @@
 	var jumpSpeed = -6;
 	var maxSpeed = 7;
 	var g = .2;
+	var LEFT = 1;
+	var RIGHT = 2;
 
 	var idleActions = ["play1", "play2", "play3", "stand1", "attack", "stand3"];
 	var IDLE_TIME = 300;
@@ -44,6 +46,7 @@
 		this.addAnimation("play1", "40-54", true, 6);
 		this.addAnimation("play2", "55-59", true, 6);
 		this.addAnimation("play3", "88-93", true, 6);
+		this.addAnimation("down", "94-95", true, 6);
 		this.addAnimation("jump2", "60-70", false, 8);
 		this.addAnimation("jump1", "71-77", false, 6);
 		this.addAnimation("attack", "80-87", true, 6);
@@ -55,7 +58,7 @@
 		this.bounds = this.getBounds();
 	};
 
-	Player.prototype.keyAction = function(){
+	Player.prototype.keyAction = function(){		
 		if(Math.abs(this.a.x) < .001 && (Keyboard.getIsDown("LEFT") || oState["l"]))
 		{
 			if(Keyboard.getKeyDelay("LEFT") < 300 || oState["l"] > 1)
@@ -91,7 +94,22 @@
 			this.angle = 0;
 		}
 
-		if(this.v.y == 0 && Keyboard.getIsDown("SPACE") && this.shootTime >= SHOOT_TIME)
+		this.a.y = g;
+		if(this.checkSlowDown()){
+			this.playAction("down");
+			this.idleTime = 0;
+
+			this.scaleX = this.slowDownType == RIGHT?-1:1;
+			this.a.y = this.v.y > 0?g*.1:g*1.2;
+
+			if(Keyboard.getIsDown("UP") || Mouse.isDown){
+				this.v.y = jumpSpeed;
+				this.angle = 0;
+
+				this.a.x = this.slowDownType == RIGHT?-maxSpeed*.1:maxSpeed*.1;
+			}
+		}
+		else if(this.v.y == 0 && Keyboard.getIsDown("SPACE") && this.shootTime >= SHOOT_TIME)
 		{
 			this.playAction("play2");
 			this.idleTime = 0;
@@ -125,6 +143,7 @@
 		}
 	};
 
+
 	Player.prototype.playAction = function(name){
 		if(name == "idle")
 		{
@@ -150,6 +169,28 @@
 		}
 	};
 	
+	Player.prototype.checkSlowDown = function(){
+		return !this.onGround && (this.slowDownType == RIGHT && Keyboard.getIsDown("RIGHT") || (this.slowDownType == LEFT && Keyboard.getIsDown("LEFT")))
+	}
+
+	Player.prototype.slowDown = function(x, pos){
+		this.v.x = 0;
+		if(pos == LEFT){
+			this.pos.x = x + this.width*.5;
+		}
+		else{
+			this.pos.x = x - this.width*.5;
+		}
+		this.slowDownType = pos;
+	}
+
+	Player.prototype.walkOnGround = function(y, ang){
+		this.pos.y = y;
+		this.v.y = 0;
+		this.angle = ang;
+		this.onGround = true;
+	}
+
 	Player.prototype.checkMap = function(map)
 	{
 		//脚碰地
@@ -163,9 +204,7 @@
 					var data = dataArr[i];
 					if(data.y <= this.pos.y + 2 && data.y >= this.pos.y - 5)
 					{
-						this.pos.y = data.y;
-						this.v.y = 0;
-						this.angle = data.ang;
+						this.walkOnGround(data.y, data.ang);
 						break;
 					}
 				}
@@ -183,8 +222,7 @@
 					var x = dataArr[i];
 					if(x <= this.pos.x + this.width*.5 && x >= this.pos.x + this.width*.5 - 5)
 					{
-						this.pos.x = x - this.width*.5;
-						this.v.x = 0;
+						this.slowDown(x, RIGHT);
 						return;
 					}
 				}
@@ -198,8 +236,7 @@
 					var x = dataArr[i];
 					if(x <= this.pos.x - this.width*.5 + 5&& x >= this.pos.x - this.width*.5)
 					{
-						this.pos.x = x + this.width*.5;
-						this.v.x = 0;
+						this.slowDown(x, LEFT);
 						return;
 					}
 				}
@@ -215,8 +252,7 @@
 					var x = dataArr[i];
 					if(x <= this.pos.x + this.width*.5 && x >= this.pos.x + this.width*.5 - 5)
 					{
-						this.pos.x = x - this.width*.5;
-						this.v.x = 0;
+						this.slowDown(x, RIGHT);
 						return;
 					}
 				}
@@ -230,8 +266,7 @@
 					var x = dataArr[i];
 					if(x <= this.pos.x - this.width*.5 + 5&& x >= this.pos.x - this.width*.5)
 					{
-						this.pos.x = x + this.width*.5;
-						this.v.x = 0;
+						this.slowDown(x, LEFT);
 						return;
 					}
 				}
@@ -259,8 +294,7 @@
 				{
 					if(floor.pos.y <= this.pos.y + 2 && floor.pos.y >= this.pos.y - 5) 
 					{
-						this.pos.y = floor.pos.y;
-						this.v.y = 0;
+						this.walkOnGround(floor.pos.y, 0);
 						this.floorV = floor.v.x;
 						return;
 					}
@@ -301,6 +335,9 @@
 		this.pos.plus(this.v);
 		this.pos.x += this.floorV;
 		this.a.x *= .9;
+
+		this.onGround = false;
+		this.slowDownType = 0;
 
 		this.checkMap(ns.map);
 		this.checkFloors(ns.floors);
