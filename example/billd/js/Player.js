@@ -391,6 +391,7 @@
 			ang = e.gamma;	
 		}
 
+		oState["l"] = oState["r"] = false;
 		if(ang > 15) 
 		{
 			oState["r"] = 2;
@@ -406,10 +407,6 @@
 		else if(ang < -5)
 		{
 			oState["l"] = 1;
-		}
-		else
-		{
-			oState["l"] = oState["r"] = false;
 		}
 	}
 })(window);
