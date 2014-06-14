@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=0">
+	<meta name="viewport" content="user-scalable=0">
 	<title>billd</title>
 	<style type="text/css">
 		body,div,canvas,p{
@@ -52,12 +52,26 @@
 		p{
 			margin-top: 5px;
 		}
+
+		.git-link{
+			display: block;
+			position: absolute;
+			top:10px;
+			right: 10px;
+			z-index: 10;
+			padding: 10px;
+			color: #fff;
+			background: #0090ff no-repeat 95% 50%;
+			font-weight: 700;
+			box-shadow: 0 0 10px rgba(0,0,0,.5);
+			border-bottom-left-radius: 2px;
+			border-bottom-right-radius: 2px;
+			text-decoration: none;
+		}
 	</style>
 </head>
 <body>
-  <a href="https://github.com/06wj/FL">
-      <img style="position: absolute; top: 0; right: 0; border: 0;" src="http://littlebilld.duapp.com/as.png" alt="Fork me on GitHub">
-  </a>
+  <a href="https://github.com/06wj/FL" class="git-link">Fork me on GitHub</a>
   <div id = "game">
 		<div id = "stage">
 			<canvas width = 600 height = 300></canvas>
