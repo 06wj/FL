@@ -1,0 +1,1 @@
+R={};R.images=[{"src": "img/ball.png?121", "id": "ball", "size": 0.78}, {"src": "img/bg.png?121", "id": "bg", "size": 82.65}, {"src": "img/cat.png?121", "id": "cat", "size": 23.39}]
