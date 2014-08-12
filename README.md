@@ -1,4 +1,4 @@
 #demos
-* [billd](http://littlebilld.duapp.com/FL/example/billd/)
-* [robot](http://littlebilld.duapp.com/FL/example/robot)
-* [miaomiao](http://littlebilld.duapp.com/FL/example/miaomiao)
+* [billd](http://06wj.github.io/FL/example/billd)
+* [robot](http://06wj.github.io/FL/example/robot)
+* [miaomiao](http://06wj.github.io/FL/example/miaomiao)
