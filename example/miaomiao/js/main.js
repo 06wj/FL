@@ -36,7 +36,11 @@
 	function init(){
 		var offset = 150;
 		var y = height - 20;
-		bg = new Bitmap(width * .5 - 13, 10, R.images.bg);
+		bg = new Bitmap({
+			x:width * .5 - 13, 
+			y:10, 
+			img:R.images.bg
+		});
 		bg.originX = bg.width * .5;
 		stage.addChild(bg);
 
@@ -66,7 +70,18 @@
 		ball = new Bitmap({
 			x:width * .5, 
 			y:y - 100, 
-			img:R.images.ball
+			img:R.images.ball,
+			v:0,
+			jumpV:-7,
+			update:function(){
+				this.v += .1;
+				this.y += this.v;
+				if(this.y > y){
+					this.y = y;
+					this.v = this.jumpV;
+					this.jumpV *= .95;
+				}
+			}
 		});
 		ball.setCenter();
 		stage.addChild(ball);
