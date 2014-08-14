@@ -2,13 +2,16 @@
 	var DisplayObject = FL.DisplayObject;
 	var Utils = FL.Utils;
 
-	var LoadProgress = FL.LoadProgress = function(loader, x, y)
+	/*
+     * loader
+	**/
+	var LoadProgress = FL.LoadProgress = function(prop)
 	{
-		DisplayObject.call(this, x , y);
-		this.width = 400;
-		this.height = 10;
+		DisplayObject.call(this, prop);
+		this.width = this.width||400;
+		this.height = this.height||10;
 		this.setCenter();
-		this.init(loader);
+		this.init(prop.loader);
 	};
 	Utils.extends(LoadProgress, DisplayObject);
 

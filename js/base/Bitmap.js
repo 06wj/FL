@@ -3,11 +3,13 @@
 	var DisplayObject = FL.DisplayObject;
 	var Rect = FL.Rect;
 
-	var Bitmap = FL.Bitmap = function(x, y, img)
+	var Bitmap = FL.Bitmap = function(prop)
 	{
-		DisplayObject.call(this, x, y);
-		this.rect = new Rect();
-		img && this.setImg(img);
+		DisplayObject.call(this, prop);
+		this.rect = this.rect||new Rect();
+		if(this.img){
+			this.setImg(this.img, prop.rect);
+		}
 	};
 
 	Utils.extends(Bitmap, DisplayObject);
@@ -15,19 +17,24 @@
 	Bitmap.prototype._draw = function(ctx)
 	{
 		var rect = this.rect;
-		this.img && ctx.drawImage(this.img, rect.x, rect.y, rect.width, rect.height, -this.originX, -this.originY, this.width, this.height);
+		this.img && ctx.drawImage(this.img, rect.x, rect.y, rect.width, rect.height, -this.originX, -this.originY, rect.width, rect.height);
 	};
 
 	Bitmap.prototype.setRect = function(x, y, w, h)
 	{
 		this.rect.set(x, y, w, h);
+		this.width = w;
+		this.height = h;
 	};
 
-	Bitmap.prototype.setImg = function(img)
+	Bitmap.prototype.setImg = function(img, rect)
 	{
 		this.img = img;
-		this.width = img.width;
-		this.height = img.height;
-		this.rect.set(0, 0, this.width, this.height);
+		if(rect){
+			this.setRect(rect.x, rect.y, rect.width, rect.height);
+		}
+		else{
+			this.setRect(0, 0, img.width, img.height)
+		}
 	};
 })();

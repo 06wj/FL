@@ -4,8 +4,8 @@
 
 	var speed = 2;
 	var LIFE_TIME = 3600;
-	var YellowBall = ns.YellowBall = function(){
-		MovieClip.apply(this, arguments);
+	var YellowBall = ns.YellowBall = function(prop){
+		MovieClip.call(this, prop);
 
 		this.pos = new Vector();
 		this.v = new Vector(speed, 0);

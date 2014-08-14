@@ -8,10 +8,17 @@
 	var height = 400;
 	var fps = 60;
 	
-	var stage = new Stage(canvas, width, height, fps);
+	var stage = new Stage({
+		canvas:canvas, 
+		width:width, 
+		height:height, 
+		fps:fps
+	});
 	stage.start();
 
-	var loadProgress = new LoadProgress(new ImageLoader());
+	var loadProgress = new LoadProgress({
+		loader:new ImageLoader()
+	});
 	loadProgress.x = width>>1;loadProgress.y=height>>1;
 	loadProgress.addEventListener("complete", function(){
 		stage.removeChild(this);

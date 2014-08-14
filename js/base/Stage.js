@@ -4,22 +4,26 @@
 	var Mouse = FL.Mouse;
 	var Keyboard = FL.Keyboard;
 
-	var Stage = FL.Stage = function(canvas, width, height, fps)
+	/**
+	 * canvas, width, height, fps
+	*/
+	var Stage = FL.Stage = function(prop)
 	{
-		DisplayObjectContainer.call(this);
-		this.init(canvas, width, height, fps);
+		DisplayObjectContainer.call(this, prop);
+		this.width = this.width||550;
+		this.height = this.height||400;
+		this.fps = this.fps||60;
+		this.init();
 	};
 	Utils.extends(Stage, DisplayObjectContainer);
 
-	Stage.prototype.init = function(canvas, width, height, fps)
+	Stage.prototype.init = function()
 	{
 		this.stage = this;
-		this.canvas = canvas;
-		this.width = canvas.width = width||550;
-		this.height = canvas.height = height||400;
-		this.fps = fps||60;
 		this.timeStep = 1000/this.fps;
-		this.ctx = canvas.getContext("2d");
+		this.canvas.width = this.width;
+		this.canvas.height = this.height;
+		this.ctx = this.canvas.getContext("2d");
 	}
 
 	Stage.prototype.addChildAt = function(obj, at)
@@ -35,8 +39,8 @@
 
 	Stage.prototype.start = function()
 	{
-		this.stop();
 		var that = this;
+		this.stop();
 		this._interval = setInterval(function(){
 				that.render();
 				that.callAll("update");

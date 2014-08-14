@@ -2,10 +2,8 @@
 	var Utils = FL.Utils;
 	var Sprite = FL.Sprite;
 
-	var MovieClip = FL.MovieClip = function(x, y)
+	var MovieClip = FL.MovieClip = function(prop)
 	{
-		Sprite.call(this, x, y);
-
 		this._time = 0;
 		this.isPlay = false;
 		this.isLoop = false;
@@ -15,6 +13,8 @@
 		this.action = "";
 		this.frames = [];
 		this.setFrameRate(24);
+
+		Sprite.call(this, prop);
 	};
 	Utils.extends(MovieClip, Sprite);
 

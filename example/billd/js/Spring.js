@@ -6,10 +6,10 @@
 	var UP_SPEED = .1;
 	var BACK_SPEED = -.05;
 
-	var Spring = ns.Spring = function(x, y)
+	var Spring = ns.Spring = function(prop)
 	{
-		Bitmap.call(this, x, y);
-		this.pos = new Vector(x,  y);
+		Bitmap.call(this, prop);
+		this.pos = new Vector(this.x, this.y);
 		this.isJump = false;
 		this.targetSpeed = -13;
 	};
@@ -52,7 +52,10 @@
 	};
 
 	Spring.create = function(x, y, img, targetSpeed){
-		var sp = new Spring(x, y);
+		var sp = new Spring({
+			x:x,
+			y:y
+		});
 		sp.targetSpeed = targetSpeed||-13;
 		sp.setImg(img||R.images.spring);
 		sp.originY = sp.height;

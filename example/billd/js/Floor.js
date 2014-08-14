@@ -10,7 +10,7 @@
 		width = width||84;
 		height = height||9;
 
-		Canvas.call(this, 0, 0);
+		Canvas.call(this);
 		this.cacheCtx.save();
 		this.cacheCtx.fillStyle = "#BF8230";
 		this.cacheCtx.fillRect(0, 0, width, height);

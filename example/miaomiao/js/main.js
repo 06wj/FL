@@ -7,10 +7,17 @@
 	var height = 360;
 	var fps = 60;
 	
-	var stage = new Stage(canvas, width, height, fps);
+	var stage = new Stage({
+		canvas:canvas,
+		width:width,
+		height:height,
+		fps:fps
+	});
 	stage.start();
 	
-	var loadProgress = new LoadProgress(new ImageLoader());
+	var loadProgress = new LoadProgress({
+		loader:new ImageLoader()
+	});
 	loadProgress.x = width>>1;loadProgress.y=height>>1;
 	loadProgress.addEventListener("complete", function(){
 		stage.removeChild(this);
@@ -33,7 +40,10 @@
 		bg.originX = bg.width * .5;
 		stage.addChild(bg);
 
-		cat0 = new MovieClip(offset, y);
+		cat0 = new MovieClip({
+			x:offset, 
+			y:y
+		});
 		cat0.setImg(R.images.cat, 82, 85);
 		cat0.addAnimation("move", "0-1", true, 12);
 		stage.addChild(cat0);
@@ -42,7 +52,10 @@
 		cat0.originY = 85;
 		cat0.play("move");
 
-		cat1 = new MovieClip(width - offset, y);
+		cat1 = new MovieClip({
+			x:width - offset, 
+			y:y
+		});
 		cat1.setImg(R.images.cat, 82, 85);
 		cat1.addAnimation("move", "0-1", true, 12);
 		stage.addChild(cat1);
@@ -50,7 +63,11 @@
 		cat1.originY = 85;
 		cat1.play("move");
 
-		ball = new Bitmap(width * .5, y - 100, R.images.ball);
+		ball = new Bitmap({
+			x:width * .5, 
+			y:y - 100, 
+			img:R.images.ball
+		});
 		ball.setCenter();
 		stage.addChild(ball);
 	}

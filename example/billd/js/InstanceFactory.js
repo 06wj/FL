@@ -36,7 +36,11 @@
 					ns.fishs.push(mc);
 					break;
 				case "star":
-					mc = new Bitmap(data.x, data.y, R.images.star);
+					mc = new Bitmap({
+						x:data.x, 
+						y:data.y, 
+						img:R.images.star
+					});
 					mc.pos = new Vector(data.x, data.y);
 					mc.originX = mc.originY = 0;
 					mc.update = function(){
@@ -60,7 +64,11 @@
 					}
 					break;
 				case "door":
-					ns.door = mc = new Bitmap(data.x, data.y, R.images.door);
+					ns.door = mc = new Bitmap({
+						x:data.x, 
+						y:data.y, 
+						img:R.images.door
+					});
 					mc.pos = new Vector(data.x, data.y);
 					mc.originX = 42.8;
 					mc.originY = 45;

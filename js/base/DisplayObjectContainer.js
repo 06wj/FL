@@ -2,13 +2,16 @@
 	var Utils = FL.Utils;
 	var DisplayObject = FL.DisplayObject;
 
-	var DisplayObjectContainer = FL.DisplayObjectContainer = function(x, y, parent)
+	/*
+     * parent
+	**/
+	var DisplayObjectContainer = FL.DisplayObjectContainer = function(prop)
 	{
-		if(parent)
+		DisplayObject.call(this, prop);
+		if(this.parent)
 		{
-			parent.addChild(this);
+			this.parent.addChild(this);
 		}
-		DisplayObject.call(this, x, y);
 		this.children = [];
 	};
 

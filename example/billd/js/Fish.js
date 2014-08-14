@@ -2,8 +2,8 @@
 	var ns = FL.ns("billd");
 	eval(FL.import("FL", "Utils, MovieClip"));
 	var speed = 7;
-	var Fish = ns.Fish = function(){
-		MovieClip.apply(this, arguments);
+	var Fish = ns.Fish = function(prop){
+		MovieClip.call(this, prop);
 		this.alive = true;
 		this.pos = new Vector();
 		this.v = new Vector(0, 0);

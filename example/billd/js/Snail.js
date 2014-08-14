@@ -3,8 +3,8 @@
 	eval(FL.import("FL", "Utils, MovieClip"));
 	
 	var speed = .5;
-	var Snail = ns.Snail = function(){
-		MovieClip.apply(this, arguments);
+	var Snail = ns.Snail = function(prop){
+		MovieClip.call(this, prop);
 		this.alive = true;
 		this.pos = new Vector();
 		this.v = new Vector(speed, 0);

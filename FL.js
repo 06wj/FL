@@ -10,8 +10,16 @@
 			console.dir(arguments);
 		}
 	}
-		
+	
+	win.RAD_TO_DEG = 180/Math.PI;	
 	win.DEG_TO_RAD = Math.PI/180;
+	
+	FL.merge = function(s1, s2){
+		for(var p in s2){
+			s1[p] = s2[p];
+		}
+		return s1;
+	};
 
 	FL.getUrlParams = function()
 	{
@@ -823,10 +831,10 @@
 	var Rect = FL.Rect;
 	var Polygon = FL.Polygon;
 
-	var DisplayObject = FL.DisplayObject = function(x, y)
+	var DisplayObject = FL.DisplayObject = function(prop)
 	{
-		this.x = x||0;
-		this.y = y||0;
+		this.x = 0;
+		this.y = 0;
 		this.originX = 0;
 		this.originY = 0;
 		this.scaleX = 1;
@@ -841,17 +849,7 @@
 		this.rect = new Rect();
 		EventDispatcher.call(this);
 
-		// var height = 0;
-		// var that = this;
-
-		// Object.defineProperty(this, "height", {
-		// 	get:function(){
-		// 		return that.scaleY*height;
-		// 	},
-		// 	set:function(value){
-		// 		height = value
-		// 	}
-		// })
+		FL.merge(this, prop);
 	};
 	
 	Utils.extends(DisplayObject, EventDispatcher);
@@ -1018,13 +1016,16 @@
 	var Utils = FL.Utils;
 	var DisplayObject = FL.DisplayObject;
 
-	var DisplayObjectContainer = FL.DisplayObjectContainer = function(x, y, parent)
+	/*
+     * parent
+	**/
+	var DisplayObjectContainer = FL.DisplayObjectContainer = function(prop)
 	{
-		if(parent)
+		DisplayObject.call(this, prop);
+		if(this.parent)
 		{
-			parent.addChild(this);
+			this.parent.addChild(this);
 		}
-		DisplayObject.call(this, x, y);
 		this.children = [];
 	};
 
@@ -1118,11 +1119,13 @@
 	var DisplayObject = FL.DisplayObject;
 	var Rect = FL.Rect;
 
-	var Bitmap = FL.Bitmap = function(x, y, img)
+	var Bitmap = FL.Bitmap = function(prop)
 	{
-		DisplayObject.call(this, x, y);
-		this.rect = new Rect();
-		img && this.setImg(img);
+		DisplayObject.call(this, prop);
+		this.rect = this.rect||new Rect();
+		if(this.img){
+			this.setImg(this.img, prop.rect);
+		}
 	};
 
 	Utils.extends(Bitmap, DisplayObject);
@@ -1130,20 +1133,25 @@
 	Bitmap.prototype._draw = function(ctx)
 	{
 		var rect = this.rect;
-		this.img && ctx.drawImage(this.img, rect.x, rect.y, rect.width, rect.height, -this.originX, -this.originY, this.width, this.height);
+		this.img && ctx.drawImage(this.img, rect.x, rect.y, rect.width, rect.height, -this.originX, -this.originY, rect.width, rect.height);
 	};
 
 	Bitmap.prototype.setRect = function(x, y, w, h)
 	{
 		this.rect.set(x, y, w, h);
+		this.width = w;
+		this.height = h;
 	};
 
-	Bitmap.prototype.setImg = function(img)
+	Bitmap.prototype.setImg = function(img, rect)
 	{
 		this.img = img;
-		this.width = img.width;
-		this.height = img.height;
-		this.rect.set(0, 0, this.width, this.height);
+		if(rect){
+			this.setRect(rect.x, rect.y, rect.width, rect.height);
+		}
+		else{
+			this.setRect(0, 0, img.width, img.height)
+		}
 	};
 })();
 (function(){
@@ -1158,9 +1166,9 @@
 	var _canvas = document.createElement("canvas");
 	var _ctx = _canvas.getContext("2d");
 
-	var Canvas = FL.Canvas = function(x, y)
+	var Canvas = FL.Canvas = function(prop)
 	{
-		Bitmap.call(this, x, y);
+		Bitmap.call(this, prop);
 		this.cacheCtx = cacheCtx;
 		this.cacheCanvas = cacheCanvas;
 	};
@@ -1182,43 +1190,47 @@
 	var Rect = FL.Rect;
 	var DisplayObjectContainer = FL.DisplayObjectContainer;
 	
-	var Sprite = FL.Sprite = function(x, y, img)
+	var Sprite = FL.Sprite = function(prop)
 	{
-		DisplayObjectContainer.call(this, x, y);
-		this.rect = new Rect();
-		img && this.setImg(img);
+		DisplayObjectContainer.call(this, prop);
+		this.rect = this.rect||new Rect();
+		if(this.img){
+			this.setImg(img, prop.rect);
+		}
 	};
 
 	Utils.extends(Sprite, DisplayObjectContainer);
 
 	Sprite.prototype._draw = function(ctx)
 	{
-		this.superClass._draw.call(this, ctx);
 		var rect = this.rect;
-		this.img && ctx.drawImage(this.img, rect.x, rect.y, rect.width, rect.height, -this.originX, -this.originY, this.width, this.height);
+		this.img && ctx.drawImage(this.img, rect.x, rect.y, rect.width, rect.height, -this.originX, -this.originY, rect.width, rect.height);
 	};
 
 	Sprite.prototype.setRect = function(x, y, w, h)
 	{
 		this.rect.set(x, y, w, h);
+		this.width = w;
+		this.height = h;
 	};
 
-	Sprite.prototype.setImg = function(img)
+	Sprite.prototype.setImg = function(img, rect)
 	{
 		this.img = img;
-		this.width = img.width;
-		this.height = img.height;
-		this.rect.set(0, 0, this.width, this.height);
+		if(rect){
+			this.setRect(rect.x, rect.y, rect.width, rect.height);
+		}
+		else{
+			this.setRect(0, 0, img.width, img.height)
+		}
 	};
 })();
 (function(){
 	var Utils = FL.Utils;
 	var Sprite = FL.Sprite;
 
-	var MovieClip = FL.MovieClip = function(x, y)
+	var MovieClip = FL.MovieClip = function(prop)
 	{
-		Sprite.call(this, x, y);
-
 		this._time = 0;
 		this.isPlay = false;
 		this.isLoop = false;
@@ -1228,6 +1240,8 @@
 		this.action = "";
 		this.frames = [];
 		this.setFrameRate(24);
+
+		Sprite.call(this, prop);
 	};
 	Utils.extends(MovieClip, Sprite);
 
@@ -1344,13 +1358,16 @@
 	var DisplayObject = FL.DisplayObject;
 	var Utils = FL.Utils;
 
-	var LoadProgress = FL.LoadProgress = function(loader, x, y)
+	/*
+     * loader
+	**/
+	var LoadProgress = FL.LoadProgress = function(prop)
 	{
-		DisplayObject.call(this, x , y);
-		this.width = 400;
-		this.height = 10;
+		DisplayObject.call(this, prop);
+		this.width = this.width||400;
+		this.height = this.height||10;
 		this.setCenter();
-		this.init(loader);
+		this.init(prop.loader);
 	};
 	Utils.extends(LoadProgress, DisplayObject);
 
@@ -1392,22 +1409,26 @@
 	var Mouse = FL.Mouse;
 	var Keyboard = FL.Keyboard;
 
-	var Stage = FL.Stage = function(canvas, width, height, fps)
+	/**
+	 * canvas, width, height, fps
+	*/
+	var Stage = FL.Stage = function(prop)
 	{
-		DisplayObjectContainer.call(this);
-		this.init(canvas, width, height, fps);
+		DisplayObjectContainer.call(this, prop);
+		this.width = this.width||550;
+		this.height = this.height||400;
+		this.fps = this.fps||60;
+		this.init();
 	};
 	Utils.extends(Stage, DisplayObjectContainer);
 
-	Stage.prototype.init = function(canvas, width, height, fps)
+	Stage.prototype.init = function()
 	{
 		this.stage = this;
-		this.canvas = canvas;
-		this.width = canvas.width = width||550;
-		this.height = canvas.height = height||400;
-		this.fps = fps||60;
 		this.timeStep = 1000/this.fps;
-		this.ctx = canvas.getContext("2d");
+		this.canvas.width = this.width;
+		this.canvas.height = this.height;
+		this.ctx = this.canvas.getContext("2d");
 	}
 
 	Stage.prototype.addChildAt = function(obj, at)
@@ -1423,8 +1444,8 @@
 
 	Stage.prototype.start = function()
 	{
-		this.stop();
 		var that = this;
+		this.stop();
 		this._interval = setInterval(function(){
 				that.render();
 				that.callAll("update");

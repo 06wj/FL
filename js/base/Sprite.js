@@ -3,32 +3,38 @@
 	var Rect = FL.Rect;
 	var DisplayObjectContainer = FL.DisplayObjectContainer;
 	
-	var Sprite = FL.Sprite = function(x, y, img)
+	var Sprite = FL.Sprite = function(prop)
 	{
-		DisplayObjectContainer.call(this, x, y);
-		this.rect = new Rect();
-		img && this.setImg(img);
+		DisplayObjectContainer.call(this, prop);
+		this.rect = this.rect||new Rect();
+		if(this.img){
+			this.setImg(img, prop.rect);
+		}
 	};
 
 	Utils.extends(Sprite, DisplayObjectContainer);
 
 	Sprite.prototype._draw = function(ctx)
 	{
-		this.superClass._draw.call(this, ctx);
 		var rect = this.rect;
-		this.img && ctx.drawImage(this.img, rect.x, rect.y, rect.width, rect.height, -this.originX, -this.originY, this.width, this.height);
+		this.img && ctx.drawImage(this.img, rect.x, rect.y, rect.width, rect.height, -this.originX, -this.originY, rect.width, rect.height);
 	};
 
 	Sprite.prototype.setRect = function(x, y, w, h)
 	{
 		this.rect.set(x, y, w, h);
+		this.width = w;
+		this.height = h;
 	};
 
-	Sprite.prototype.setImg = function(img)
+	Sprite.prototype.setImg = function(img, rect)
 	{
 		this.img = img;
-		this.width = img.width;
-		this.height = img.height;
-		this.rect.set(0, 0, this.width, this.height);
+		if(rect){
+			this.setRect(rect.x, rect.y, rect.width, rect.height);
+		}
+		else{
+			this.setRect(0, 0, img.width, img.height)
+		}
 	};
 })();

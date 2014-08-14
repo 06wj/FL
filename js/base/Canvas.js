@@ -10,9 +10,9 @@
 	var _canvas = document.createElement("canvas");
 	var _ctx = _canvas.getContext("2d");
 
-	var Canvas = FL.Canvas = function(x, y)
+	var Canvas = FL.Canvas = function(prop)
 	{
-		Bitmap.call(this, x, y);
+		Bitmap.call(this, prop);
 		this.cacheCtx = cacheCtx;
 		this.cacheCanvas = cacheCanvas;
 	};

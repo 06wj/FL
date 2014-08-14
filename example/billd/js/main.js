@@ -24,11 +24,18 @@
 	ns.allData = mapData;
 	mapData = getMapData(FL.params.stage);
 
-	var stage = ns.stage = new Stage(canvas, width, height, fps);
+	var stage = ns.stage = new Stage({
+		 canvas:canvas, 
+		 width:width, 
+		 height:height, 
+		 fps:fps
+	});
 	stage.start();
 	var isShake = false;
 
-	var loadProgress = new LoadProgress(new ImageLoader());
+	var loadProgress = new LoadProgress({
+		loader:new ImageLoader()
+	});
 	loadProgress.x = width>>1;loadProgress.y=height>>1;
 	loadProgress.addEventListener("complete", function(){
 		stage.removeChild(this);
@@ -73,7 +80,6 @@
 		player = ns.player = Player.create();
 
 		map.init(mapData.map.width, mapData.map.height);
-		camera = new Camera(0, 0, width, height);
 		
 		player.pos.x = mapData.mc.player[0].x;
 		player.pos.y = mapData.mc.player[0].y;

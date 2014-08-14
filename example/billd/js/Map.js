@@ -3,7 +3,10 @@
 	eval(FL.import("FL", "Bitmap, Utils, Bezier, Line"));
 
 	var Map = ns.Map = function(x, y){
-		Bitmap.call(this, x, y);
+		Bitmap.call(this, {
+			x:x||0,
+			y:y||0
+		});
 		this.mapData = {};
 		this.lines = [];
 	};

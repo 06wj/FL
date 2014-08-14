@@ -15,9 +15,9 @@
 
 	var SHOOT_TIME = 14;
 
-	var Player = ns.Player = function()
+	var Player = ns.Player = function(prop)
 	{
-		MovieClip.apply(this, arguments);
+		MovieClip.call(this, prop);
 		
 		this.action = "stand2";
 		this.time = 0;
@@ -170,6 +170,7 @@
 	};
 	
 	Player.prototype.checkSlowDown = function(){
+		return false;
 		// return !this.onGround && (this.slowDownType == RIGHT && Keyboard.getIsDown("RIGHT") || (this.slowDownType == LEFT && Keyboard.getIsDown("LEFT")))
 		// return !this.onGround && tshis.slowDownType && (Keyboard.getIsDown("RIGHT") || Keyboard.getIsDown("LEFT"));
 		return !this.onGround && this.slowDownType && (1||Keyboard.getIsDown("RIGHT") || Keyboard.getIsDown("LEFT"));

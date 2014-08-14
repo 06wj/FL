@@ -10,8 +10,16 @@
 			console.dir(arguments);
 		}
 	}
-		
+	
+	win.RAD_TO_DEG = 180/Math.PI;	
 	win.DEG_TO_RAD = Math.PI/180;
+	
+	FL.merge = function(s1, s2){
+		for(var p in s2){
+			s1[p] = s2[p];
+		}
+		return s1;
+	};
 
 	FL.getUrlParams = function()
 	{

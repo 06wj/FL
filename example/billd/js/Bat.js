@@ -2,8 +2,8 @@
 	var ns = FL.ns("billd");
 	eval(FL.import("FL", "Utils, MovieClip"));
 	var speed = 7;
-	var Bat = ns.Bat = function(){
-		MovieClip.apply(this, arguments);
+	var Bat = ns.Bat = function(prop){
+		MovieClip.call(this, prop);
 		this.alive = true;
 		this.pos = new Vector();
 		this.v = new Vector(1, 0);

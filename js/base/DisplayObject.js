@@ -4,10 +4,10 @@
 	var Rect = FL.Rect;
 	var Polygon = FL.Polygon;
 
-	var DisplayObject = FL.DisplayObject = function(x, y)
+	var DisplayObject = FL.DisplayObject = function(prop)
 	{
-		this.x = x||0;
-		this.y = y||0;
+		this.x = 0;
+		this.y = 0;
 		this.originX = 0;
 		this.originY = 0;
 		this.scaleX = 1;
@@ -22,17 +22,7 @@
 		this.rect = new Rect();
 		EventDispatcher.call(this);
 
-		// var height = 0;
-		// var that = this;
-
-		// Object.defineProperty(this, "height", {
-		// 	get:function(){
-		// 		return that.scaleY*height;
-		// 	},
-		// 	set:function(value){
-		// 		height = value
-		// 	}
-		// })
+		FL.merge(this, prop);
 	};
 	
 	Utils.extends(DisplayObject, EventDispatcher);

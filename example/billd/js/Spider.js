@@ -3,8 +3,8 @@
 	eval(FL.import("FL", "Utils, MovieClip"));
 	
 	var speed = 1.5;
-	var Spider = ns.Spider = function(){
-		MovieClip.apply(this, arguments);
+	var Spider = ns.Spider = function(prop){
+		MovieClip.call(this, prop);
 		this.alive = true;
 		this.pos = new Vector();
 		this.v = new Vector(speed, 0);
