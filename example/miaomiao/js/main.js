@@ -44,27 +44,46 @@
 		bg.originX = bg.width * .5;
 		stage.addChild(bg);
 
+		var g = .1;
+
 		cat0 = new MovieClip({
 			x:offset, 
-			y:y
+			y:y,
+			vy:0,
+			update:function(){
+				this.vy += g;
+				this.y += this.vy;
+				if(this.y > y){
+					this.y = y;
+					this.vy = -5;
+				}
+
+				if(Math.abs(this.vy) < 4){
+					this.play("jump");
+				}
+				else{
+					this.play("move");
+				}
+			},
+			scaleX:-1,
+			originX:41,
+			originY:85
 		});
 		cat0.setImg(R.images.cat, 82, 85);
 		cat0.addAnimation("move", "0-1", true, 12);
+		cat0.addAnimation("jump", "4", true, 12);
 		stage.addChild(cat0);
-		cat0.scaleX = -1;
-		cat0.setCenter();
-		cat0.originY = 85;
 		cat0.play("move");
 
 		cat1 = new MovieClip({
 			x:width - offset, 
-			y:y
+			y:y,
+			originX:41,
+			originY:85
 		});
 		cat1.setImg(R.images.cat, 82, 85);
 		cat1.addAnimation("move", "0-1", true, 12);
 		stage.addChild(cat1);
-		cat1.setCenter();
-		cat1.originY = 85;
 		cat1.play("move");
 
 		ball = new Bitmap({
