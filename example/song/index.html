@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>song</title>
+	<style>
+		body, div, p, canvas{
+			margin: 0;
+			padding: 0;
+		}
+
+		canvas{
+			background-color: #000;
+			margin:20px auto;
+			display: block;
+		}
+
+		h1{
+			text-align: center;
+			margin-bottom: 5px;
+		}
+
+		img{
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<h1>song</h1>
+	<canvas></canvas>
+	<script>
+		var canvas = document.querySelector("canvas");
+		var ctx = canvas.getContext("2d");
+		var width = 550;
+		var height = 400;
+
+		canvas.width = width;
+		canvas.height = height;
+
+		var PI2 = Math.PI * 2;
+		var objs = [];
+
+		var utils = {
+			merge:function(a, b){
+				for(var i in b){
+					a[i] = b[i];
+				}
+			}
+		}
+
+		var ObjectPool = {
+			pool :{},
+			create:function(Class, props){
+				var type = Class.classType;
+				if(!this.pool[type]){
+					this.pool[type] = [];
+				}
+				if(this.pool[type].length){
+					var obj = this.pool[type].pop();
+				}
+				else{
+					var obj = new Class();
+				}
+				obj.init(props);
+				objs.push(obj);
+				return obj;
+			},
+			release:function(obj){
+				this.pool[obj.classType].push(obj);
+			}
+		}
+
+		var Circle = function(props){
+			this.init(props);
+		}
+
+		Circle.classType = Circle.prototype.classType = "circle";
+
+		Circle.prototype.init = function(props){
+			this.x = 0;
+			this.y = 0;
+			this.r = 10;
+			this.alpha = 1;
+			this.isDie = false;
+			utils.merge(this, props);
+		};
+
+		Circle.prototype.update = function(){
+			ctx.save();
+			ctx.strokeStyle = "#fff";
+			ctx.lineWidth = 1;
+			ctx.beginPath();
+			ctx.translate(this.x, this.y);
+			ctx.scale(1, .5);
+
+			var r = this.r;
+			var num = 5;
+			while(num){
+				r *= .7;
+				ctx.moveTo(r, 0);
+				ctx.arc(0, 0, r, 0, PI2);
+				num --;
+			}
+
+			ctx.globalAlpha = this.alpha;
+
+			ctx.stroke();
+			ctx.restore();
+
+			this.r ++;
+			this.alpha -= .01;
+			if(this.alpha < 0){
+				this.isDie = true;
+			}
+		};
+
+		Circle.prototype.destory = function(){
+			ObjectPool.release(this);
+		}
+
+		var Star = function(props){
+			this.init(props);
+		}
+
+		Star.classType = Star.prototype.classType = "star";
+
+		Star.prototype.init = function(props){
+			this.isDie = false;
+			this.created = false;
+			this.x = 0;
+			this.y = 0;
+
+			utils.merge(this, props);
+		};
+
+		Star.prototype.update = function(){
+			ctx.save();
+			ctx.translate(this.x, this.y);
+
+			this.y += this.v;
+			var w = 5;
+			var hw = w*.5;
+			if(this.y >= this.groundY){
+				ctx.fillStyle = "#fff";
+				ctx.fillRect(-hw, -40, w, 40 - this.y + this.groundY);
+
+				ctx.globalAlpha = .3;
+				ctx.fillRect(-hw, -40, w, 40);
+
+				if(!this.created){
+					this.created = true;
+					ObjectPool.create(Circle, {
+						x:this.x,
+						y:this.y
+					});
+
+				}
+				if(this.y >= this.groundY + 40){
+					this.isDie = true;
+				}
+			}
+			else{
+				ctx.fillStyle = "#fff";
+				ctx.fillRect(-hw, -40, w, 40);
+			}
+
+			ctx.restore();
+		};
+
+		Star.prototype.destory = function(){
+			ObjectPool.release(this);
+		}
+
+		var time = 0;
+		function createObjs(){
+			if(time % 30 == 0){
+				 ObjectPool.create(Star, {
+					x:Math.random() * width,
+					y:0,
+					groundY:Math.random() * 200 + 200,
+					v:Math.random() * 2 + 1
+				});
+			}
+			time ++;
+		}
+
+		createObjs();
+
+		setInterval(function(){
+			ctx.fillStyle = "#000";
+			ctx.fillRect(0, 0, width, height);
+			for(var i = objs.length - 1;i >= 0;i --){
+				var obj = objs[i];
+				obj.update();
+				if(obj.isDie){
+					objs.splice(i, 1);
+					obj.destory();
+				}
+			}
+
+			createObjs();
+		}, 1000/100);
+	</script>
+</body>
+</html>
