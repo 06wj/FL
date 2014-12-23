@@ -21,7 +21,10 @@
 
 		this.lines = [];
 
-		var shape = mapData.hit;
+		var shape = mapData.hit||{};
+		shape.beziers = shape.beziers||[];
+		shape.lines = shape.lines||[];
+
 		for(var i = 0, l = shape.beziers.length;i < l;i ++)
 		{
 			var points = shape.beziers[i];
