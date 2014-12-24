@@ -1,3 +1,7 @@
+node_modules/
+.DS_Store
+*.swp
 *.lnk
-*.DS_Store
-forkme_right_red_aa0000.png
+*.idea
+*.iml
+npm-debug.log

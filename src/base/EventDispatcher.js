@@ -38,4 +38,12 @@
 			}
 		}
 	};
+
+	EventDispatcher.prototype.on = EventDispatcher.prototype.addEventListener;
+	EventDispatcher.prototype.off = EventDispatcher.prototype.removeEventListener;
+	EventDispatcher.prototype.fire = function(type, data){
+		var e = {type:type};
+		FL.merge(e, data||{});
+		this.dispatchEvent(e);
+	}
 })();
