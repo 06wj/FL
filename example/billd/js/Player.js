@@ -1,6 +1,7 @@
 (function(win){
 	var ns = FL.ns("billd");
 	eval(FL.import("FL", "Utils, MovieClip, Keyboard, Mouse"));
+	eval(FL.import("billd", "sound"));
 
 	var speed1 = 2;
 	var speed2 = 3.5;
@@ -92,6 +93,7 @@
 		{
 			this.v.y = jumpSpeed;
 			this.angle = 0;
+			sound.play("jump");
 		}
 
 		this.a.y = g;

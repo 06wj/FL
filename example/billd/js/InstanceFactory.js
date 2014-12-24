@@ -47,6 +47,7 @@
 						this.x = ns.map.x + this.pos.x;
 						this.y = ns.map.y + this.pos.y;
 						if(ns.player.hitTestObject(this)){
+							ns.sound.play("coin");
 							this.update = null;
 							var that = this;
 							TweenLite.to(this, 1, {

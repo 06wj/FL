@@ -1503,7 +1503,7 @@
     var Utils = FL.Utils;
     var EventDispatcher = FL.EventDispatcher;
 
-    var Audio = FL.Audio = function(properties){
+    var HTMLAudio = FL.Audio = function(properties){
         this.src = null;
         this.loop = false;
         this.autoPlay = false;
@@ -1521,9 +1521,9 @@
         this._onAudioEvent = this._onAudioEvent.bind(this);
     };
 
-    Utils.extends(Audio, EventDispatcher);
+    Utils.extends(HTMLAudio, EventDispatcher);
 
-    FL.merge(Audio.prototype, {
+    FL.merge(HTMLAudio.prototype, {
         /**
          * 加载音频文件。
          */
