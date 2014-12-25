@@ -1667,42 +1667,56 @@
 	};
 
 	Camera.prototype.update = function(){
-		if(this.target != null)
-		{
-			if(this.deadzone == null)
-				this.focusOn(this.target.x + this.target.width*.5, this.target.y + this.target.height*.5);
-			else
-			{
-				
-				var targetX = this.target.x + ((this.target.x > 0)?0.0000001:-0.0000001);
-				var targetY = this.target.y + ((this.target.y > 0)?0.0000001:-0.0000001);
+		var bounds = this.bounds;
+		var target = this.target;
+		var width = this.width;
+		var height = this.height;
+		var scroll = this.scroll;
+		var deadzone = this.deadzone;
+
+		if(target){
+			if(deadzone){
+				var targetX = target.pos.x + ((target.pos.x > 0)?0.0000001:-0.0000001);
+				var targetY = target.pos.y + ((target.pos.y > 0)?0.0000001:-0.0000001);
 				
 				var edge = targetX - deadzone.x;
-				if(this.scroll.x > edge)
-					this.scroll.x = edge;
-				edge = targetX + this.target.width - this.deadzone.x - this.deadzone.width;
-				if(this.scroll.x < edge)
-					this.scroll.x = edge;
+				if(scroll.x > edge){
+					scroll.x = edge;
+				}
+
+				edge = targetX + target.width - deadzone.x - deadzone.width;
+				if(scroll.x < edge){
+					scroll.x = edge;
+				}
 				
-				edge = targetY - this.deadzone.y;
-				if(this.scroll.y > edge)
-					this.scroll.y = edge;
-				edge = targetY + this.target.height - this.deadzone.y - this.deadzone.height;
-				if(this.scroll.y < edge)
-					this.scroll.y = edge;
+				edge = targetY - deadzone.y;
+				if(scroll.y > edge){
+					scroll.y = edge;
+				}
+
+				edge = targetY + target.height - deadzone.y - deadzone.height;
+				if(scroll.y < edge){
+					scroll.y = edge;
+				}
+			}
+			else{
+				this.focusOn(target.pos.x + target.width*.5, target.pos.y + target.height*.5);
 			}
 		}
 		
-		if(this.bounds != null)
-		{
-			if(this.scroll.x < this.bounds.left)
-				this.scroll.x = bounds.left;
-			if(scroll.x > this.bounds.right - width)
-				this.scroll.x = bounds.right - width;
-			if(scroll.y < this.bounds.top)
-				this.scroll.y = bounds.top;
-			if(scroll.y > this.bounds.bottom - height)
-				this.scroll.y = this.bounds.bottom - height;
+		if(bounds){
+			if(scroll.x < bounds.left){
+				scroll.x = bounds.left;
+			}
+			if(scroll.x > bounds.right - width){
+				scroll.x = bounds.right - width;
+			}
+			if(scroll.y < bounds.top){
+				scroll.y = bounds.top;
+			}
+			if(scroll.y > bounds.bottom - height){
+				scroll.y = bounds.bottom - height;
+			}
 		}
 	};
 
@@ -1714,20 +1728,21 @@
 	Camera.prototype.follow = function(target, style){
 		this.target = target;
 		var helper;
-		switch(style)
-		{
+		var width = this.width;
+		var height = this.height;
+		switch(style){
 			case "platFormer":
-				var w = this.width/8;
-				var h = this.height/3;
-				this.deadzone = new Rect((this.width-w)/2,(this.height-h)/2 - h*0.25,w,h);
+				var w = width/5;
+				var h = height/3;
+				this.deadzone = new Rect((width-w)/2,(height-h)/2 - h*0.25,w,h);
 				break;
 			case "topDown":
-				helper = Math.max(this.width,this.height)/4;
-				this.deadzone = new Rect((this.width-helper)/2,(this.height-helper)/2,helper,helper);
+				helper = Math.max(width,height)/4;
+				this.deadzone = new Rect((width-helper)/2,(height-helper)/2,helper,helper);
 				break;
 			case "topDownTight":
 				helper = Math.max(width,height)/8;
-				this.deadzone = new Rect((this.width-helper)/2,(this.height-helper)/2,helper,helper);
+				this.deadzone = new Rect((width-helper)/2,(height-helper)/2,helper,helper);
 				break;
 			case "direct":
 			default:

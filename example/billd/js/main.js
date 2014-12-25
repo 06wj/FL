@@ -80,6 +80,10 @@
 		player = ns.player = Player.create();
 
 		map.init(mapData.map.width, mapData.map.height);
+
+		ns.camera = new FL.Camera(0, 0, width, height, 1);
+		ns.camera.follow(player, "topDownTight");
+		ns.camera.setBounds(0, -200, mapData.map.width, mapData.map.height + 200)
 		
 		player.pos.x = mapData.mc.player[0].x;
 		player.pos.y = mapData.mc.player[0].y;
@@ -120,25 +124,30 @@
 	function update(){
 		ns.fps ++;
 
-		if(player.x >= Math.floor(width * .6) && map.x > width - map.width)
-		{
-			map.x = width * .6 - player.pos.x;
-		}
+		// if(player.x >= Math.floor(width * .6) && map.x > width - map.width)
+		// {
+		// 	map.x = width * .6 - player.pos.x;
+		// }
 
-		else if(player.x <= width * .4 && map.x < 0)
-		{
-			map.x = width * .4 - player.pos.x;
-		}
+		// else if(player.x <= width * .4 && map.x < 0)
+		// {
+		// 	map.x = width * .4 - player.pos.x;
+		// }
 
-		if(player.y <= Math.ceil(height * .3))
-		{
-			map.y = height * .3 - player.pos.y;
-		}
+		// if(player.y <= Math.ceil(height * .3))
+		// {
+		// 	map.y = height * .3 - player.pos.y;
+		// }
 		
-		else if(player.y >= Math.floor(height * .7) && map.y > height - map.height)
-		{
-			map.y = height * .7 - player.pos.y;
-		}
+		// else if(player.y >= Math.floor(height * .7) && map.y > height - map.height)
+		// {
+		// 	map.y = height * .7 - player.pos.y;
+		// }
+
+		ns.camera.update();
+
+		map.x = -ns.camera.scroll.x
+		map.y = -ns.camera.scroll.y
 
 		if(player.pos.y > map.height && !isShake)
 		{
