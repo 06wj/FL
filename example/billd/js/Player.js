@@ -279,6 +279,14 @@
 				}
 			}
 		}
+
+		if(this.pos.x < this.width * .5){
+			this.pos.x = this.width * .5;
+		}
+
+		if(this.pos.x > map.width - this.width*.5){
+			this.pos.x = map.width - this.width*.5;
+		}
 	};
 
 	Player.prototype.die  =function()
@@ -346,15 +354,16 @@
 		this.onGround = false;
 		this.slowDownType = 0;
 
-		this.checkMap(ns.map);
 		this.checkFloors(ns.floors);
 		this.checkSprings(ns.springs);
+		this.checkMap(ns.map);
 
 		this.x = this.pos.x + ns.map.x;
 		this.y = this.pos.y + ns.map.y;
 
 		this.keyAction();
-	
+
+
 		if( !this.alive)
 		{
 			this.time++;

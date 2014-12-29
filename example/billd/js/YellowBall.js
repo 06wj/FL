@@ -14,7 +14,7 @@
 		this.onGround = false;
 
 		this.time = 0;
-		this.isDie = false;
+		this.alive = true;
 	};
 	Utils.extends(YellowBall, MovieClip);
 
@@ -87,10 +87,10 @@
 
 			this.time ++;
 			if(this.time > LIFE_TIME){
-				this.isDie = true;
+				this.alive = false;
 			}
 
-			if(this.isDie ||this.v.getLength2() < .5){
+			if(!this.alive ||this.v.getLength2() < .5){
 				var d = .01;
 				this.alpha -= d;
 				this.scaleX -= d/3;
