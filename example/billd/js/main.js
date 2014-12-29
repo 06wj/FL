@@ -166,8 +166,7 @@
 				spider.scaleX = 1;
 				spider.setCenter();
 				spiders.splice(spiders.indexOf(spider), 1);
-				i--;
-				l--;
+
 				TweenLite.to(spider, 2, {scaleX:.8, scaleY:.8, angle:10, onComplete:function(){
 					stage.removeChild(spider);
 				}})
