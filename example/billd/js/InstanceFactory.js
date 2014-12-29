@@ -78,7 +78,7 @@
 						this.x = 80-ns.map.x*100/ns.map.width;
 						this.y = 30-ns.map.y*10/ns.map.height;
 						this.scaleX = this.scaleY = 1+Math.pow(ns.bg.y/100, 2);
-						this.angle+=.08;
+						this.angle-=.02;
 						if(ns.player.hitTestObject(this)){
 							//this.update = null;
 							//alert("a")

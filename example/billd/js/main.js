@@ -5,7 +5,7 @@
 	document.body.style.webkitTapHighlightColor = "rgba(0,0,0,0)";
 
 	var ns = FL.ns("billd");
-	eval(FL.import("ns", "Player, Map, YellowBall, Spider, Fish, Floor, Bat, Spring, InstanceFactory"));
+	eval(FL.import("ns", "Player, Map, YellowBall, Spider, Fish, Floor, Bat, Spring, InstanceFactory, collision"));
 	eval(FL.import("FL", "Stage, LoadProgress, ImageLoader, Camera, Utils"));
 
 	var getMapData = function(i){
@@ -81,13 +81,15 @@
 
 		map.init(mapData.map.width, mapData.map.height);
 
-		ns.camera = new FL.Camera(0, 0, width, height, 1);
-		ns.camera.follow(player, "topDownTight");
-		ns.camera.setBounds(0, -200, mapData.map.width, mapData.map.height + 200)
+		
 		
 		player.pos.x = mapData.mc.player[0].x;
 		player.pos.y = mapData.mc.player[0].y;
 		player.y = player.pos.y + map.y;
+
+		ns.camera = new FL.Camera(0, 0, width, height, 1);
+		ns.camera.follow(player, "topDownTight");
+		ns.camera.setBounds(0, -200, mapData.map.width, mapData.map.height + 200);
 
 		var bg = ns.bg = new FL.Bitmap();
 		bg.setImg(R.images.bg);
@@ -123,29 +125,7 @@
 
 	function update(){
 		ns.fps ++;
-
-		// if(player.x >= Math.floor(width * .6) && map.x > width - map.width)
-		// {
-		// 	map.x = width * .6 - player.pos.x;
-		// }
-
-		// else if(player.x <= width * .4 && map.x < 0)
-		// {
-		// 	map.x = width * .4 - player.pos.x;
-		// }
-
-		// if(player.y <= Math.ceil(height * .3))
-		// {
-		// 	map.y = height * .3 - player.pos.y;
-		// }
-		
-		// else if(player.y >= Math.floor(height * .7) && map.y > height - map.height)
-		// {
-		// 	map.y = height * .7 - player.pos.y;
-		// }
-
 		ns.camera.update();
-
 		map.x = -ns.camera.scroll.x
 		map.y = -ns.camera.scroll.y
 
@@ -162,80 +142,56 @@
 				player.pos.y = player.y = mapData.mc.player[0].y;
 			}, 1000);
 		}
+		
+		collision.collide(spiders, yellowBalls, function(spider, ball){
+			spider.v.y = -4;
+			spider.v.x = 0;
+			spider.scaleX = 1;
+			spider.setCenter();
+			spiders.splice(spiders.indexOf(spider), 1);
+			TweenLite.to(spider, 2, {scaleX:.8, scaleY:.8, angle:10, onComplete:function(){
+				stage.removeChild(spider);
+			}});
+			spider.alive = false;
+			ns.score += 5;
+			ball.destroy();
+			return true;
+		});
 
-		if(player.pos.x < player.width*.5){
-			player.pos.x = player.width*.5;
-		}
-
-		if(player.pos.x > map.width-player.width*.5){
-			player.pos.x = map.width-player.width*.5;
-		}
-
-		for(var i = 0, l = spiders.length;i < l;i ++)
-		{
-			var spider = spiders[i];
-			for(var j = 0, jl = yellowBalls.length;j < jl;j ++){
-				var ball = yellowBalls[j];
-				if(spider.alive && spider.isInStage && !ball.isDie && ball.isInStage && ball.hitTestObject(spider)){
-					spider.v.y = -4;
-					spider.v.x = 0;
-					spider.scaleX = 1;
-					spider.setCenter();
-					spiders.splice(spiders.indexOf(spider), 1);
-					TweenLite.to(spider, 2, {scaleX:.8, scaleY:.8, angle:10, onComplete:function(){
-						stage.removeChild(spider);
-					}})
-					spider.alive = false;
-					ns.score += 5;
-					i--;
-					l--;
-					ball.destroy();
-					break;
-				}
-			}
-
-			if(	spider.alive && spider.isInStage && player.alive && player.hitTestObject(spider))
-			{
-				if(player.v.y > 0){
-					player.v.y = -5;
-					spider.v.y = -4;
-					spider.v.x = 0;
-					spider.scaleX = 1;
-					spider.setCenter();
-					spiders.splice(spiders.indexOf(spider), 1);
-					i--;
-					l--;
-					TweenLite.to(spider, 2, {scaleX:.8, scaleY:.8, angle:10, onComplete:function(){
-						stage.removeChild(spider);
-					}})
-					spider.alive = false;
-					ns.score += 5;
-				}	
-				else{
-					player.die();
-					spider.attack();
-					player.v.set(0, 0);
-					player.a.x = spider.pos.x > player.pos.x ? -3:3;
-					spider.v.x *= (spider.pos.x - player.pos.x) * spider.v.x < 0? 1:-1;
-					life --;
-					FL.Shake.shake(stage, .5, .02, "xy")
-				}
-				break;
-			}
-		}
-
-		for(var i = 0, l = fishs.length;i < l;i ++)
-		{
-			var fish = fishs[i];
-			if(player.hitTestObject(fish) && player.alive)
-			{
+		collision.collide(player, spiders, function(player, spider){
+			if(player.v.y > 0){
+				player.v.y = -5;
+				spider.v.y = -4;
+				spider.v.x = 0;
+				spider.scaleX = 1;
+				spider.setCenter();
+				spiders.splice(spiders.indexOf(spider), 1);
+	
+				TweenLite.to(spider, 2, {scaleX:.8, scaleY:.8, angle:10, onComplete:function(){
+					stage.removeChild(spider);
+				}})
+				spider.alive = false;
+				ns.score += 5;
+			}	
+			else{
 				player.die();
-				player.v.y = -4;
-				player.a.x = player.v.x>0 ? -3:3;
+				spider.attack();
+				player.v.set(0, 0);
+				player.a.x = spider.pos.x > player.pos.x ? -3:3;
+				spider.v.x *= (spider.pos.x - player.pos.x) * spider.v.x < 0? 1:-1;
+				life --;
 				FL.Shake.shake(stage, .5, .02, "xy")
-				break;
 			}
-		}
+			return true;
+		});
+
+		collision.collide(player, fishs, function(player, fish){
+			player.die();
+			player.v.y = -4;
+			player.a.x = player.v.x>0 ? -3:3;
+			FL.Shake.shake(stage, .5, .02, "xy");
+			return true;
+		});
 
 		lifeDom.innerHTML = "life:" + life;
 		scoreDom.innerHTML = "score:" + ns.score;

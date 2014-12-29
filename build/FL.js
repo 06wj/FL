@@ -1700,7 +1700,7 @@
 				}
 			}
 			else{
-				this.focusOn(target.pos.x + target.width*.5, target.pos.y + target.height*.5);
+				this.focusOn({x:target.pos.x + target.width*.5, y:target.pos.y + target.height*.5});
 			}
 		}
 		
@@ -1752,7 +1752,7 @@
 	}
 
 	Camera.prototype.focusOn = function(point){
-		this.scroll.set(point.x - this.width*0.5,point.y - this.height*0.5);
+		this.scroll.set(point.x - this.width*0.5, point.y - this.height*0.5);
 	};
 
 	Camera.prototype.setBounds = function(x, y, width, height){
